@@ -9,6 +9,7 @@ import TabBar from "@/components/ide/TabBar";
 import Breadcrumb from "@/components/ide/Breadcrumb";
 import StatusBar from "@/components/ide/StatusBar";
 import TerminalDrawer from "@/components/ide/TerminalDrawer";
+import AgentPanel from "@/components/ide/AgentPanel";
 import { ActiveFileProvider } from "@/context/ActiveFileContext";
 
 const jetbrainsMono = JetBrains_Mono({
@@ -51,14 +52,34 @@ export default function RootLayout({
             </div>
 
             {/* Editor Area */}
-            <main className="flex-1 flex flex-col min-w-0 bg-bg-editor overflow-hidden">
+            <main className="flex-1 flex flex-col min-w-0 bg-bg-editor overflow-hidden relative">
               <TabBar />
               <Breadcrumb />
-              <div className="flex-1 overflow-y-auto scrollbar-thin">
-                {children}
+              <div className="flex-1 overflow-y-auto scrollbar-thin flex">
+                {/* Line Number Gutter */}
+                <div className="w-12 bg-bg-editor border-r border-transparent flex flex-col items-end pr-4 pt-12 select-none shrink-0">
+                  {Array.from({ length: 50 }).map((_, i) => (
+                    <span key={i} className="text-[13px] text-muted font-mono leading-relaxed h-[22.5px]">
+                      {i + 1}
+                    </span>
+                  ))}
+                </div>
+                {/* Page Content */}
+                <div className="flex-1 min-w-0">
+                  {children}
+                </div>
+                {/* Minimap Placeholder */}
+                <div className="w-16 hidden xl:block opacity-20 border-l border-border-color shrink-0 pt-12 pr-2">
+                  {Array.from({ length: 100 }).map((_, i) => (
+                    <div key={i} className="h-[2px] w-full bg-text-muted mb-[1px]" />
+                  ))}
+                </div>
               </div>
               <TerminalDrawer />
             </main>
+
+            {/* Right Chrome (Agent Panel) */}
+            <AgentPanel />
           </div>
 
           {/* Bottom Chrome */}
