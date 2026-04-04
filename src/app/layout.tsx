@@ -1,8 +1,9 @@
-import type { Metadata } from "next";
+'use client';
+
+import React, { useState, useEffect, useCallback } from 'react';
 import { JetBrains_Mono, Space_Grotesk } from "next/font/google";
 import "./globals.css";
 import TitleBar from "@/components/ide/TitleBar";
-import MenuBar from "@/components/ide/MenuBar";
 import ActivityBar from "@/components/ide/ActivityBar";
 import Sidebar from "@/components/ide/Sidebar";
 import TabBar from "@/components/ide/TabBar";
@@ -10,7 +11,7 @@ import Breadcrumb from "@/components/ide/Breadcrumb";
 import StatusBar from "@/components/ide/StatusBar";
 import TerminalDrawer from "@/components/ide/TerminalDrawer";
 import AgentPanel from "@/components/ide/AgentPanel";
-import { ActiveFileProvider } from "@/context/ActiveFileContext";
+import { ActiveFileProvider, useActiveFile } from "@/context/ActiveFileContext";
 
 const jetbrainsMono = JetBrains_Mono({
   subsets: ["latin"],
@@ -22,13 +23,96 @@ const spaceGrotesk = Space_Grotesk({
   variable: "--font-space-grotesk",
 });
 
-export const metadata: Metadata = {
-  title: {
-    default: "Ganesh Singha",
-    template: "%s — Ganesh Singha",
-  },
-  description: "Portfolio of Ganesh Singha, Full Stack Developer.",
-};
+function WorkspaceLayout({ children }: { children: React.ReactNode }) {
+  const { isSidebarOpen, isAgentPanelOpen, agentPanelWidth, setAgentPanelWidth } = useActiveFile();
+  const [isResizing, setIsResizing] = useState(false);
+
+  const startResizing = useCallback((mouseDownEvent: React.MouseEvent) => {
+    setIsResizing(true);
+  }, []);
+
+  const stopResizing = useCallback(() => {
+    setIsResizing(false);
+  }, []);
+
+  const resize = useCallback(
+    (mouseMoveEvent: MouseEvent) => {
+      if (isResizing) {
+        const newWidth = window.innerWidth - mouseMoveEvent.clientX;
+        if (newWidth > 250 && newWidth < 500) {
+          setAgentPanelWidth(newWidth);
+        }
+      }
+    },
+    [isResizing, setAgentPanelWidth]
+  );
+
+  useEffect(() => {
+    window.addEventListener("mousemove", resize);
+    window.addEventListener("mouseup", stopResizing);
+    return () => {
+      window.removeEventListener("mousemove", resize);
+      window.removeEventListener("mouseup", stopResizing);
+    };
+  }, [resize, stopResizing]);
+
+  return (
+    <div className={`flex flex-col h-screen overflow-hidden bg-bg-editor ${isResizing ? 'cursor-col-resize select-none' : ''}`}>
+      <TitleBar />
+      
+      <div className="flex flex-1 overflow-hidden relative">
+        {/* Left Chrome */}
+        <div className="flex h-full overflow-hidden">
+          <ActivityBar />
+          {isSidebarOpen && <Sidebar />}
+        </div>
+
+        {/* Editor Area */}
+        <main className="flex-1 flex flex-col min-w-0 bg-bg-editor overflow-hidden relative">
+          <TabBar />
+          <Breadcrumb />
+          <div className="flex-1 overflow-y-auto scrollbar-thin flex">
+            <div className="w-12 bg-bg-editor border-r border-transparent flex flex-col items-end pr-4 pt-12 select-none shrink-0">
+              {Array.from({ length: 50 }).map((_, i) => (
+                <span key={i} className="text-[13px] text-muted font-mono leading-relaxed h-[22.5px]">
+                  {i + 1}
+                </span>
+              ))}
+            </div>
+            <div className="flex-1 min-w-0">
+              {children}
+            </div>
+            <div className="w-16 hidden xl:block opacity-20 border-l border-border-color shrink-0 pt-12 pr-2">
+              {Array.from({ length: 100 }).map((_, i) => (
+                <div key={i} className="h-[2px] w-full bg-text-muted mb-[1px]" />
+              ))}
+            </div>
+          </div>
+          <TerminalDrawer />
+        </main>
+
+        {/* Resizer Handle */}
+        {isAgentPanelOpen && (
+          <div 
+            onMouseDown={startResizing}
+            className="w-1 cursor-col-resize hover:bg-[#007acc] active:bg-[#007acc] transition-colors z-50 absolute right-0 h-full"
+            style={{ right: `${agentPanelWidth}px` }}
+          />
+        )}
+
+        {/* Right Chrome (Agent Panel) */}
+        <div 
+          style={{ width: isAgentPanelOpen ? `${agentPanelWidth}px` : '0px' }}
+          className="h-full overflow-hidden flex-shrink-0"
+        >
+          <AgentPanel />
+        </div>
+      </div>
+
+      <StatusBar />
+    </div>
+  );
+}
 
 export default function RootLayout({
   children,
@@ -37,53 +121,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={`${jetbrainsMono.variable} ${spaceGrotesk.variable}`}>
-      <body className="antialiased font-mono bg-bg-editor h-screen overflow-hidden flex flex-col">
+      <body className="antialiased font-mono">
         <ActiveFileProvider>
-          {/* Top Chrome */}
-          <TitleBar />
-          <MenuBar />
-
-          {/* Main Workspace */}
-          <div className="flex flex-1 overflow-hidden">
-            {/* Left Chrome */}
-            <div className="hidden md:flex h-full">
-              <ActivityBar />
-              <Sidebar />
-            </div>
-
-            {/* Editor Area */}
-            <main className="flex-1 flex flex-col min-w-0 bg-bg-editor overflow-hidden relative">
-              <TabBar />
-              <Breadcrumb />
-              <div className="flex-1 overflow-y-auto scrollbar-thin flex">
-                {/* Line Number Gutter */}
-                <div className="w-12 bg-bg-editor border-r border-transparent flex flex-col items-end pr-4 pt-12 select-none shrink-0">
-                  {Array.from({ length: 50 }).map((_, i) => (
-                    <span key={i} className="text-[13px] text-muted font-mono leading-relaxed h-[22.5px]">
-                      {i + 1}
-                    </span>
-                  ))}
-                </div>
-                {/* Page Content */}
-                <div className="flex-1 min-w-0">
-                  {children}
-                </div>
-                {/* Minimap Placeholder */}
-                <div className="w-16 hidden xl:block opacity-20 border-l border-border-color shrink-0 pt-12 pr-2">
-                  {Array.from({ length: 100 }).map((_, i) => (
-                    <div key={i} className="h-[2px] w-full bg-text-muted mb-[1px]" />
-                  ))}
-                </div>
-              </div>
-              <TerminalDrawer />
-            </main>
-
-            {/* Right Chrome (Agent Panel) */}
-            <AgentPanel />
-          </div>
-
-          {/* Bottom Chrome */}
-          <StatusBar />
+          <WorkspaceLayout>{children}</WorkspaceLayout>
         </ActiveFileProvider>
       </body>
     </html>

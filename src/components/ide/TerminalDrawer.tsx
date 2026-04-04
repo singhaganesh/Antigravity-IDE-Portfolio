@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { useActiveFile } from '@/context/ActiveFileContext';
-import { X, ChevronRight, MoreHorizontal, LayoutGrid, Monitor } from 'lucide-react';
+import { X, ChevronRight, MoreHorizontal, LayoutGrid, Monitor, ChevronDown } from 'lucide-react';
 
 const TerminalDrawer = () => {
   const { isTerminalOpen, setIsTerminalOpen } = useActiveFile();

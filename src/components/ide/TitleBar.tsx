@@ -1,11 +1,27 @@
 'use client';
 
 import React from 'react';
-import { Search, Minus, Square, X, Menu, Settings, Users, ChevronDown, Monitor, LayoutGrid, Sparkles } from 'lucide-react';
+import { Search, Minus, Square, X, Menu, Settings, Sparkles, LayoutPanelLeft, LayoutPanelTop, LayoutPanelRight } from 'lucide-react';
 import { useActiveFile } from '@/context/ActiveFileContext';
+import { clsx, type ClassValue } from 'clsx';
+import { twMerge } from 'tailwind-merge';
+
+function cn(...inputs: ClassValue[]) {
+  return twMerge(clsx(inputs));
+}
 
 const TitleBar = () => {
-  const { activeFile, isMobileMenuOpen, setIsMobileMenuOpen } = useActiveFile();
+  const { 
+    activeFile, 
+    isMobileMenuOpen, 
+    setIsMobileMenuOpen,
+    isSidebarOpen,
+    setIsSidebarOpen,
+    isTerminalOpen,
+    setIsTerminalOpen,
+    isAgentPanelOpen,
+    setIsAgentPanelOpen
+  } = useActiveFile();
 
   return (
     <div className="h-[35px] bg-bg-sidebar border-b border-border-color flex items-center justify-between select-none px-3">
@@ -24,7 +40,6 @@ const TitleBar = () => {
           <div className="w-3 h-3 rounded-full bg-[#28c840]" />
         </div>
         
-        {/* Menu Bar (Desktop only, shifted here in some themes) */}
         <div className="hidden xl:flex items-center gap-1 ml-4 text-[13px] text-muted">
           {['File', 'Edit', 'Selection', 'View', 'Go', 'Run', 'Terminal', 'Help'].map(m => (
             <span key={m} className="px-2 py-0.5 hover:bg-bg-hover rounded transition-colors cursor-pointer">{m}</span>
@@ -43,16 +58,41 @@ const TitleBar = () => {
         </div>
       </div>
 
-      {/* Right: Window Controls & Search Icons */}
+      {/* Right: Layout Controls & Window Buttons */}
       <div className="flex items-center gap-3">
-        <div className="hidden lg:flex items-center gap-3 mr-4 text-muted">
+        {/* Layout Toggles (Matching Screenshot) */}
+        <div className="hidden md:flex items-center gap-1 mr-4 bg-[#ffffff05] p-0.5 rounded-md border border-border-color/50">
+          <button 
+            onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+            className={cn(
+              "p-1 rounded transition-colors",
+              isSidebarOpen ? "bg-[#ffffff15] text-white" : "text-muted hover:text-white"
+            )}
+          >
+            <SidebarIcon isActive={isSidebarOpen} />
+          </button>
+          <button 
+            onClick={() => setIsTerminalOpen(!isTerminalOpen)}
+            className={cn(
+              "p-1 rounded transition-colors",
+              isTerminalOpen ? "bg-[#ffffff15] text-white" : "text-muted hover:text-white"
+            )}
+          >
+            <TerminalIcon isActive={isTerminalOpen} />
+          </button>
+          <button 
+            onClick={() => setIsAgentPanelOpen(!isAgentPanelOpen)}
+            className={cn(
+              "p-1 rounded transition-colors",
+              isAgentPanelOpen ? "bg-[#ffffff15] text-white" : "text-muted hover:text-white"
+            )}
+          >
+            <AgentIcon isActive={isAgentPanelOpen} />
+          </button>
+        </div>
+
+        <div className="hidden lg:flex items-center gap-3 mr-4 text-muted border-l border-border-color pl-4">
           <Search size={14} className="hover:text-white cursor-pointer" />
-          <div className="flex items-center gap-1 hover:text-white cursor-pointer">
-            <span className="text-[12px]">Open Agent Manager</span>
-            <LayoutGrid size={14} />
-          </div>
-          <Monitor size={14} className="hover:text-white cursor-pointer" />
-          <div className="w-[1px] h-4 bg-border-color mx-1" />
           <Settings size={14} className="hover:text-white cursor-pointer" />
           <Sparkles size={14} className="text-[#00e5cc] cursor-pointer" />
           <div className="w-6 h-6 rounded-full bg-purple-600 flex items-center justify-center text-[10px] text-white font-bold cursor-pointer">
@@ -69,5 +109,30 @@ const TitleBar = () => {
     </div>
   );
 };
+
+/* Custom SVGs to match the screenshot exactly */
+const SidebarIcon = ({ isActive }: { isActive: boolean }) => (
+  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" className={isActive ? "opacity-100" : "opacity-60"}>
+    <rect x="2.5" y="2.5" width="11" height="11" rx="1.5" stroke="currentColor" strokeWidth="1.2"/>
+    <path d="M6.5 2.5V13.5" stroke="currentColor" strokeWidth="1.2"/>
+    {!isActive && <rect x="3" y="3" width="3" height="10" fill="currentColor" opacity="0.2"/>}
+  </svg>
+);
+
+const TerminalIcon = ({ isActive }: { isActive: boolean }) => (
+  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" className={isActive ? "opacity-100" : "opacity-60"}>
+    <rect x="2.5" y="2.5" width="11" height="11" rx="1.5" stroke="currentColor" strokeWidth="1.2"/>
+    <path d="M2.5 10.5H13.5" stroke="currentColor" strokeWidth="1.2"/>
+    {!isActive && <rect x="3" y="11" width="10" height="2" fill="currentColor" opacity="0.2"/>}
+  </svg>
+);
+
+const AgentIcon = ({ isActive }: { isActive: boolean }) => (
+  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" className={isActive ? "opacity-100" : "opacity-60"}>
+    <rect x="2.5" y="2.5" width="11" height="11" rx="1.5" stroke="currentColor" strokeWidth="1.2"/>
+    <path d="M9.5 2.5V13.5" stroke="currentColor" strokeWidth="1.2"/>
+    {!isActive && <rect x="10" y="3" width="3" height="10" fill="currentColor" opacity="0.2"/>}
+  </svg>
+);
 
 export default TitleBar;

@@ -1,7 +1,7 @@
 'use client';
 
 import React, { createContext, useContext, useEffect, useState } from 'react';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 
 export interface FileMetadata {
   name: string;
@@ -10,20 +10,30 @@ export interface FileMetadata {
   dot: string;
   color: string;
   letter: string;
+  path: string;
 }
 
-const FILE_MAP: { [key: string]: FileMetadata } = {
-  "/": { name: "home.tsx", lang: "TypeScript React", tabBorder: "#61dafb", dot: "#61dafb", color: "#61dafb", letter: "R" },
-  "/about": { name: "about.html", lang: "HTML", tabBorder: "#e34c26", dot: "#e34c26", color: "#e34c26", letter: "H" },
-  "/projects": { name: "projects.js", lang: "JavaScript", tabBorder: "#f7df1e", dot: "#f7df1e", color: "#f7df1e", letter: "J" },
-  "/skills": { name: "skills.json", lang: "JSON", tabBorder: "#cbcb41", dot: "#cbcb41", color: "#cbcb41", letter: "J" },
-  "/contact": { name: "contact.css", lang: "CSS", tabBorder: "#563d7c", dot: "#563d7c", color: "#563d7c", letter: "C" },
+export const FILE_MAP: { [key: string]: FileMetadata } = {
+  "/": { name: "home.tsx", lang: "TypeScript React", tabBorder: "#61dafb", dot: "#61dafb", color: "#61dafb", letter: "R", path: "/" },
+  "/about": { name: "about.html", lang: "HTML", tabBorder: "#e34c26", dot: "#e34c26", color: "#e34c26", letter: "H", path: "/about" },
+  "/projects": { name: "projects.js", lang: "JavaScript", tabBorder: "#f7df1e", dot: "#f7df1e", color: "#f7df1e", letter: "J", path: "/projects" },
+  "/skills": { name: "skills.json", lang: "JSON", tabBorder: "#cbcb41", dot: "#cbcb41", color: "#cbcb41", letter: "J", path: "/skills" },
+  "/contact": { name: "contact.css", lang: "CSS", tabBorder: "#563d7c", dot: "#563d7c", color: "#563d7c", letter: "C", path: "/contact" },
 };
 
 interface ActiveFileContextType {
   activeFile: FileMetadata;
+  openTabs: string[];
+  closeTab: (path: string) => void;
+  openTab: (path: string) => void;
   isTerminalOpen: boolean;
   setIsTerminalOpen: (open: boolean) => void;
+  isSidebarOpen: boolean;
+  setIsSidebarOpen: (open: boolean) => void;
+  isAgentPanelOpen: boolean;
+  setIsAgentPanelOpen: (open: boolean) => void;
+  agentPanelWidth: number;
+  setAgentPanelWidth: (width: number) => void;
   isMobileMenuOpen: boolean;
   setIsMobileMenuOpen: (open: boolean) => void;
 }
@@ -32,17 +42,62 @@ const ActiveFileContext = createContext<ActiveFileContextType | undefined>(undef
 
 export const ActiveFileProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const pathname = usePathname();
+  const router = useRouter();
   const [activeFile, setActiveFile] = useState<FileMetadata>(FILE_MAP["/"]);
-  const [isTerminalOpen, setIsTerminalOpen] = useState(false);
+  const [openTabs, setOpenTabs] = useState<string[]>(["/"]);
+  const [isTerminalOpen, setIsTerminalOpen] = useState(true);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const [isAgentPanelOpen, setIsAgentPanelOpen] = useState(true);
+  const [agentPanelWidth, setAgentPanelWidth] = useState(300);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   useEffect(() => {
-    setActiveFile(FILE_MAP[pathname] || FILE_MAP["/"]);
-    setIsMobileMenuOpen(false); // Close mobile menu on navigation
+    const currentFile = FILE_MAP[pathname];
+    if (currentFile) {
+      setActiveFile(currentFile);
+      if (!openTabs.includes(pathname)) {
+        setOpenTabs(prev => [...prev, pathname]);
+      }
+    }
+    setIsMobileMenuOpen(false);
   }, [pathname]);
 
+  const openTab = (path: string) => {
+    if (!openTabs.includes(path)) {
+      setOpenTabs(prev => [...prev, path]);
+    }
+    router.push(path);
+  };
+
+  const closeTab = (path: string) => {
+    const newTabs = openTabs.filter(t => t !== path);
+    setOpenTabs(newTabs);
+    if (pathname === path) {
+      if (newTabs.length > 0) {
+        router.push(newTabs[newTabs.length - 1]);
+      } else {
+        router.push("/");
+      }
+    }
+  };
+
   return (
-    <ActiveFileContext.Provider value={{ activeFile, isTerminalOpen, setIsTerminalOpen, isMobileMenuOpen, setIsMobileMenuOpen }}>
+    <ActiveFileContext.Provider value={{ 
+      activeFile, 
+      openTabs, 
+      closeTab, 
+      openTab,
+      isTerminalOpen, 
+      setIsTerminalOpen, 
+      isSidebarOpen,
+      setIsSidebarOpen,
+      isAgentPanelOpen,
+      setIsAgentPanelOpen,
+      agentPanelWidth,
+      setAgentPanelWidth,
+      isMobileMenuOpen, 
+      setIsMobileMenuOpen 
+    }}>
       {children}
     </ActiveFileContext.Provider>
   );
