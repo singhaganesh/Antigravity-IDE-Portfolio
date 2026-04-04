@@ -1,0 +1,190 @@
+## PHASE 1 — PROJECT SETUP & ANTIGRAVITY IDE SHELL
+// Send this prompt first. Build only the IDE shell — zero content sections yet.
+
+You are helping me build a personal portfolio for Ganesh Singha, a Full Stack Developer.
+
+─── CONCEPT ─────────────────────────────────
+The portfolio is themed as the Antigravity IDE — a fictional IDE that looks and feels
+exactly like VS Code's default dark theme, but named "Antigravity". The critical design
+rule is: each portfolio section (Home, About, Projects, Skills, Contact) is a
+SEPARATE open file, not a scroll section on one page. Clicking a file in the sidebar
+NAVIGATES to a new route/page — it does NOT smooth-scroll. Each page renders its own
+content inside the "editor area", exactly like switching tabs in VS Code.
+
+This means the portfolio is a multi-page Next.js app where each page looks like
+a different file is open in the same IDE window.
+
+─── TECH STACK ──────────────────────────────
+Framework  : Next.js 14, App Router, TypeScript
+Styling    : Tailwind CSS v3
+Fonts      : next/font — "JetBrains Mono" (all text, matching VS Code feel)
+Icons      : lucide-react (IDE chrome only)
+Routing    : Next.js file-based routing — one route per "file"
+               app/page.tsx          → home.tsx tab
+               app/about/page.tsx    → about.html tab
+               app/projects/page.tsx → projects.js tab
+               app/skills/page.tsx   → skills.json tab
+               app/contact/page.tsx  → contact.css tab
+
+─── ANTIGRAVITY DEFAULT THEME COLOR TOKENS ──
+// Based on VS Code default dark theme — add all to tailwind.config.ts
+bg-editor   : #1e1e1e   ← main editor background (VS Code default)
+bg-sidebar  : #252526   ← sidebar + activity bar background
+bg-tab-bar  : #2d2d2d   ← tab bar background
+bg-tab-active:#1e1e1e  ← active tab background (same as editor)
+bg-tab-inactive:#2d2d2d ← inactive tab
+bg-hover    : #2a2d2e   ← sidebar item hover
+bg-selected : #37373d   ← sidebar selected file
+border-color: #3d3d3d   ← all borders/dividers
+text-primary: #d4d4d4   ← main text (VS Code default)
+text-muted  : #858585   ← muted / comments
+text-cyan   : #4ec9b0   ← Antigravity accent (VS Code teal, e.g. class names)
+text-blue   : #9cdcfe   ← variable names / keys
+text-orange : #ce9178   ← strings
+text-yellow : #dcdcaa   ← function names
+text-green  : #6a9955   ← comments
+text-pink   : #c586c0   ← keywords (import, const, etc.)
+text-white  : #ffffff   ← headings / emphasis
+statusbar-bg: #007acc   ← VS Code blue status bar
+statusbar-txt:#ffffff  ← status bar text
+
+─── FILE STRUCTURE ──────────────────────────
+app/
+  layout.tsx              ← root layout — renders IDE shell around {children}
+  page.tsx                ← home.tsx "file" content
+  about/page.tsx          ← about.html content
+  projects/page.tsx       ← projects.js content
+  skills/page.tsx         ← skills.json content
+  contact/page.tsx        ← contact.css content
+components/
+  ide/
+    TitleBar.tsx           ← macOS-style top bar
+    MenuBar.tsx            ← File Edit View Go Run Terminal Help Copilot
+    ActivityBar.tsx        ← leftmost icon strip
+    Sidebar.tsx            ← file explorer panel
+    TabBar.tsx             ← open file tabs
+    Breadcrumb.tsx         ← path below tabs e.g. ganesh-singha › src › home.tsx
+    StatusBar.tsx          ← bottom blue bar
+  sections/               ← populated in later phases
+tailwind.config.ts
+globals.css
+
+─── IDE CHROME COMPONENTS (build all in Phase 1) ─
+
+TitleBar.tsx
+- height: 28px, bg-sidebar, border-b border-color
+- Left: three circles — #ff5f57 #ffbd2e #28c840 (12px w/h, gap-2, ml-3)
+- Center: search/command bar pill —
+    bg: #3c3c3c, rounded-md, px-4 py-0.5, text-xs text-muted, w-72
+    icon: Search size-3 text-muted, text: "ganesh-singha : portfolio"
+    right side: "Ctrl P" in a small pill bg-[#4e4e4e] text-muted text-[10px] px-1
+- Right: window icons (Minus, Square, X) text-muted size-3, gap-3, mr-3
+
+MenuBar.tsx
+- height: 28px, bg-sidebar, border-b border-color
+- Items: File  Edit  View  Go  Run  Terminal  Help  Copilot
+- text-[13px] text-muted px-3 py-1 hover:bg-bg-hover cursor-pointer
+- "Copilot" item is last, same style
+
+ActivityBar.tsx
+- width: 48px, full height, bg-sidebar, border-r border-color
+- Icons stacked vertically, each 48x48px, flex items-center justify-center:
+    Files icon        → links to /
+    Search icon       → decorative (no route)
+    GitBranch icon    → decorative
+    Package icon      → links to /projects
+    Extensions icon   → decorative
+    (spacer flex-1)
+    Settings icon     → decorative (bottom)
+- Active icon: left border 2px solid #d4d4d4, text-white; inactive: text-muted
+- Use Next.js usePathname() to determine active icon
+
+Sidebar.tsx
+- width: 240px, bg-sidebar, border-r border-color, overflow-y-auto
+- Header row: "PORTFOLIO" text-[11px] text-muted tracking-widest px-4 py-2 uppercase
+- File list — each file row (height 28px, px-2, flex items-center, gap-2):
+    File icon (colored, matching VS Code file type icons):
+      home.tsx      → React icon color #61dafb, bg cyan pill
+      about.html    → HTML icon color #e34c26, bg orange pill
+      projects.js   → JS icon color #f7df1e, bg yellow pill
+      skills.json   → JSON icon color #cbcb41, bg olive pill
+      experience.ts → TS icon color #3178c6, bg blue pill  ← decorative only in phase 1
+      contact.css   → CSS icon color #563d7c, bg purple pill
+      README.md     → MD icon color #519aba, bg teal pill  ← decorative only
+      Ganesh_Resume.pdf → PDF icon color #ff0000, bg red pill ← decorative only
+    Filename text: text-[13px] text-primary
+    Active file row: bg-bg-selected, text-white
+    Hover: bg-bg-hover
+    File icons are small 16x16 colored square badges with a letter (e.g. "R" for React)
+      matching exactly what VS Code shows
+- Clicking a file navigates to the correct Next.js route
+
+TabBar.tsx
+- height: 35px, bg-tab-bar, border-b border-color, flex items-center overflow-x-auto
+- One tab per open file (show all 5 tabs always, as if they were all opened):
+    Each tab (flex items-center gap-2 px-4 h-full border-r border-color):
+      File icon (same colored badges as sidebar, 14px)
+      Filename text text-[13px]
+      X close icon size-3 text-muted (decorative — clicking does nothing)
+    Active tab: bg-tab-active text-white border-t-2 border-t-[#007acc]
+    Inactive tab: bg-tab-inactive text-muted hover:bg-bg-hover
+- Tab order: home.tsx | about.html | README.md | contact.css | projects.js
+  (reorder based on current active route)
+
+Breadcrumb.tsx
+- height: 22px, border-b border-color, bg-editor, px-3, flex items-center gap-1
+- Shows: "ganesh-singha" › "src" › "current-filename"
+- Each segment: text-[12px] text-muted, "›" separator also text-muted
+- Current filename: text-primary (slightly brighter)
+- ChevronRight icon size-3 between segments
+
+StatusBar.tsx
+- height: 22px, bg-[#007acc], fixed bottom, full width
+- Left side (flex gap-4 px-2 items-center text-[12px] text-white):
+    GitBranch icon size-3 + "main"
+    AlertCircle icon size-3 + "0" + AlertTriangle icon + "0"  (errors/warnings)
+- Right side (flex gap-4 px-3 items-center text-[12px] text-white, ml-auto):
+    "Copilot" with sparkle icon
+    "TypeScript React" (changes per active file: "HTML", "CSS", "JSON")
+    "UTF-8"
+    "Prettier"
+    Heart icon + "Aahana Dark" → rename to "Antigravity Dark"
+
+─── ROOT LAYOUT (app/layout.tsx) ────────────
+Structure (all panels together):
+  
+
+    
+    
+    
+
+      
+      
+      
+
+        
+        
+        
+
+          {children}   ← each page renders here
+        
+
+      
+
+    
+
+    
+  
+
+
+─── globals.css ──────────────────────────────
+- html, body: height 100%, overflow hidden, bg #1e1e1e
+- Scrollbar styling: thin, #3d3d3d track, #555 thumb (matching VS Code)
+- @keyframes blink: opacity 1→0→1, 1s step-end infinite (for cursor)
+- @keyframes float: translateY 0→-8px→0, 3s ease-in-out infinite
+- @keyframes fadeUp: opacity 0 + translateY(16px) → opacity 1 + translateY(0)
+- @keyframes typewriter: used with steps() for typing effect
+
+// Deliver: full project scaffold with all IDE chrome components rendering.
+// Each page (app/page.tsx etc.) can be empty for now — just return a div.
+// Confirm the IDE shell looks like VS Code before moving to Phase 2.

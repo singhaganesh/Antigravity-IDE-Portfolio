@@ -1,0 +1,123 @@
+## PHASE 5 — ROUTING, MOBILE & FINAL POLISH
+// All 5 file pages exist. This phase makes everything feel seamless and ship-ready.
+
+─── 1. ACTIVE STATE SYNC (the "open file" illusion) ──
+This is the most important part. Every IDE chrome component must react to the
+current Next.js route. Use usePathname() from next/navigation in each component.
+
+Mapping table (pathname → file metadata):
+const FILE_MAP = {
+  "/"          : { name:"home.tsx",     lang:"TypeScript React", tabBorder:"#61dafb", dot:"#61dafb" },
+  "/about"     : { name:"about.html",   lang:"HTML",             tabBorder:"#e34c26", dot:"#e34c26" },
+  "/projects"  : { name:"projects.js",  lang:"JavaScript",       tabBorder:"#f7df1e", dot:"#f7df1e" },
+  "/skills"    : { name:"skills.json",  lang:"JSON",             tabBorder:"#cbcb41", dot:"#cbcb41" },
+  "/contact"   : { name:"contact.css",  lang:"CSS",              tabBorder:"#563d7c", dot:"#563d7c" },
+}
+
+Sidebar.tsx: active file row = bg-[#37373d], border-l-2 border-white text-white
+TabBar.tsx : active tab = bg-[#1e1e1e] text-white, border-t-2 color = tabBorder from map
+Breadcrumb : last segment = FILE_MAP[pathname].name
+StatusBar  : right side "TypeScript React" → FILE_MAP[pathname].lang
+
+Create a shared context ActiveFileContext that wraps the root layout and exposes
+the current FILE_MAP entry. All IDE chrome components consume this context.
+
+Page transitions:
+  Wrap {children} in a motion div (use framer-motion OR pure CSS):
+  On route change: fade out (opacity 0, 80ms) then fade in new page (opacity 0→1, 200ms)
+  This mimics switching files in VS Code
+  If using pure CSS: add a className with animate-fadeUp to each page's root div
+
+─── 2. SIDEBAR DECORATIVE FILES ─────────────
+Add these non-routable files to the sidebar (decorative only, no click navigation):
+  experience.ts  → TypeScript blue icon  (grayed text, no hover navigation)
+  README.md      → Markdown teal icon    (grayed text)
+  Ganesh_Resume.pdf → PDF red icon       (clicking triggers download of /public/resume.pdf)
+                                            show a small inline toast: "downloading..."
+                                            mark with: {/* placeholder: add resume.pdf to /public */}
+Divider line (border-t border-[#3d3d3d] my-1) between the navigable files and decorative files.
+
+─── 3. MENU BAR DROPDOWN (optional but impressive) ──
+Make the "Terminal" menu item in MenuBar functional:
+  On click: toggle a mini terminal drawer — slides up from the bottom of the screen
+  (above StatusBar), height 120px, bg-[#1e1e1e], border-t border-[#3d3d3d]
+  Shows rotating typewriter lines (same as Phase 1 Terminal spec):
+    $ antigravity --status     → "All systems floating ✓"
+    $ launch --resume          → "Deploying resume.pdf..."
+    $ contact --ping ganesh    → "Signal transmitted..."
+  Blinking cursor after each line
+  Click "Terminal" again to close the drawer
+
+─── 4. MOBILE RESPONSIVENESS ────────────────
+On screens < 768px the full sidebar cannot fit. Handle gracefully:
+
+TitleBar: show a hamburger icon (Menu icon, lucide) on the left instead of traffic lights
+ActivityBar: hidden on mobile
+Sidebar:
+  - Hidden by default on mobile
+  - Hamburger click: slides in as full-height overlay from the left (fixed, z-50)
+  - Shows the full file list; clicking a file navigates + closes the drawer
+  - Outside click closes drawer
+TabBar: overflow-x-auto with scrollbar-hide; show only the active tab's name on very small screens
+MenuBar: hidden on mobile (< md)
+Editor area: full width, padding reduces to px-5 py-8 on mobile
+All section headings: scale down to text-[40px] on mobile (text-[64px] on desktop)
+
+─── 5. SEO METADATA ──────────────────────────
+Add Next.js generateMetadata or static metadata to each page:
+
+app/layout.tsx (root):
+  title: { default: "Ganesh Singha", template: "%s — Ganesh Singha" }
+  description: "Portfolio of Ganesh Singha, Full Stack Developer. React, Next.js, Node.js."
+  keywords: ["Full Stack Developer","React","Next.js","Node.js","Portfolio","Ganesh Singha"]
+  openGraph: { type:"website", url:"https://ganesh-singha.dev" }   ← placeholder URL
+
+Per page:
+  app/page.tsx:          title: "Home"
+  app/about/page.tsx:    title: "About"
+  app/projects/page.tsx: title: "Projects"
+  app/skills/page.tsx:   title: "Skills"
+  app/contact/page.tsx:  title: "Contact"
+
+─── 6. PERFORMANCE ───────────────────────────
+- Star particles on home page: generate inside useEffect (client only) to avoid
+  hydration mismatch — initial render returns null for particles, useEffect populates them
+- Wrap particle array in useMemo
+- Add to globals.css:
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+  }
+- All Next.js  components should have prefetch={true} (default) for instant navigation
+
+─── 7. FINAL PLACEHOLDER CHECKLIST ──────────
+// Add this as a comment block at the top of app/layout.tsx
+Output a complete checklist of every placeholder in the codebase:
+  [ ] Your city — app/about/page.tsx
+  [ ] Years of experience — app/about/page.tsx
+  [ ] Stat numbers (3+, 20+, 10+) — app/about/page.tsx
+  [ ] ganesh@example.com — app/contact/page.tsx
+  [ ] linkedin.com/in/ganeshsingha — app/contact/page.tsx
+  [ ] github.com/ganeshsingha — app/contact/page.tsx
+  [ ] medium.com/@ganeshsingha — app/contact/page.tsx
+  [ ] Project names, descriptions, demo URLs — app/projects/page.tsx
+  [ ] Job title + company + dates (experience timeline) — app/skills/page.tsx
+  [ ] "Currently Learning" chips — app/skills/page.tsx
+  [ ] /public/resume.pdf — public folder
+  [ ] Site URL in metadata — app/layout.tsx
+  [ ] Favicon — public/favicon.ico
+  [ ] OG image — public/og-image.png
+
+─── 8. FINAL CHECKLIST ──────────────────────
+Before marking complete, verify:
+  ✓ Navigating between all 5 routes updates sidebar, tabbar, breadcrumb, statusbar
+  ✓ Each page's comment label, heading, and layout match the file type aesthetic
+  ✓ contact.css page matches the reference screenshot layout exactly
+  ✓ home.tsx typewriter cycles all phrases correctly
+  ✓ Contact form success state works
+  ✓ Mobile sidebar drawer opens and closes
+  ✓ No TypeScript errors: npx tsc --noEmit
+  ✓ No hydration errors in browser console
+  ✓ Deploy to Vercel: npx vercel --prod
+
+// Portfolio complete. Each section is its own file in the Antigravity IDE.
+// Ganesh can replace placeholders and go live.

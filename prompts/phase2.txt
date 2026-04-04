@@ -1,0 +1,90 @@
+## PHASE 2 — home.tsx PAGE (HERO / LANDING)
+// Phase 1 IDE shell is complete. Now build the first "file" — the hero page.
+// File: app/page.tsx — this renders when home.tsx tab is active.
+
+The design reference is Aahana Bobade's portfolio hero. Study these exact details:
+- Top of the editor area shows a code comment as a section label
+- The name is displayed in a massive bold display font, split across two lines,
+  with the first line in white and the second line in the brand accent color
+- Below the name: a row of role/tag pills with colored dot indicators
+- Below that: a typewriter line that changes between phrases
+- Then a short paragraph bio with specific words highlighted in the syntax colors
+- Finally: 3 CTA buttons in a row
+
+─── CONTENT & LAYOUT ────────────────────────
+File    : app/page.tsx
+Padding : px-10 py-12 (matching VS Code editor padding feel)
+Font    : JetBrains Mono throughout
+
+1. Code comment label (top)
+   "// hello world !! Welcome to my portfolio"
+   color: #6a9955 (green comment color), text-[15px], font-mono, mb-8
+
+2. Name — two-line giant heading
+   Line 1: "Ganesh"   → color #ffffff, font-black, text-[96px], leading-none
+   Line 2: "Singha"   → color #00e5cc (Antigravity cyan), font-black, text-[96px], leading-none
+   Apply float animation (slow 3s up-down) to the whole heading block
+   Font: use a wide heavy display font — import "Space Grotesk" or "Bebas Neue"
+   from Google Fonts via next/font for the name only
+
+3. Role pills row (mt-8, flex gap-3 flex-wrap)
+   Each pill: rounded-full border border-[#3d3d3d] px-4 py-1.5 text-[13px] font-mono
+              flex items-center gap-2
+   Pills and dot colors:
+     ● Full Stack Dev    dot: #4ec9b0 (cyan)
+     ● React / Next.js   dot: #61dafb (blue)
+     ● Node.js Backend   dot: #68a063 (green)
+     ● Open to Work      dot: #c586c0 (pink)
+   Pill bg: transparent, text: #d4d4d4, border: #3d3d3d
+   Hover: bg-[#2a2d2e], border-[#555]
+
+4. Typewriter line (mt-6)
+   Cycles through these phrases with a typewriter CSS animation:
+     "Turning ideas into scalable products."
+     "Building full stack solutions."
+     "Crafting clean, maintainable code."
+     "Available for freelance & full-time."
+   Style: text-[15px] font-mono text-[#d4d4d4]
+   Blinking cursor ▌ after text, color #00e5cc
+   Use a React useState + useEffect with setInterval to cycle phrases
+   Each phrase types in character by character, then pauses 2s, then clears
+
+5. Bio paragraph (mt-8, max-w-[640px])
+   Text: "I live at the crossroads of full stack engineering and clean product thinking.
+   I build systems that are genuinely scalable and maintainable."
+   Style: text-[15px] font-mono leading-relaxed text-[#d4d4d4]
+   Highlight specific words in syntax colors (wrap in spans):
+     "full stack engineering" → color #4ec9b0 (cyan) font-bold
+     "clean product thinking"  → color #9cdcfe (blue) font-bold
+     "scalable"               → color #ce9178 (orange)
+     "maintainable"           → color #dcdcaa (yellow)
+
+6. CTA buttons row (mt-10, flex gap-3)
+   Button 1: "⚡ Projects"
+     bg: #00e5cc, text: #1e1e1e, font-bold, px-5 py-2.5 rounded text-[13px]
+     hover: bg-[#00b8a9]
+     onClick: router.push('/projects')
+   Button 2: "◎ About Me"
+     bg: transparent, border border-[#d4d4d4], text-[#d4d4d4], px-5 py-2.5 rounded text-[13px]
+     hover: bg-[#2a2d2e]
+     onClick: router.push('/about')
+   Button 3: "✉ Contact"
+     same style as Button 2
+     onClick: router.push('/contact')
+
+7. Floating element — top right corner
+   A small floating box (like Aahana's square widget, top-right of editor):
+   width: 80px, height: 80px, bg-[#252526], border border-[#3d3d3d], rounded
+   Contains: a small blinking cursor "▌" centered, color #00e5cc
+   Position: absolute top-8 right-8 (relative to the editor main area)
+   Applies float animation (opposite phase — floats down while name floats up)
+
+─── ROUTING NOTE ────────────────────────────
+When the user clicks any CTA button or sidebar file, they navigate to a new
+Next.js route. The IDE chrome (sidebar, tabs, breadcrumb) stays mounted via
+layout.tsx — only the {children} area changes. The active tab and active sidebar
+file must update based on usePathname(). This is the core "different file" illusion.
+
+// After Phase 2: home.tsx page looks exactly like a VS Code file is open.
+// The sidebar shows home.tsx as selected. The tab bar shows home.tsx as active.
+// Move to Phase 3 only after confirming this renders correctly.

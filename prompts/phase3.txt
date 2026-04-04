@@ -1,0 +1,122 @@
+## PHASE 3 — about.html & projects.js PAGES
+// Build two more file pages. Each one opens as a different "file" in the IDE.
+// The sidebar and tab bar must reflect the correct active file for each route.
+
+─── PAGE 1: about.html (app/about/page.tsx) ─
+Active tab  : about.html tab highlighted, orange top border (#e34c26)
+Active file : about.html highlighted in sidebar
+Breadcrumb  : ganesh-singha › src › about.html
+StatusBar   : right side shows "HTML" instead of "TypeScript React"
+Padding     : px-10 py-12
+
+1. Code comment label
+   "<!-- about.html — the human behind the code -->"
+   color: #6a9955, text-[15px] font-mono, mb-8
+
+2. Section heading
+   "About Me" — text-[64px] font-black text-white leading-none
+   Subtitle: "// the human behind the code"
+   color: #858585, text-[14px] font-mono, mt-2 mb-10
+
+3. Two-column layout (grid grid-cols-1 lg:grid-cols-[320px_1fr] gap-12)
+
+   Left — Profile Card (bg-[#252526] border border-[#3d3d3d] rounded p-6):
+     Avatar circle: w-24 h-24 rounded-full bg-[#37373d] border-2 border-[#00e5cc]
+       Centered initials "GS" text-[28px] font-black text-[#00e5cc]
+     Name: "Ganesh Singha" text-[18px] font-bold text-white mt-4
+     Role: "Full Stack Developer" text-[13px] font-mono text-[#9cdcfe] mt-1
+     Status badge (mt-3): "● Open to Work"
+       rounded-full bg-[#1e3a1e] text-[#4ec9b0] text-[12px] px-3 py-1 font-mono
+     Divider: border-t border-[#3d3d3d] my-4
+     Info rows (each: flex justify-between text-[13px] font-mono py-1.5):
+       "Location"   → "[Your City], India"      text-[#d4d4d4]  ← placeholder
+       "Available"  → "Immediately"              text-[#4ec9b0]
+       "Languages"  → "English, Bengali"         text-[#d4d4d4]
+       "Experience" → "3+ Years"                 text-[#d4d4d4]  ← placeholder
+     Keys in text-[#858585], values in text-[#d4d4d4]
+
+   Right — Bio + Stats
+     Para 1 (text-[15px] font-mono text-[#d4d4d4] leading-relaxed):
+       "Hi, I'm Ganesh — a Full Stack Developer who loves building scalable web
+       applications and purposeful user experiences."
+     Para 2 (mt-4, same style):
+       "I work across the entire stack — from pixel-perfect frontends to robust
+       backend architectures. I'm driven by clean code and real-world impact."
+     Para 3 (mt-4, same style):
+       "When I'm not coding, I'm exploring new technologies, contributing to open
+       source, or thinking about how software can solve everyday problems."
+     Highlight words: wrap in spans matching syntax colors (same as Phase 2 pattern)
+
+     Stat cards (grid grid-cols-3 gap-4 mt-10):
+       Each card: bg-[#252526] border border-[#3d3d3d] rounded p-5 text-center
+         Number: text-[32px] font-black text-[#00e5cc]
+         Label:  text-[12px] font-mono text-[#858585] mt-1
+       Cards: "3+" Years Exp | "20+" Projects | "10+" Clients  ← placeholder numbers
+
+─── PAGE 2: projects.js (app/projects/page.tsx) ─
+Active tab  : projects.js tab, yellow top border (#f7df1e)
+Active file : projects.js in sidebar
+Breadcrumb  : ganesh-singha › src › projects.js
+StatusBar   : "JavaScript"
+Padding     : px-10 py-12
+
+1. Code comment label
+   "// projects.js — things I've shipped"
+   color: #6a9955, text-[15px] font-mono, mb-8
+
+2. Section heading
+   "Projects" — text-[64px] font-black text-white leading-none
+   Subtitle: "// things I've shipped"
+   color: #858585 text-[14px] font-mono, mt-2 mb-10
+
+3. Project data (define as const array, mark all with placeholder comments):
+const projects = [
+  {
+    name: "OrbitCart",
+    tag: "Full Stack",
+    desc: "A full-stack e-commerce platform with authentication, cart management, and payment integration.",
+    stack: ["React", "Node.js", "MongoDB", "Stripe"],
+    tagColor: "#4ec9b0",
+    demo: "#",    // placeholder
+    github: "#"  // placeholder
+  },
+  {
+    name: "NebulaChat",
+    tag: "Real-time",
+    desc: "A real-time messaging app with rooms, typing indicators, and WebSocket connections.",
+    stack: ["Next.js", "Socket.io", "PostgreSQL", "Tailwind"],
+    tagColor: "#9cdcfe",
+    demo: "#",
+    github: "#"
+  },
+  {
+    name: "GravityDash",
+    tag: "Analytics",
+    desc: "An analytics dashboard with interactive charts, live data simulation, and CSV export.",
+    stack: ["React", "TypeScript", "Chart.js", "REST API"],
+    tagColor: "#dcdcaa",
+    demo: "#",
+    github: "#"
+  }
+]
+
+4. Project cards grid (grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5)
+   Each card (bg-[#252526] border border-[#3d3d3d] rounded-sm p-6
+               hover:border-[#00e5cc] transition-colors duration-200):
+     Top row: tag pill (bg-[#1e1e1e] border border-[#3d3d3d] text-[tagColor]
+               text-[11px] font-mono px-2 py-0.5 rounded)
+     Project name: text-[22px] font-bold text-white mt-3 font-mono
+     Description: text-[13px] text-[#858585] mt-2 leading-relaxed font-mono
+     Stack badges (flex flex-wrap gap-2 mt-4):
+       Each: bg-[#1e1e1e] text-[#d4d4d4] text-[12px] font-mono px-2 py-1
+             border border-[#3d3d3d] rounded
+     Action row (flex gap-3 mt-6, border-t border-[#3d3d3d] pt-4):
+       "↗ Live Demo"  → text-[#00e5cc] text-[13px] font-mono hover:underline
+       "⌥ GitHub"    → text-[#858585] text-[13px] font-mono hover:text-[#d4d4d4]
+
+5. Footer line
+   "// more_projects on GitHub →" as a link
+   color: #858585 hover:text-[#00e5cc], font-mono text-[14px], mt-10 block
+
+// Confirm both pages feel like separate files are open in the IDE.
+// Sidebar + tab + breadcrumb + statusbar all update correctly per route.

@@ -1,0 +1,124 @@
+## PHASE 4 — skills.json & contact.css PAGES
+// Two final content pages. After this, all 5 files are complete.
+
+─── PAGE 1: skills.json (app/skills/page.tsx) ─
+Active tab  : skills.json, olive/yellow top border (#cbcb41)
+Active file : skills.json in sidebar
+Breadcrumb  : ganesh-singha › src › skills.json
+StatusBar   : "JSON"
+Padding     : px-10 py-12
+
+1. Code comment label
+   "// skills.json — my technical universe"
+   color: #6a9955, text-[15px] font-mono, mb-8
+
+2. Section heading
+   "Skills & Stack" — text-[64px] font-black text-white leading-none
+   Subtitle: "// my technical universe"
+   color: #858585, text-[14px] font-mono, mt-2 mb-10
+
+3. Skill clusters (grid grid-cols-1 md:grid-cols-3 gap-10)
+   Data:
+   const clusters = [
+     { label: "Frontend",      color: "#9cdcfe", icon: "◈",
+       skills: ["React","Next.js","TypeScript","Tailwind CSS","HTML / CSS","Framer Motion"] },
+     { label: "Backend",       color: "#4ec9b0", icon: "◉",
+       skills: ["Node.js","Express.js","Python","REST APIs","GraphQL","PostgreSQL"] },
+     { label: "Tools & Infra", color: "#dcdcaa", icon: "◇",
+       skills: ["Git","Docker","AWS","MongoDB","Vercel","Linux"] }
+   ]
+
+   Each cluster column:
+     Header row (flex items-center gap-2 mb-5):
+       icon in cluster color, text-[18px]
+       label: text-[13px] font-mono font-bold color matches cluster color
+       small line: flex-1 border-t border-[#3d3d3d] ml-2
+     Skill chips (flex flex-wrap gap-2):
+       Each chip: bg-[#252526] border border-[#3d3d3d] rounded
+                  text-[13px] font-mono text-[#d4d4d4] px-3 py-1.5
+                  hover:border-[cluster color] hover:text-[cluster color]
+                  transition-colors duration-150
+       Animate in: fadeUp with animation-delay: index * 50ms
+
+4. Currently Learning section (mt-14)
+   Label: "// currently_learning: []" — color #6a9955 font-mono text-[14px] mb-4
+   Two dashed-border chips: ["Rust", "Web3"]  ← placeholder, mark with comment
+   Same chip style but border-dashed border-[#555] text-[#858585]
+
+5. Experience timeline (mt-14)
+   Label: "// experience_log:" — color #6a9955 font-mono text-[14px] mb-6
+   Two placeholder timeline entries (vertical list, left border-l border-[#3d3d3d] pl-6):
+     Entry (mb-8, relative):
+       Dot: w-3 h-3 rounded-full bg-[#00e5cc] absolute -left-[25px] top-1.5
+       Role: text-[16px] font-bold text-white font-mono   ← "[Job Title]" placeholder
+       Company + dates: text-[13px] text-[#858585] font-mono mt-0.5  ← placeholder
+       Description: text-[13px] text-[#d4d4d4] font-mono mt-2 leading-relaxed ← placeholder
+
+─── PAGE 2: contact.css (app/contact/page.tsx) ─
+// Study image 2 from the reference screenshots carefully for this page.
+Active tab  : contact.css, purple top border (#563d7c)
+Active file : contact.css in sidebar
+Breadcrumb  : ganesh-singha › src › contact.css
+StatusBar   : "CSS"
+Padding     : px-10 py-12
+
+1. Code comment label (exactly matching the reference screenshot style)
+   "/* contact.css — let's build something */"
+   color: #6a9955, text-[15px] font-mono, mb-6
+
+2. Section heading
+   "Contact" — text-[64px] font-black text-white leading-none
+   Subtitle line: "// open to work, collabs & good conversations"
+   color: #858585, text-[14px] font-mono, mt-2 mb-10
+
+3. Two-column layout (grid grid-cols-1 lg:grid-cols-2 gap-12)
+
+   Left — FIND ME ON (matching screenshot exactly)
+   Column header: "FIND ME ON" — text-[#4ec9b0] text-[13px] font-mono tracking-widest mb-4
+
+   Contact link cards (flex flex-col gap-3):
+     Each card (bg-[#252526] border border-[#3d3d3d] rounded p-4
+                flex items-center justify-between
+                hover:border-[#4ec9b0] transition-colors cursor-pointer):
+       Left: icon (16px, text-[#4ec9b0]) + flex-col:
+               Label: "EMAIL" / "LINKEDIN" / "GITHUB" / "MEDIUM"
+                 text-[#4ec9b0] text-[12px] font-mono tracking-wider font-bold
+               Value: "ganesh@example.com" etc.
+                 text-[#d4d4d4] text-[13px] font-mono mt-0.5  ← placeholder
+       Right: diagonal arrow "↗" text-[#858585] text-[14px]
+
+     Cards in order (mark all values as placeholder):
+       Mail icon     → EMAIL      → ganesh@example.com
+       Linkedin icon → LINKEDIN   → linkedin.com/in/ganeshsingha
+       Github icon   → GITHUB     → github.com/ganeshsingha
+       FileText icon → MEDIUM     → medium.com/@ganeshsingha  ← optional placeholder
+
+   Right — SEND A MESSAGE (matching screenshot exactly)
+   Column header: "SEND A MESSAGE" — text-[#4ec9b0] text-[13px] font-mono tracking-widest mb-4
+
+   Form (flex flex-col gap-0, use React useState for fields + submitted state):
+     Each field group (mb-5):
+       Label: "// YOUR_NAME *" / "// YOUR_EMAIL *" / "// SUBJECT" / "// MESSAGE *"
+         color: #858585, text-[12px] font-mono mb-1.5
+         Required fields show red asterisk: text-[#f44747]
+       Input / Textarea:
+         bg-[#1e1e1e] border border-[#3d3d3d] rounded w-full
+         px-4 py-2.5 text-[13px] font-mono text-[#d4d4d4]
+         placeholder: "string" (exactly like the screenshot — the placeholder text IS "string")
+         focus: outline-none border-[#00e5cc] transition-colors
+       Message textarea: rows=5, resize-none
+
+     Submit button (mt-2 w-full):
+       "transmit_message( ) →"
+       bg-[#00e5cc] text-[#1e1e1e] font-bold font-mono text-[14px]
+       py-3 rounded hover:bg-[#00b8a9] transition-colors
+       On click: set submitted=true (no real API — mark with TODO comment)
+
+     Success state (when submitted=true, replace form):
+       "// message_transmitted: true ✓"  color #4ec9b0 font-mono text-[15px]
+       "signal received. Response within 24 hours."  color #858585 text-[13px] mt-2
+       Reset link: "← send_another( )" onClick: reset form
+
+// After Phase 4: all 5 file pages are complete.
+// Each one feels like opening a different file in the Antigravity IDE.
+// Move to Phase 5 for routing polish, mobile, and final wiring.
