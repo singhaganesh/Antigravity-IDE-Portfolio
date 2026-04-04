@@ -1,16 +1,8 @@
 'use client';
 
 import React from 'react';
-import Link from 'next/link';
-import { usePathname } from 'next/navigation';
 import { X } from 'lucide-react';
-import { clsx, type ClassValue } from 'clsx';
-import { twMerge } from 'tailwind-merge';
 import { useActiveFile } from '@/context/ActiveFileContext';
-
-function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs));
-}
 
 interface FileEntry {
   name: string;
@@ -21,7 +13,6 @@ interface FileEntry {
 }
 
 const Sidebar = () => {
-  const pathname = usePathname();
   const { isMobileMenuOpen, setIsMobileMenuOpen, openTab } = useActiveFile();
 
   const files: FileEntry[] = [
@@ -37,7 +28,6 @@ const Sidebar = () => {
 
   const sidebarContent = (
     <>
-      {/* Header */}
       <div className="px-4 py-3 flex items-center justify-between text-muted shrink-0">
         <span className="text-[11px] font-bold tracking-[0.2em] uppercase">PORTFOLIO</span>
         {isMobileMenuOpen && (
@@ -49,48 +39,34 @@ const Sidebar = () => {
         )}
       </div>
 
-      {/* File List */}
       <div className="flex flex-col py-1 overflow-y-auto no-scrollbar">
-        {files.map((file) => {
-          const isActive = pathname === file.path;
-          
-          const Content = (
-            <div 
-              className={cn(
-                "flex items-center gap-6 px-4 h-[32px] hover:bg-bg-hover transition-colors select-none cursor-pointer",
-                isActive ? "bg-[#37373d] text-white" : "text-primary/70"
-              )}
-              onClick={() => !file.isDecorative && openTab(file.path)}
+        {files.map((file) => (
+          <div 
+            key={file.name}
+            className="flex items-center gap-6 px-4 h-[32px] hover:bg-bg-hover transition-colors select-none cursor-pointer"
+            onClick={() => !file.isDecorative && openTab(file.path)}
+          >
+            <div
+              className="w-4 h-4 flex items-center justify-center rounded-sm text-[10px] font-bold text-bg-sidebar shrink-0 ml-1"
+              style={{ backgroundColor: file.color }}
             >
-              <div
-                className="w-4 h-4 flex items-center justify-center rounded-sm text-[10px] font-bold text-bg-sidebar shrink-0 ml-1"
-                style={{ backgroundColor: file.color }}
-              >
-                {file.letter}
-              </div>
-              <span className={cn(
-                "text-[13px] font-mono",
-                isActive ? "text-white font-medium" : "text-[#858585]"
-              )}>
-                {file.name}
-              </span>
+              {file.letter}
             </div>
-          );
-
-          return <div key={file.name}>{Content}</div>;
-        })}
+            <span className="text-[13px] font-mono text-[#858585]">
+              {file.name}
+            </span>
+          </div>
+        ))}
       </div>
     </>
   );
 
   return (
     <>
-      {/* Desktop Sidebar */}
       <div className="w-[240px] h-full bg-bg-sidebar border-r border-border-color hidden md:flex flex-col select-none overflow-hidden">
         {sidebarContent}
       </div>
 
-      {/* Mobile Sidebar Overlay */}
       {isMobileMenuOpen && (
         <div className="fixed inset-0 z-50 flex md:hidden">
           <div className="fixed inset-0 bg-black/50" onClick={() => setIsMobileMenuOpen(false)} />

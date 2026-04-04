@@ -1,24 +1,23 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { useActiveFile } from '@/context/ActiveFileContext';
-import { X, ChevronRight, MoreHorizontal, LayoutGrid, Monitor, ChevronDown } from 'lucide-react';
+import { X, MoreHorizontal, LayoutGrid, Monitor, ChevronDown } from 'lucide-react';
 
 const TerminalDrawer = () => {
   const { isTerminalOpen, setIsTerminalOpen } = useActiveFile();
 
   const terminalContent = [
-    { text: "ganesh@ganesh:~/Work/Projects/Antigravity-IDE-Portfolio$ ^C", color: "text-[#4ec9b0]" },
     { text: "ganesh@ganesh:~/Work/Projects/Antigravity-IDE-Portfolio$ npm run dev", color: "text-[#4ec9b0]" },
-    { text: "./src/components/ide/Sidebar.tsx", color: "text-white" },
     { text: " ", color: "" },
-    { text: "./src/components/ide/Sidebar.tsx", color: "text-white" },
-    { text: "Attempted import error: 'FileCss' is not exported from '__barrel_optimize_?names=ChevronDown,FileCode,FileCss,FileJson,FileSearch,FileText,FileType,X!==lucide-react' (imported as 'FileCss').", color: "text-[#f44747]" },
+    { text: "  ▲ Next.js 14.2.18", color: "text-white" },
+    { text: "  - Local:        http://localhost:3000", color: "text-text-muted" },
+    { text: "  - Network:      http://192.168.1.x:3000", color: "text-text-muted" },
+    { text: "  - Environments: .env.local", color: "text-text-muted" },
     { text: " ", color: "" },
-    { text: "Import trace for requested module:", color: "text-white" },
-    { text: "./src/components/ide/Sidebar.tsx", color: "text-[#f44747]" },
-    { text: "GET /search 404 in 102ms", color: "text-white" },
-    { text: "GET /git 404 in 36ms", color: "text-white" },
+    { text: " ✓ Ready in 847ms", color: "text-[#4ec9b0]" },
+    { text: " ✓ Compiled successfully", color: "text-[#4ec9b0]" },
+    { text: " ", color: "" },
   ];
 
   if (!isTerminalOpen) return null;
@@ -35,8 +34,7 @@ const TerminalDrawer = () => {
         </div>
         <div className="flex items-center gap-3">
           <div className="flex items-center gap-2 text-muted text-[11px] hover:text-white cursor-pointer bg-[#ffffff08] px-2 py-0.5 rounded">
-            <span className="text-[10px] scale-90">⬚</span>
-            <span>npm</span>
+            <span className="text-[10px] scale-90">npm</span>
             <PlusIcon />
             <ChevronDown size={12} />
           </div>

@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { Search, Minus, Square, X, Menu, Settings, Sparkles, LayoutPanelLeft, LayoutPanelTop, LayoutPanelRight } from 'lucide-react';
+import { Search, Minus, Square, X, Menu, Settings, Sparkles } from 'lucide-react';
 import { useActiveFile } from '@/context/ActiveFileContext';
 import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';

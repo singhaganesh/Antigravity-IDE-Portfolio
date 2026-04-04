@@ -2,12 +2,6 @@
 
 import React, { useState, useEffect, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
-import { clsx, type ClassValue } from 'clsx';
-import { twMerge } from 'tailwind-merge';
-
-function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs));
-}
 
 const Typewriter = ({ phrases }: { phrases: string[] }) => {
   const [index, setIndex] = useState(0);
@@ -75,7 +69,6 @@ export default function Home() {
 
   return (
     <div className="px-10 py-12 relative min-h-full flex flex-col animate-fadeUp overflow-hidden">
-      {/* Star Particles */}
       {isClient && particles.map((p) => (
         <div
           key={p.id}
@@ -88,17 +81,14 @@ export default function Home() {
         />
       ))}
 
-      {/* Code comment label */}
       <div className="text-text-green text-[15px] font-mono mb-8 relative z-10">
         {"// hello world !! Welcome to my portfolio"}
       </div>
 
-      {/* Floating Element (Top Right) */}
       <div className="absolute top-8 right-8 w-20 h-20 bg-bg-sidebar border border-border-color rounded flex items-center justify-center animate-float [animation-direction:reverse] z-10">
         <div className="w-2 h-4 bg-[#00e5cc] animate-blink" />
       </div>
 
-      {/* Name Section */}
       <div className="animate-float relative z-10">
         <h1 className="font-display font-black text-[96px] leading-[0.9] flex flex-col">
           <span className="text-white">Ganesh</span>
@@ -106,7 +96,6 @@ export default function Home() {
         </h1>
       </div>
 
-      {/* Role Pills */}
       <div className="mt-8 flex gap-3 flex-wrap relative z-10">
         {rolePills.map((pill) => (
           <div
@@ -119,12 +108,10 @@ export default function Home() {
         ))}
       </div>
 
-      {/* Typewriter Line */}
       <div className="mt-6 relative z-10">
         <Typewriter phrases={phrases} />
       </div>
 
-      {/* Bio Paragraph */}
       <div className="mt-8 max-w-[640px] text-[15px] font-mono leading-relaxed text-text-primary relative z-10">
         I live at the crossroads of{" "}
         <span className="text-text-cyan font-bold">full stack engineering</span> and{" "}
@@ -134,7 +121,6 @@ export default function Home() {
         <span className="text-text-yellow">maintainable</span>.
       </div>
 
-      {/* CTA Buttons Row */}
       <div className="mt-10 flex gap-3 relative z-10">
         <button
           onClick={() => router.push('/projects')}

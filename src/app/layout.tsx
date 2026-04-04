@@ -11,6 +11,7 @@ import Breadcrumb from "@/components/ide/Breadcrumb";
 import StatusBar from "@/components/ide/StatusBar";
 import TerminalDrawer from "@/components/ide/TerminalDrawer";
 import AgentPanel from "@/components/ide/AgentPanel";
+import { ErrorBoundary } from "@/components/ui/ErrorBoundary";
 import { ActiveFileProvider, useActiveFile } from "@/context/ActiveFileContext";
 
 const jetbrainsMono = JetBrains_Mono({
@@ -27,7 +28,7 @@ function WorkspaceLayout({ children }: { children: React.ReactNode }) {
   const { isSidebarOpen, isAgentPanelOpen, agentPanelWidth, setAgentPanelWidth } = useActiveFile();
   const [isResizing, setIsResizing] = useState(false);
 
-  const startResizing = useCallback((mouseDownEvent: React.MouseEvent) => {
+  const startResizing = useCallback(() => {
     setIsResizing(true);
   }, []);
 
@@ -61,37 +62,36 @@ function WorkspaceLayout({ children }: { children: React.ReactNode }) {
       <TitleBar />
       
       <div className="flex flex-1 overflow-hidden relative">
-        {/* Left Chrome */}
         <div className="flex h-full overflow-hidden">
           <ActivityBar />
           {isSidebarOpen && <Sidebar />}
         </div>
 
-        {/* Editor Area */}
         <main className="flex-1 flex flex-col min-w-0 bg-bg-editor overflow-hidden relative">
           <TabBar />
           <Breadcrumb />
-          <div className="flex-1 overflow-y-auto scrollbar-thin flex">
-            <div className="w-12 bg-bg-editor border-r border-transparent flex flex-col items-end pr-4 pt-12 select-none shrink-0">
-              {Array.from({ length: 50 }).map((_, i) => (
-                <span key={i} className="text-[13px] text-muted font-mono leading-relaxed h-[22.5px]">
-                  {i + 1}
-                </span>
-              ))}
+          <ErrorBoundary>
+            <div className="flex-1 overflow-y-auto scrollbar-thin flex">
+              <div className="w-12 bg-bg-editor border-r border-transparent flex flex-col items-end pr-4 pt-12 select-none shrink-0">
+                {Array.from({ length: 50 }).map((_, i) => (
+                  <span key={i} className="text-[13px] text-muted font-mono leading-relaxed h-[22.5px]">
+                    {i + 1}
+                  </span>
+                ))}
+              </div>
+              <div className="flex-1 min-w-0">
+                {children}
+              </div>
+              <div className="w-16 hidden xl:block opacity-20 border-l border-border-color shrink-0 pt-12 pr-2">
+                {Array.from({ length: 100 }).map((_, i) => (
+                  <div key={i} className="h-[2px] w-full bg-text-muted mb-[1px]" />
+                ))}
+              </div>
             </div>
-            <div className="flex-1 min-w-0">
-              {children}
-            </div>
-            <div className="w-16 hidden xl:block opacity-20 border-l border-border-color shrink-0 pt-12 pr-2">
-              {Array.from({ length: 100 }).map((_, i) => (
-                <div key={i} className="h-[2px] w-full bg-text-muted mb-[1px]" />
-              ))}
-            </div>
-          </div>
+          </ErrorBoundary>
           <TerminalDrawer />
         </main>
 
-        {/* Resizer Handle */}
         {isAgentPanelOpen && (
           <div 
             onMouseDown={startResizing}
@@ -100,7 +100,6 @@ function WorkspaceLayout({ children }: { children: React.ReactNode }) {
           />
         )}
 
-        {/* Right Chrome (Agent Panel) */}
         <div 
           style={{ width: isAgentPanelOpen ? `${agentPanelWidth}px` : '0px' }}
           className="h-full overflow-hidden flex-shrink-0"

@@ -1,6 +1,6 @@
 'use client';
 
-import React, { createContext, useContext, useEffect, useState } from 'react';
+import React, { createContext, useContext, useEffect, useState, useCallback, useRef } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 
 export interface FileMetadata {
@@ -21,6 +21,11 @@ export const FILE_MAP: { [key: string]: FileMetadata } = {
   "/contact": { name: "contact.css", lang: "CSS", tabBorder: "#563d7c", dot: "#563d7c", color: "#563d7c", letter: "C", path: "/contact" },
 };
 
+export interface CursorPosition {
+  line: number;
+  column: number;
+}
+
 interface ActiveFileContextType {
   activeFile: FileMetadata;
   openTabs: string[];
@@ -36,6 +41,8 @@ interface ActiveFileContextType {
   setAgentPanelWidth: (width: number) => void;
   isMobileMenuOpen: boolean;
   setIsMobileMenuOpen: (open: boolean) => void;
+  cursorPosition: CursorPosition;
+  setCursorPosition: (pos: CursorPosition) => void;
 }
 
 const ActiveFileContext = createContext<ActiveFileContextType | undefined>(undefined);
@@ -50,36 +57,61 @@ export const ActiveFileProvider: React.FC<{ children: React.ReactNode }> = ({ ch
   const [isAgentPanelOpen, setIsAgentPanelOpen] = useState(true);
   const [agentPanelWidth, setAgentPanelWidth] = useState(300);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [cursorPosition, setCursorPosition] = useState<CursorPosition>({ line: 1, column: 1 });
 
+  // Track if we're in the middle of a close operation
+  const isClosingTab = useRef(false);
+
+  const handleSetCursorPosition = useCallback((pos: CursorPosition) => {
+    setCursorPosition(pos);
+  }, []);
+
+  // Only react to pathname changes - NOT openTabs changes
   useEffect(() => {
     const currentFile = FILE_MAP[pathname];
     if (currentFile) {
       setActiveFile(currentFile);
-      if (!openTabs.includes(pathname)) {
-        setOpenTabs(prev => [...prev, pathname]);
+      // Only add tab if we're not closing a tab and tab doesn't exist
+      if (!isClosingTab.current) {
+        setOpenTabs(prev => {
+          if (!prev.includes(pathname)) {
+            return [...prev, pathname];
+          }
+          return prev;
+        });
       }
+      // Reset the flag after the effect runs
+      isClosingTab.current = false;
     }
     setIsMobileMenuOpen(false);
+    setCursorPosition({ line: 1, column: 1 });
   }, [pathname]);
 
-  const openTab = (path: string) => {
-    if (!openTabs.includes(path)) {
-      setOpenTabs(prev => [...prev, path]);
-    }
-    router.push(path);
-  };
-
-  const closeTab = (path: string) => {
-    const newTabs = openTabs.filter(t => t !== path);
-    setOpenTabs(newTabs);
-    if (pathname === path) {
-      if (newTabs.length > 0) {
-        router.push(newTabs[newTabs.length - 1]);
-      } else {
-        router.push("/");
+  const openTab = useCallback((path: string) => {
+    setOpenTabs(prev => {
+      if (!prev.includes(path)) {
+        return [...prev, path];
       }
-    }
-  };
+      return prev;
+    });
+    router.push(path);
+  }, [router]);
+
+  const closeTab = useCallback((path: string) => {
+    isClosingTab.current = true;
+    setOpenTabs(prev => {
+      const newTabs = prev.filter(t => t !== path);
+      // Navigate to another tab if closing the active one
+      if (pathname === path) {
+        if (newTabs.length > 0) {
+          router.push(newTabs[newTabs.length - 1]);
+        } else {
+          router.push("/");
+        }
+      }
+      return newTabs;
+    });
+  }, [pathname, router]);
 
   return (
     <ActiveFileContext.Provider value={{ 
@@ -96,7 +128,9 @@ export const ActiveFileProvider: React.FC<{ children: React.ReactNode }> = ({ ch
       agentPanelWidth,
       setAgentPanelWidth,
       isMobileMenuOpen, 
-      setIsMobileMenuOpen 
+      setIsMobileMenuOpen,
+      cursorPosition,
+      setCursorPosition: handleSetCursorPosition
     }}>
       {children}
     </ActiveFileContext.Provider>

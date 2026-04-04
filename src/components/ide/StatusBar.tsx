@@ -5,14 +5,14 @@ import { useActiveFile } from '@/context/ActiveFileContext';
 import { GitBranch, AlertCircle, AlertTriangle, Sparkles, Heart, Bell } from 'lucide-react';
 
 const StatusBar = () => {
-  const { activeFile } = useActiveFile();
+  const { activeFile, cursorPosition } = useActiveFile();
 
   return (
     <div className="h-[22px] bg-[#181818] border-t border-border-color fixed bottom-0 left-0 right-0 flex items-center justify-between select-none px-3 text-muted z-50">
       <div className="flex items-center gap-4 text-[12px]">
         <div className="flex items-center gap-1 hover:bg-[#ffffff10] px-1 cursor-pointer transition-colors">
           <GitBranch size={12} />
-          <span>main*</span>
+          <span>main</span>
           <RotateIcon />
         </div>
         <div className="flex items-center gap-2 hover:bg-[#ffffff10] px-1 cursor-pointer transition-colors">
@@ -25,7 +25,7 @@ const StatusBar = () => {
 
       <div className="flex items-center gap-4 text-[12px] ml-auto">
         <div className="flex items-center gap-1 hover:bg-[#ffffff10] px-1 cursor-pointer transition-colors">
-          <span>Ln 123, Col 1</span>
+          <span>Ln {cursorPosition.line}, Col {cursorPosition.column}</span>
         </div>
         <div className="flex items-center gap-1 hover:bg-[#ffffff10] px-1 cursor-pointer transition-colors">
           <span>Spaces: 2</span>
@@ -37,7 +37,7 @@ const StatusBar = () => {
           <span>LF</span>
         </div>
         <div className="flex items-center gap-1 hover:bg-[#ffffff10] px-1 cursor-pointer transition-colors">
-          <span>{`{ }`} TypeScript JSX</span>
+          <span>{'{ }'} {activeFile.lang}</span>
         </div>
         <div className="flex items-center gap-1 hover:bg-[#ffffff10] px-1 cursor-pointer transition-colors text-white">
           <Sparkles size={12} className="text-[#00e5cc]" />
@@ -45,7 +45,7 @@ const StatusBar = () => {
         </div>
         <div className="flex items-center gap-1 hover:bg-[#ffffff10] px-1 cursor-pointer transition-colors">
           <Heart size={12} />
-          <span className="hidden sm:inline">Antigravity - Settings</span>
+          <span className="hidden sm:inline">Antigravity</span>
         </div>
         <div className="flex items-center hover:bg-[#ffffff10] px-1 cursor-pointer transition-colors">
           <Bell size={12} />

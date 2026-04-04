@@ -1,21 +1,9 @@
 'use client';
 
 import React from 'react';
+import { aboutInfo, stats } from '@/data/profile';
 
 const AboutPage = () => {
-  const infoRows = [
-    { label: "Location", value: "Burdwan, India", valueColor: "text-text-primary" },
-    { label: "Available", value: "Immediately", valueColor: "text-text-cyan" },
-    { label: "Languages", value: "English, Bengali, Hindi", valueColor: "text-text-primary" },
-    { label: "Experience", value: "3+ Years", valueColor: "text-text-primary" },
-  ];
-
-  const stats = [
-    { number: "3+", label: "Years Exp" },
-    { number: "20+", label: "Projects" },
-    { number: "10+", label: "Clients" },
-  ];
-
   return (
     <div className="px-10 py-12 animate-fadeUp">
       {/* Code comment label */}
@@ -52,7 +40,7 @@ const AboutPage = () => {
           <div className="border-t border-border-color my-4" />
 
           <div className="flex flex-col gap-1.5">
-            {infoRows.map((row) => (
+            {aboutInfo.map((row) => (
               <div key={row.label} className="flex justify-between text-[13px] font-mono py-1">
                 <span className="text-text-muted">{row.label}</span>
                 <span className={row.valueColor}>{row.value}</span>
@@ -65,26 +53,25 @@ const AboutPage = () => {
         <div className="flex flex-col">
           <div className="space-y-4 text-[15px] font-mono leading-relaxed text-text-primary">
             <p>
-              Hi, I'm Ganesh — a <span className="text-text-cyan font-bold">Full Stack Developer</span> who loves building 
+              Hi, &apos;I&apos;m Ganesh — a <span className="text-text-cyan font-bold">Full Stack Developer</span> who loves building 
               <span className="text-text-orange"> scalable</span> web applications and purposeful user experiences.
             </p>
             <p>
               I work across the entire stack — from pixel-perfect <span className="text-text-blue">frontends</span> to 
-              robust <span className="text-text-yellow">backend architectures</span>. I'm driven by clean code and real-world impact.
+              robust <span className="text-text-yellow">backend architectures</span>. &apos;I&apos;m driven by clean code and real-world impact.
             </p>
             <p>
-              When I'm not coding, I'm exploring new technologies, contributing to open source, or thinking about how software 
+              When &apos;I&apos;m not coding, I&apos;m exploring new technologies, contributing to open source, or thinking about how software 
               can solve everyday problems.
             </p>
           </div>
 
           {/* Stat cards */}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-10">
-            {stats.map((stat, i) => (
+            {stats.map((stat) => (
               <div 
                 key={stat.label} 
                 className="bg-bg-sidebar border border-border-color rounded p-5 text-center transition-transform hover:-translate-y-1"
-                style={{ animationDelay: `${(i + 1) * 100}ms` }}
               >
                 <div className="text-[32px] font-black text-[#00e5cc] font-display leading-tight">{stat.number}</div>
                 <div className="text-[12px] font-mono text-text-muted mt-1 uppercase tracking-wider">{stat.label}</div>

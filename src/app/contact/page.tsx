@@ -5,6 +5,8 @@ import { Mail, Linkedin, Github, FileText, Send } from 'lucide-react';
 
 const ContactPage = () => {
   const [submitted, setSubmitted] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -19,10 +21,30 @@ const ContactPage = () => {
     { icon: FileText, label: "MEDIUM", value: "medium.com/@ganeshsingha", href: "https://medium.com/@ganeshsingha" }
   ];
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Simulate API call
-    setSubmitted(true);
+    setIsLoading(true);
+    setError(null);
+
+    try {
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData)
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to send message');
+      }
+
+      setSubmitted(true);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to send message');
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -76,13 +98,20 @@ const ContactPage = () => {
 
           {!submitted ? (
             <form onSubmit={handleSubmit} className="flex flex-col gap-5">
+              {error && (
+                <div className="bg-[#3d1e1e] border border-[#f44747] text-[#f44747] text-[13px] font-mono p-3 rounded">
+                  {error}
+                </div>
+              )}
+              
               <div>
                 <label className="text-text-muted text-[12px] font-mono mb-1.5 block">{"// YOUR_NAME *"}</label>
                 <input 
                   required
                   type="text"
-                  placeholder="string"
-                  className="bg-bg-editor border border-border-color rounded w-full px-4 py-2.5 text-[13px] font-mono text-text-primary focus:outline-none focus:border-[#00e5cc] transition-colors placeholder:opacity-30"
+                  placeholder="John Doe"
+                  className="bg-bg-editor border border-border-color rounded w-full px-4 py-2.5 text-[13px] font-mono text-text-primary focus:outline-none focus:border-[#00e5cc] transition-colors"
+                  value={formData.name}
                   onChange={(e) => setFormData({...formData, name: e.target.value})}
                 />
               </div>
@@ -92,8 +121,9 @@ const ContactPage = () => {
                 <input 
                   required
                   type="email"
-                  placeholder="string"
-                  className="bg-bg-editor border border-border-color rounded w-full px-4 py-2.5 text-[13px] font-mono text-text-primary focus:outline-none focus:border-[#00e5cc] transition-colors placeholder:opacity-30"
+                  placeholder="john@example.com"
+                  className="bg-bg-editor border border-border-color rounded w-full px-4 py-2.5 text-[13px] font-mono text-text-primary focus:outline-none focus:border-[#00e5cc] transition-colors"
+                  value={formData.email}
                   onChange={(e) => setFormData({...formData, email: e.target.value})}
                 />
               </div>
@@ -102,8 +132,9 @@ const ContactPage = () => {
                 <label className="text-text-muted text-[12px] font-mono mb-1.5 block">{"// SUBJECT"}</label>
                 <input 
                   type="text"
-                  placeholder="string"
-                  className="bg-bg-editor border border-border-color rounded w-full px-4 py-2.5 text-[13px] font-mono text-text-primary focus:outline-none focus:border-[#00e5cc] transition-colors placeholder:opacity-30"
+                  placeholder="Project Inquiry"
+                  className="bg-bg-editor border border-border-color rounded w-full px-4 py-2.5 text-[13px] font-mono text-text-primary focus:outline-none focus:border-[#00e5cc] transition-colors"
+                  value={formData.subject}
                   onChange={(e) => setFormData({...formData, subject: e.target.value})}
                 />
               </div>
@@ -113,29 +144,34 @@ const ContactPage = () => {
                 <textarea 
                   required
                   rows={5}
-                  placeholder="string"
-                  className="bg-bg-editor border border-border-color rounded w-full px-4 py-2.5 text-[13px] font-mono text-text-primary focus:outline-none focus:border-[#00e5cc] transition-colors placeholder:opacity-30 resize-none"
+                  placeholder="Hello, I would like to discuss..."
+                  className="bg-bg-editor border border-border-color rounded w-full px-4 py-2.5 text-[13px] font-mono text-text-primary focus:outline-none focus:border-[#00e5cc] transition-colors resize-none"
+                  value={formData.message}
                   onChange={(e) => setFormData({...formData, message: e.target.value})}
                 />
               </div>
 
               <button 
                 type="submit"
-                className="bg-[#00e5cc] text-[#1e1e1e] font-bold font-mono text-[14px] py-3 rounded hover:bg-[#00b8a9] transition-all flex items-center justify-center gap-2"
+                disabled={isLoading}
+                className="bg-[#00e5cc] text-[#1e1e1e] font-bold font-mono text-[14px] py-3 rounded hover:bg-[#00b8a9] transition-all flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                transmit_message( ) <Send size={14} />
+                {isLoading ? 'Sending...' : 'transmit_message( )'} <Send size={14} />
               </button>
             </form>
           ) : (
             <div className="bg-bg-sidebar border border-border-color rounded p-8 flex flex-col items-center text-center animate-fadeUp">
               <div className="text-[#4ec9b0] font-mono text-[16px] mb-2 font-bold">
-                {"// message_transmitted: true ✓"}
+                {"// message_transmitted: true"}
               </div>
               <div className="text-text-muted text-[13px] font-mono max-w-xs">
                 Signal received. Response within 24 hours.
               </div>
               <button 
-                onClick={() => setSubmitted(false)}
+                onClick={() => {
+                  setSubmitted(false);
+                  setFormData({ name: '', email: '', subject: '', message: '' });
+                }}
                 className="mt-6 text-text-cyan hover:underline text-[13px] font-mono"
               >
                 {"← send_another( )"}

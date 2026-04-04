@@ -1,44 +1,9 @@
 'use client';
 
 import React from 'react';
+import { skillClusters, learning, experience } from '@/data/skills';
 
 const SkillsPage = () => {
-  const clusters = [
-    { 
-      label: "Frontend",      
-      color: "#9cdcfe", 
-      icon: "◈",
-      skills: ["React", "Next.js", "TypeScript", "Tailwind CSS", "HTML / CSS", "Framer Motion"] 
-    },
-    { 
-      label: "Backend",       
-      color: "#4ec9b0", 
-      icon: "◉",
-      skills: ["Node.js", "Express.js", "Python", "REST APIs", "GraphQL", "PostgreSQL"] 
-    },
-    { 
-      label: "Tools & Infra", 
-      color: "#dcdcaa", 
-      icon: "◇",
-      skills: ["Git", "Docker", "AWS", "MongoDB", "Vercel", "Linux"] 
-    }
-  ];
-
-  const experience = [
-    {
-      role: "Full Stack Developer",
-      company: "Freelance / Open Source",
-      dates: "2023 - Present",
-      description: "Building scalable web applications using React, Next.js, and Node.js. Contributing to various open-source projects."
-    },
-    {
-      role: "Junior Web Developer",
-      company: "Tech Solutions Inc.",
-      dates: "2021 - 2023",
-      description: "Developed and maintained client websites, improved performance by 30%, and collaborated with the design team for pixel-perfect UIs."
-    }
-  ];
-
   return (
     <div className="px-10 py-12 animate-fadeUp">
       {/* Code comment label */}
@@ -56,7 +21,7 @@ const SkillsPage = () => {
 
       {/* Skill clusters */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
-        {clusters.map((cluster) => (
+        {skillClusters.map((cluster) => (
           <div key={cluster.label} className="flex flex-col">
             <div className="flex items-center gap-2 mb-5">
               <span className="text-[18px]" style={{ color: cluster.color }}>{cluster.icon}</span>
@@ -67,17 +32,13 @@ const SkillsPage = () => {
             </div>
             
             <div className="flex flex-wrap gap-2">
-              {cluster.skills.map((skill, i) => (
+              {cluster.skills.map((skill) => (
                 <span 
                   key={skill}
-                  className="bg-bg-sidebar border border-border-color rounded text-[13px] font-mono text-text-primary px-3 py-1.5 hover:border-current transition-colors duration-150"
-                  style={{ 
-                    transitionProperty: 'border-color, color',
-                    animation: `fadeUp 0.4s ease-out forwards ${i * 50}ms`,
-                    opacity: 0
-                  } as any}
-                  onMouseEnter={(e) => (e.currentTarget.style.color = cluster.color)}
-                  onMouseLeave={(e) => (e.currentTarget.style.color = '#d4d4d4')}
+                  className="bg-bg-sidebar border border-border-color rounded text-[13px] font-mono text-text-primary px-3 py-1.5 hover:border-current transition-colors duration-150 cursor-default"
+                  style={{ borderColor: 'var(--tw-colors-border-color)' }}
+                  onMouseEnter={(e) => (e.currentTarget.style.borderColor = cluster.color)}
+                  onMouseLeave={(e) => (e.currentTarget.style.borderColor = '#3d3d3d')}
                 >
                   {skill}
                 </span>
@@ -91,7 +52,7 @@ const SkillsPage = () => {
       <div className="mt-14">
         <div className="text-text-green font-mono text-[14px] mb-4">{"// currently_learning: []"}</div>
         <div className="flex gap-3">
-          {["Rust", "Web3", "Go"].map((tech) => (
+          {learning.map((tech) => (
             <span key={tech} className="border border-dashed border-[#555] text-text-muted px-4 py-1.5 rounded text-[13px] font-mono">
               {tech}
             </span>
