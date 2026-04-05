@@ -1,62 +1,49 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
-import { Star, GitFork, ExternalLink, Github, Search, FolderOpen } from 'lucide-react';
-import { GitHubRepo, Project } from '@/lib/github';
+import React, { useState, useMemo } from 'react';
+import { Search, Github, ExternalLink, Star, GitFork, FolderOpen } from 'lucide-react';
+import projectsData from '@/data/projects.json';
+import { PROJECT_ORDER } from '@/data/projects-config';
+
+interface Project {
+  id: number;
+  name: string;
+  originalName: string;
+  tag: string;
+  desc: string;
+  stack: string[];
+  tagColor: string;
+  demo: string;
+  github: string;
+  stars: number;
+  forks: number;
+  updatedAt: string;
+}
 
 const ProjectsPage = () => {
-  const [projects, setProjects] = useState<Project[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
 
-  useEffect(() => {
-    fetchProjects();
-  }, []);
+  const projects = useMemo(() => {
+    const data = [...projectsData] as Project[];
+    
+    // Sort based on PROJECT_ORDER configuration
+    return data.sort((a, b) => {
+      const indexA = PROJECT_ORDER.indexOf(a.originalName);
+      const indexB = PROJECT_ORDER.indexOf(b.originalName);
 
-  const fetchProjects = async () => {
-    try {
-      setLoading(true);
-      const response = await fetch(
-        `https://api.github.com/users/singhaganesh/repos?sort=updated&per_page=100&type=public`
-      );
-
-      if (!response.ok) {
-        throw new Error('Failed to fetch projects');
+      // If both are in the config, use config order
+      if (indexA !== -1 && indexB !== -1) {
+        return indexA - indexB;
       }
 
-      const repos: GitHubRepo[] = await response.json();
-      
-      const portfolioProjects = repos
-        .filter(repo => 
-          !repo.fork && 
-          repo.visibility === 'public' &&
-          repo.topics?.includes('portfolio')
-        )
-        .map(repo => ({
-          id: repo.id,
-          name: formatRepoName(repo.name),
-          tag: repo.language || 'Project',
-          desc: repo.description || 'No description available',
-          stack: getStack(repo),
-          tagColor: getLanguageColor(repo.language),
-          demo: repo.homepage || '#',
-          github: repo.html_url,
-          stars: repo.stargazers_count,
-          forks: repo.forks_count,
-          featured: true,
-        }));
+      // If only one is in the config, prioritize it
+      if (indexA !== -1) return -1;
+      if (indexB !== -1) return 1;
 
-      setProjects(portfolioProjects);
-      setError(null);
-    } catch (err) {
-      console.error('Error fetching repos:', err);
-      setError('Failed to load projects from GitHub');
-      setProjects([]);
-    } finally {
-      setLoading(false);
-    }
-  };
+      // Fallback: sort by update date (newest first)
+      return new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime();
+    });
+  }, []);
 
   const filteredProjects = projects.filter((project) => {
     const matchesSearch = 
@@ -67,39 +54,22 @@ const ProjectsPage = () => {
     return matchesSearch;
   });
 
-  if (loading) {
-    return (
-      <div className="px-10 py-12 animate-fadeUp">
-        <div className="text-text-green text-[15px] font-mono mb-8">
-          {"// projects.js — loading from GitHub..."}
-        </div>
-        <div className="mb-10">
-          <h1 className="text-[64px] font-black text-white leading-none font-display">Projects</h1>
-          <p className="text-text-muted text-[14px] font-mono mt-2">{"// things I've shipped"}</p>
-        </div>
-        <div className="flex items-center justify-center h-64">
-          <div className="flex items-center gap-3 text-text-muted font-mono">
-            <div className="w-4 h-4 border-2 border-text-muted border-t-transparent rounded-full animate-spin" />
-            Loading portfolio projects...
-          </div>
-        </div>
-      </div>
-    );
-  }
-
   return (
     <div className="px-10 py-12 animate-fadeUp">
+      {/* Code comment label */}
       <div className="text-text-green text-[15px] font-mono mb-8">
-        {"// projects.js — things I've shipped"}
+        {"// projects.js — curated work from my GitHub"}
       </div>
 
+      {/* Section heading */}
       <div className="mb-10">
         <h1 className="text-[64px] font-black text-white leading-none font-display">Projects</h1>
         <p className="text-text-muted text-[14px] font-mono mt-2">
-          {"// featured work — sourced from GitHub"}
+          {"// featured projects & selected experiments"}
         </p>
       </div>
 
+      {/* Search Bar */}
       <div className="mb-8">
         <div className="relative max-w-md">
           <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-text-muted" />
@@ -113,12 +83,7 @@ const ProjectsPage = () => {
         </div>
       </div>
 
-      {error && (
-        <div className="bg-[#3d1e1e] border border-[#f44747] text-[#f44747] text-[13px] font-mono p-3 rounded mb-6">
-          {error}
-        </div>
-      )}
-
+      {/* Projects grid */}
       {filteredProjects.length > 0 ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
           {filteredProjects.map((project) => (
@@ -191,10 +156,7 @@ const ProjectsPage = () => {
       ) : (
         <div className="flex flex-col items-center justify-center py-16 text-text-muted">
           <FolderOpen size={48} className="mb-4 opacity-50" />
-          <p className="font-mono text-[14px] mb-2">No portfolio projects found</p>
-          <p className="font-mono text-[12px] opacity-70">
-            Add the portfolio topic to your repos on GitHub
-          </p>
+          <p className="font-mono text-[14px] mb-2">No projects matching your search</p>
         </div>
       )}
 
@@ -212,52 +174,5 @@ const ProjectsPage = () => {
     </div>
   );
 };
-
-function formatRepoName(name: string): string {
-  return name
-    .replace(/-/g, ' ')
-    .replace(/_/g, ' ')
-    .split(' ')
-    .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
-    .join(' ');
-}
-
-function getStack(repo: GitHubRepo): string[] {
-  const stack: string[] = [];
-  
-  if (repo.language) {
-    stack.push(repo.language);
-  }
-  
-  if (repo.topics) {
-    const otherTopics = repo.topics
-      .filter(t => t !== 'portfolio')
-      .slice(0, 4);
-    stack.push(...otherTopics);
-  }
-  
-  return [...new Set(stack)].slice(0, 5);
-}
-
-function getLanguageColor(language: string | null): string {
-  const colors: { [key: string]: string } = {
-    TypeScript: '#3178c6',
-    JavaScript: '#f7df1e',
-    Python: '#3572A5',
-    React: '#61dafb',
-    HTML: '#e34c26',
-    CSS: '#563d7c',
-    Go: '#00ADD8',
-    Rust: '#dea584',
-    Java: '#b07219',
-    'C++': '#f34b7d',
-    Swift: '#F05138',
-    Kotlin: '#A97BFF',
-    Ruby: '#701516',
-    PHP: '#4F5D95',
-    Dart: '#00B4AB',
-  };
-  return language ? (colors[language] || '#858585') : '#858585';
-}
 
 export default ProjectsPage;

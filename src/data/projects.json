@@ -1,38 +1,87 @@
 [
   {
-    "name": "OrbitCart",
-    "repoName": "orbitcart",
-    "tag": "Full Stack",
-    "desc": "A full-stack e-commerce platform with authentication, cart management, and payment integration.",
-    "stack": ["React", "Node.js", "MongoDB", "Stripe"],
-    "tagColor": "#4ec9b0",
-    "demo": "",
-    "github": "https://github.com/singhaganesh/orbitcart",
+    "id": 1201007541,
+    "name": "Antigravity Ide Portfolio",
+    "originalName": "Antigravity-IDE-Portfolio",
+    "tag": "TypeScript",
+    "desc": "Personal portfolio for Ganesh Singha. Styled as the Antigravity IDE using Next.js, React, and Tailwind CSS.",
+    "stack": [
+      "TypeScript"
+    ],
+    "tagColor": "#3178c6",
+    "demo": "#",
+    "github": "https://github.com/singhaganesh/Antigravity-IDE-Portfolio",
     "stars": 0,
-    "forks": 0
+    "forks": 0,
+    "updatedAt": "2026-04-04T08:00:40Z",
+    "order": 999
   },
   {
-    "name": "NebulaChat",
-    "repoName": "nebulachat",
-    "tag": "Real-time",
-    "desc": "A real-time messaging app with rooms, typing indicators, and WebSocket connections.",
-    "stack": ["Next.js", "Socket.io", "PostgreSQL", "Tailwind"],
-    "tagColor": "#9cdcfe",
-    "demo": "",
-    "github": "https://github.com/singhaganesh/nebulachat",
+    "id": 1013762329,
+    "name": "Chat App Web",
+    "originalName": "chat-app-web",
+    "tag": "JavaScript",
+    "desc": "No description available",
+    "stack": [
+      "JavaScript"
+    ],
+    "tagColor": "#f7df1e",
+    "demo": "https://chat-app-web-tan.vercel.app",
+    "github": "https://github.com/singhaganesh/chat-app-web",
     "stars": 0,
-    "forks": 0
+    "forks": 0,
+    "updatedAt": "2026-04-04T07:27:37Z",
+    "order": 999
   },
   {
-    "name": "GravityDash",
-    "repoName": "gravitydash",
-    "tag": "Analytics",
-    "desc": "An analytics dashboard with interactive charts, live data simulation, and CSV export.",
-    "stack": ["React", "TypeScript", "Chart.js", "REST API"],
-    "tagColor": "#dcdcaa",
-    "demo": "",
-    "github": "https://github.com/singhaganesh/gravitydash",
+    "id": 1174238235,
+    "name": "Thingsboard Bot",
+    "originalName": "ThingsBoard-Bot",
+    "tag": "Java",
+    "desc": "ThingsBoard AI Assistant is an AI-powered conversational layer designed to sit directly inside a ThingsBoard dashboard.",
+    "stack": [
+      "Java"
+    ],
+    "tagColor": "#858585",
+    "demo": "#",
+    "github": "https://github.com/singhaganesh/ThingsBoard-Bot",
     "stars": 0,
-    "forks": 0
+    "forks": 0,
+    "updatedAt": "2026-04-04T07:26:54Z",
+    "order": 999
+  },
+  {
+    "id": 1138840383,
+    "name": "Ecommerce Web",
+    "originalName": "Ecommerce-Web",
+    "tag": "JavaScript",
+    "desc": "Fullstack Ecommerce Project (Spring Boot + Frontend)",
+    "stack": [
+      "JavaScript"
+    ],
+    "tagColor": "#f7df1e",
+    "demo": "#",
+    "github": "https://github.com/singhaganesh/Ecommerce-Web",
+    "stars": 0,
+    "forks": 0,
+    "updatedAt": "2026-04-04T07:26:31Z",
+    "order": 999
+  },
+  {
+    "id": 1157856577,
+    "name": "Ev Project",
+    "originalName": "EV-Project",
+    "tag": "Kotlin",
+    "desc": "This project help EV vehicle owner to find nearest EV station",
+    "stack": [
+      "Kotlin"
+    ],
+    "tagColor": "#858585",
+    "demo": "#",
+    "github": "https://github.com/singhaganesh/EV-Project",
+    "stars": 0,
+    "forks": 0,
+    "updatedAt": "2026-04-04T07:25:45Z",
+    "order": 999
   }
 ]
