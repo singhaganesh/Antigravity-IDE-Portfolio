@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { X } from 'lucide-react';
+import { usePathname } from 'next/navigation';
 import { useActiveFile } from '@/context/ActiveFileContext';
 
 interface FileEntry {
@@ -14,6 +15,7 @@ interface FileEntry {
 
 const Sidebar = () => {
   const { isMobileMenuOpen, setIsMobileMenuOpen, openTab } = useActiveFile();
+  const pathname = usePathname();
 
   const files: FileEntry[] = [
     { name: 'home.tsx', path: '/', color: '#61dafb', letter: 'R' },
@@ -40,23 +42,39 @@ const Sidebar = () => {
       </div>
 
       <div className="flex flex-col py-1 overflow-y-auto no-scrollbar">
-        {files.map((file) => (
-          <div 
-            key={file.name}
-            className="flex items-center gap-6 px-4 h-[32px] hover:bg-bg-hover transition-colors select-none cursor-pointer"
-            onClick={() => !file.isDecorative && openTab(file.path)}
-          >
+        {files.map((file) => {
+          const isActive = !file.isDecorative && pathname === file.path;
+
+          return (
             <div
-              className="w-4 h-4 flex items-center justify-center rounded-sm text-[10px] font-bold text-bg-sidebar shrink-0 ml-1"
-              style={{ backgroundColor: file.color }}
+              key={file.name}
+              className={[
+                "flex items-center gap-6 px-4 h-[32px] transition-colors select-none",
+                file.isDecorative ? "cursor-default" : "cursor-pointer",
+                isActive ? "bg-bg-selected border-l-2 border-white" : "",
+                !file.isDecorative && !isActive ? "hover:bg-bg-hover" : ""
+              ].join(" ")}
+              onClick={() => !file.isDecorative && openTab(file.path)}
             >
-              {file.letter}
+              <div
+                className="w-4 h-4 flex items-center justify-center rounded-sm text-[10px] font-bold text-bg-sidebar shrink-0 ml-1"
+                style={{ backgroundColor: file.color }}
+              >
+                {file.letter}
+              </div>
+              <span
+                className={[
+                  "text-[13px] font-mono",
+                  file.isDecorative ? "text-[#858585]" : "",
+                  !file.isDecorative && isActive ? "text-white" : "",
+                  !file.isDecorative && !isActive ? "text-text-primary" : ""
+                ].join(" ")}
+              >
+                {file.name}
+              </span>
             </div>
-            <span className="text-[13px] font-mono text-[#858585]">
-              {file.name}
-            </span>
-          </div>
-        ))}
+          );
+        })}
       </div>
     </>
   );
