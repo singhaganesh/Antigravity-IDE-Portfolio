@@ -8,6 +8,32 @@ const __dirname = path.dirname(__filename);
 const USERNAME = 'singhaganesh';
 const OUTPUT_FILE = path.join(__dirname, '../src/data/projects.json');
 
+async function getArchitecture(repoName) {
+  try {
+    const branches = ['main', 'master'];
+    let text = '';
+    
+    for (const branch of branches) {
+      const response = await fetch(`https://raw.githubusercontent.com/${USERNAME}/${repoName}/${branch}/README.md`);
+      if (response.ok) {
+        text = await response.text();
+        break;
+      }
+    }
+
+    if (!text) return null;
+
+    // Regex to find "## System Architecture" and grab content until the next "##" or end of file
+    const regex = /## System Architecture([\s\S]*?)(?=\n## |$)/i;
+    const match = text.match(regex);
+    
+    return match ? match[1].trim() : null;
+  } catch (error) {
+    console.error(`Failed to fetch README for ${repoName}:`, error.message);
+    return null;
+  }
+}
+
 async function fetchProjects() {
   console.log(`Fetching repositories for ${USERNAME}...`);
   try {
@@ -21,33 +47,34 @@ async function fetchProjects() {
 
     const repos = await response.json();
     
-    const projects = repos
-      .filter(repo => 
-        !repo.fork && 
-        repo.visibility === 'public' &&
-        repo.topics?.includes('portfolio')
-      )
-      .map(repo => ({
-        id: repo.id,
-        name: formatRepoName(repo.name),
-        originalName: repo.name, // Keep original for mapping/ordering
-        tag: repo.language || 'Project',
-        desc: repo.description || 'No description available',
-        stack: getStack(repo),
-        tagColor: getLanguageColor(repo.language),
-        demo: repo.homepage || '#',
-        github: repo.html_url,
-        stars: repo.stargazers_count,
-        forks: repo.forks_count,
-        updatedAt: repo.updated_at,
-        order: 999 // Default order
-      }));
-
-    console.log(`Found ${projects.length} portfolio projects.`);
+    const projects = [];
     
-    // Write to JSON
+    for (const repo of repos) {
+      if (!repo.fork && repo.visibility === 'public' && repo.topics?.includes('portfolio')) {
+        console.log(`Processing ${repo.name}...`);
+        
+        const architecture = await getArchitecture(repo.name);
+        
+        projects.push({
+          id: repo.id,
+          name: formatRepoName(repo.name),
+          originalName: repo.name,
+          tag: repo.language || 'Project',
+          desc: repo.description || 'No description available',
+          architecture: architecture, // New surgically extracted field
+          stack: getStack(repo),
+          tagColor: getLanguageColor(repo.language),
+          demo: repo.homepage || '#',
+          github: repo.html_url,
+          stars: repo.stargazers_count,
+          forks: repo.forks_count,
+          updatedAt: repo.updated_at,
+        });
+      }
+    }
+
+    console.log(`Saved ${projects.length} projects with architecture snippets.`);
     await fs.writeFile(OUTPUT_FILE, JSON.stringify(projects, null, 2));
-    console.log(`Saved to ${OUTPUT_FILE}`);
 
   } catch (error) {
     console.error('Failed to sync projects:', error.message);
