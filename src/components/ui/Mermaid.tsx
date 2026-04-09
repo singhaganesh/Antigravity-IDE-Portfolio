@@ -3,7 +3,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import mermaid from 'mermaid';
 import { TransformWrapper, TransformComponent, useControls } from 'react-zoom-pan-pinch';
-import { ZoomIn, ZoomOut, RotateCcw, Maximize2, Minimize2, Move } from 'lucide-react';
+import { ZoomIn, ZoomOut, RotateCcw, Move } from 'lucide-react';
 
 interface MermaidProps {
   chart: string;
@@ -11,7 +11,7 @@ interface MermaidProps {
 
 // Configure mermaid
 mermaid.initialize({
-  startOnLoad: true,
+  startOnLoad: false,
   theme: 'dark',
   securityLevel: 'loose',
   themeVariables: {
@@ -55,7 +55,7 @@ const Controls = () => {
       </div>
       <div className="bg-[#1e1e1e]/50 border border-border-color/50 rounded-md p-2 text-[10px] text-muted font-mono flex items-center gap-2 pointer-events-none">
         <Move size={10} />
-        Drag to Pan
+        Drag to Explore
       </div>
     </div>
   );
@@ -63,60 +63,69 @@ const Controls = () => {
 
 const Mermaid = ({ chart }: MermaidProps) => {
   const ref = useRef<HTMLDivElement>(null);
-  const [isExpanded, setIsExpanded] = useState(false);
+  const [renderKey, setRenderKey] = useState(0);
 
   useEffect(() => {
-    if (ref.current) {
-      mermaid.contentLoaded();
-      const id = `mermaid-${Math.random().toString(36).substr(2, 9)}`;
-      
-      try {
-        mermaid.render(id, chart).then(({ svg }) => {
-          if (ref.current) {
-            ref.current.innerHTML = svg;
-          }
-        });
-      } catch (error) {
-        console.error('Mermaid rendering failed:', error);
-      }
-    }
+    setRenderKey(prev => prev + 1);
   }, [chart]);
 
+  useEffect(() => {
+    const renderDiagram = async () => {
+      if (ref.current) {
+        try {
+          ref.current.removeAttribute('data-processed');
+          await mermaid.run({
+            nodes: [ref.current],
+          });
+          const svg = ref.current.querySelector('svg');
+          if (svg) {
+            svg.style.maxWidth = 'none';
+            svg.style.height = 'auto';
+          }
+        } catch (error) {
+          console.error('Mermaid rendering failed:', error);
+        }
+      }
+    };
+    renderDiagram();
+  }, [renderKey]);
+
   return (
-    <div className={`relative bg-[#0d0d0d] border border-border-color rounded-xl overflow-hidden group transition-all duration-300 ${isExpanded ? 'h-[700px]' : 'h-[450px]'}`}>
-      {/* Header / Expand Toggle */}
-      <div className="absolute top-4 left-4 z-10 flex items-center gap-3">
-        <div className="bg-[#1e1e1e] border border-border-color rounded-md p-1.5 flex items-center gap-2">
+    <div className="relative bg-[#0d0d0d] border border-border-color rounded-xl overflow-hidden group h-[700px]">
+      {/* Header Indicator */}
+      <div className="absolute top-4 left-4 z-10">
+        <div className="bg-[#1e1e1e] border border-border-color rounded-md p-1.5 flex items-center gap-2 shadow-lg">
           <div className="w-2 h-2 rounded-full bg-[#00e5cc] animate-pulse" />
           <span className="text-[10px] font-mono text-text-muted uppercase tracking-widest">Interactive Canvas</span>
         </div>
-        <button 
-          onClick={() => setIsExpanded(!isExpanded)}
-          className="bg-[#1e1e1e] border border-border-color rounded-md p-1.5 text-muted hover:text-white hover:bg-[#37373d] transition-all"
-          title={isExpanded ? "Minimize" : "Expand Workspace"}
-        >
-          {isExpanded ? <Minimize2 size={14} /> : <Maximize2 size={14} />}
-        </button>
       </div>
 
       <TransformWrapper
-        initialScale={1}
-        minScale={0.5}
-        maxScale={3}
+        initialScale={0.8}
+        minScale={0.1}
+        maxScale={4}
         centerOnInit={true}
+        limitToBounds={false}
+        panning={{ velocityDisabled: true }}
       >
         <Controls />
         <TransformComponent wrapperClass="!w-full !h-full" contentClass="!w-full !h-full flex items-center justify-center cursor-grab active:cursor-grabbing">
-          <div 
-            ref={ref} 
-            className="mermaid p-10 w-full flex justify-center scale-110" 
-          />
+          <div className="p-40 min-w-[1200px] flex items-center justify-center">
+            <div 
+              key={renderKey}
+              ref={ref} 
+              className="mermaid opacity-100 transition-opacity duration-500"
+            >
+              {chart}
+            </div>
+          </div>
         </TransformComponent>
       </TransformWrapper>
 
       {/* Decorative Grid Background */}
-      <div className="absolute inset-0 pointer-events-none opacity-[0.03]" 
-        style={{ backgroundImage: `radial-gradient(#ffffff 1px, transparent 1px)`, backgroundSize: '20px 20px' }} 
+      <div 
+        className="absolute inset-0 pointer-events-none opacity-[0.03]" 
+        style={{ backgroundImage: 'radial-gradient(#ffffff 1px, transparent 1px)', backgroundSize: '30px 30px' }} 
       />
     </div>
   );

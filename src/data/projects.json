@@ -1,5 +1,39 @@
 [
   {
+    "id": 1138840383,
+    "name": "Ecommerce Web",
+    "originalName": "Ecommerce-Web",
+    "tag": "JavaScript",
+    "desc": "Fullstack Ecommerce Project (Spring Boot + Frontend)",
+    "architecture": "```mermaid\ngraph TD\n    subgraph Clients\n        U[User / Customer]\n        S[Seller]\n        A[Admin]\n    end\n\n    subgraph \"Frontend (React + Vite)\"\n        UI[User Interface / React Router]\n        State[Redux Toolkit State]\n        Axios[Axios HTTP Client]\n        \n        UI <--> State\n        UI <--> Axios\n    end\n\n    subgraph \"Backend (Spring Boot)\"\n        Auth[Spring Security + JWT Filter]\n        Controllers[REST Controllers]\n        Services[Business Logic Layer]\n        Repositories[Spring Data JPA]\n        \n        Auth -->|Validated Requests| Controllers\n        Controllers -->|DTOs| Services\n        Services -->|Entities| Repositories\n    end\n\n    subgraph \"Storage & Services\"\n        DB[(PostgreSQL / MySQL)]\n        Cloud[Cloudinary / File Storage]\n    end\n\n    %% Client to Frontend\n    U -->|Browses / Shops| UI\n    S -->|Manages Inventory| UI\n    A -->|System Admin| UI\n\n    %% Frontend to Backend\n    Axios <-->|REST API Calls w/ Bearer Token| Auth\n\n    %% Backend to Storage\n    Repositories <-->|SQL Queries| DB\n    Services -->|Uploads Media| Cloud\n```\n---",
+    "stack": [
+      "JavaScript"
+    ],
+    "tagColor": "#f7df1e",
+    "demo": "#",
+    "github": "https://github.com/singhaganesh/Ecommerce-Web",
+    "stars": 0,
+    "forks": 0,
+    "updatedAt": "2026-04-09T18:02:58Z"
+  },
+  {
+    "id": 1201007541,
+    "name": "Antigravity Ide Portfolio",
+    "originalName": "Antigravity-IDE-Portfolio",
+    "tag": "TypeScript",
+    "desc": "Personal portfolio for Ganesh Singha. Styled as the Antigravity IDE using Next.js, React, and Tailwind CSS.",
+    "architecture": null,
+    "stack": [
+      "TypeScript"
+    ],
+    "tagColor": "#3178c6",
+    "demo": "#",
+    "github": "https://github.com/singhaganesh/Antigravity-IDE-Portfolio",
+    "stars": 0,
+    "forks": 0,
+    "updatedAt": "2026-04-09T17:32:02Z"
+  },
+  {
     "id": 1157856577,
     "name": "Ev Project",
     "originalName": "EV-Project",
@@ -34,23 +68,6 @@
     "updatedAt": "2026-04-09T08:54:18Z"
   },
   {
-    "id": 1201007541,
-    "name": "Antigravity Ide Portfolio",
-    "originalName": "Antigravity-IDE-Portfolio",
-    "tag": "TypeScript",
-    "desc": "Personal portfolio for Ganesh Singha. Styled as the Antigravity IDE using Next.js, React, and Tailwind CSS.",
-    "architecture": null,
-    "stack": [
-      "TypeScript"
-    ],
-    "tagColor": "#3178c6",
-    "demo": "#",
-    "github": "https://github.com/singhaganesh/Antigravity-IDE-Portfolio",
-    "stars": 0,
-    "forks": 0,
-    "updatedAt": "2026-04-06T07:15:16Z"
-  },
-  {
     "id": 1013762329,
     "name": "Chat App Web",
     "originalName": "chat-app-web",
@@ -66,22 +83,5 @@
     "stars": 0,
     "forks": 0,
     "updatedAt": "2026-04-04T07:27:37Z"
-  },
-  {
-    "id": 1138840383,
-    "name": "Ecommerce Web",
-    "originalName": "Ecommerce-Web",
-    "tag": "JavaScript",
-    "desc": "Fullstack Ecommerce Project (Spring Boot + Frontend)",
-    "architecture": null,
-    "stack": [
-      "JavaScript"
-    ],
-    "tagColor": "#f7df1e",
-    "demo": "#",
-    "github": "https://github.com/singhaganesh/Ecommerce-Web",
-    "stars": 0,
-    "forks": 0,
-    "updatedAt": "2026-04-04T07:26:31Z"
   }
 ]
