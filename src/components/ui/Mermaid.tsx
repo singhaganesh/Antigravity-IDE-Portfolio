@@ -9,20 +9,17 @@ interface MermaidProps {
   chart: string;
 }
 
-// Global initialization with "Safety First" settings
+// Global initialization with Native SVG rendering
 mermaid.initialize({
   startOnLoad: false,
   theme: 'dark',
   securityLevel: 'loose',
-  // TRICK: Use 'monospace' for internal calculations as it's wider than JetBrains Mono
   fontFamily: 'monospace',
   flowchart: {
-    htmlLabels: true,
+    htmlLabels: false, // As requested: Use native SVG text
     useMaxWidth: false,
     curve: 'basis',
     padding: 40,
-    nodeSpacing: 50,
-    rankSpacing: 50,
   },
   themeVariables: {
     primaryColor: '#1e1e1e',
@@ -54,61 +51,47 @@ const Controls = () => {
 
 const Mermaid = ({ chart }: MermaidProps) => {
   const ref = useRef<HTMLDivElement>(null);
-  const [renderKey, setRenderKey] = useState(0);
-
-  useEffect(() => {
-    setRenderKey(prev => prev + 1);
-  }, [chart]);
+  const [svgContent, setSvgContent] = useState<string>('');
 
   useEffect(() => {
     const renderDiagram = async () => {
-      if (ref.current) {
-        try {
-          // 1. Wait for fonts to be ready
-          if (typeof document !== 'undefined' && 'fonts' in document) {
-            await (document as any).fonts.ready;
-          }
-
-          // 2. Reset container
-          ref.current.removeAttribute('data-processed');
-          ref.current.innerHTML = chart; 
-          
-          // 3. Render
-          await mermaid.run({
-            nodes: [ref.current],
-          });
-          
-          // 4. Force styles on generated elements
-          const svg = ref.current.querySelector('svg');
-          if (svg) {
-            svg.style.maxWidth = 'none';
-            svg.style.height = 'auto';
-            svg.style.visibility = 'visible';
-            svg.setAttribute('width', '100%');
-
-            // Fix for HTML labels inside foreignObjects
-            const labels = svg.querySelectorAll('.label, .nodeLabel');
-            labels.forEach((l: any) => {
-              l.style.whiteSpace = 'nowrap';
-              l.style.overflow = 'visible';
-            });
-          }
-        } catch (error) {
-          console.error('Mermaid rendering failed:', error);
+      if (!chart) return;
+      
+      try {
+        // 1. Wait for fonts
+        if (typeof document !== 'undefined' && 'fonts' in document) {
+          await (document as any).fonts.ready;
         }
+
+        // 2. Generate unique ID and render
+        const id = `mermaid-${Math.random().toString(36).substr(2, 9)}`;
+        
+        // Clean the chart input (remove possible markdown backticks)
+        const cleanChart = chart.replace(/```mermaid/g, '').replace(/```/g, '').trim();
+        
+        const { svg } = await mermaid.render(id, cleanChart);
+        
+        // 3. Process the SVG string to ensure visibility and font styles
+        let processedSvg = svg;
+        
+        // Ensure maxWidth is disabled and it has proper sizing
+        processedSvg = processedSvg.replace(/max-width:[^;"]*;?/g, 'max-width:none;');
+        
+        // Inject font styles directly into the SVG string
+        const styleTag = `<style>text { font-family: var(--font-jetbrains-mono), monospace !important; }</style>`;
+        processedSvg = processedSvg.replace(/<style>/, `${styleTag}<style>`);
+
+        setSvgContent(processedSvg);
+      } catch (error) {
+        console.error('Mermaid rendering failed:', error);
       }
     };
+
     renderDiagram();
-  }, [renderKey, chart]);
+  }, [chart]);
 
   return (
     <div className="relative bg-[#0d0d0d] border border-border-color rounded-xl overflow-hidden group h-[700px]">
-      <style>{`
-        .mermaid foreignObject { overflow: visible !important; }
-        .mermaid .label { font-family: var(--font-jetbrains-mono), monospace !important; white-space: nowrap !important; }
-        .mermaid .nodeLabel { font-family: var(--font-jetbrains-mono), monospace !important; white-space: nowrap !important; }
-      `}</style>
-
       <div className="absolute top-4 left-4 z-10">
         <div className="bg-[#1e1e1e] border border-border-color rounded-md p-1.5 flex items-center gap-2 shadow-lg">
           <div className="w-2 h-2 rounded-full bg-[#00e5cc] animate-pulse" />
@@ -125,13 +108,10 @@ const Mermaid = ({ chart }: MermaidProps) => {
       >
         <Controls />
         <TransformComponent wrapperClass="!w-full !h-full" contentClass="!w-full !h-full flex items-center justify-center cursor-grab active:cursor-grabbing">
-          <div className="p-40 flex items-center justify-center min-w-[1200px]">
-            <div 
-              key={renderKey}
-              ref={ref} 
-              className="mermaid opacity-100 transition-opacity duration-500"
-            />
-          </div>
+          <div 
+            className="p-40 flex items-center justify-center min-w-[1200px]"
+            dangerouslySetInnerHTML={{ __html: svgContent }}
+          />
         </TransformComponent>
       </TransformWrapper>
 
