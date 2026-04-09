@@ -1,20 +1,20 @@
 [
   {
-    "id": 1138840383,
-    "name": "Ecommerce Web",
-    "originalName": "Ecommerce-Web",
+    "id": 1013762329,
+    "name": "Chat App Web",
+    "originalName": "chat-app-web",
     "tag": "JavaScript",
-    "desc": "Fullstack Ecommerce Project (Spring Boot + Frontend)",
-    "architecture": "```mermaid\ngraph TD\n    subgraph Clients\n        U[User / Customer]\n        S[Seller]\n        A[Admin]\n    end\n\n    subgraph \"Frontend (React + Vite)\"\n        UI[User Interface / React Router]\n        State[Redux Toolkit State]\n        Axios[Axios HTTP Client]\n        \n        UI <--> State\n        UI <--> Axios\n    end\n\n    subgraph \"Backend (Spring Boot)\"\n        Auth[Spring Security + JWT Filter]\n        Controllers[REST Controllers]\n        Services[Business Logic Layer]\n        Repositories[Spring Data JPA]\n        \n        Auth -->|Validated Requests| Controllers\n        Controllers -->|DTOs| Services\n        Services -->|Entities| Repositories\n    end\n\n    subgraph \"Storage & Services\"\n        DB[(PostgreSQL / MySQL)]\n        Cloud[Cloudinary / File Storage]\n    end\n\n    %% Client to Frontend\n    U -->|Browses / Shops| UI\n    S -->|Manages Inventory| UI\n    A -->|System Admin| UI\n\n    %% Frontend to Backend\n    Axios <-->|REST API Calls w/ Bearer Token| Auth\n\n    %% Backend to Storage\n    Repositories <-->|SQL Queries| DB\n    Services -->|Uploads Media| Cloud\n```\n---",
+    "desc": "No description available",
+    "architecture": "```mermaid\ngraph TD\n    %% Define Nodes\n    User((User))\n    Frontend[\"Frontend Client\\n(React)\"]\n    BackendREST[\"REST API\\n(Spring Boot /RoomController)\"]\n    BackendWS[\"WebSocket API\\n(Spring Boot /ChatController)\"]\n    Broker((\"In-Memory Broker\\n(STOMP Pub/Sub)\"))\n    Database[(\"MongoDB\\n(Rooms & Messages)\")]\n\n    %% User Interaction\n    User <-->|\"Interacts via Browser\"| Frontend\n\n    %% HTTP / REST Data Flow\n    Frontend -->|\"1. Create/Join Room (HTTP POST/GET)\"| BackendREST\n    Frontend -->|\"2. Fetch Chat History (HTTP GET)\"| BackendREST\n    BackendREST <-->|\"Query / Persist Room Data\"| Database\n\n    %% WebSocket / Real-Time Data Flow\n    Frontend <-->|\"3. Send Message (SockJS/STOMP)\"| BackendWS\n    BackendWS -->|\"4. Append Message to Room\"| Database\n    BackendWS -->|\"5. Route Message via Topic\"| Broker\n    Broker -.->|\"6. Broadcast to Room Subscribers\"| Frontend\n```",
     "stack": [
       "JavaScript"
     ],
     "tagColor": "#f7df1e",
-    "demo": "#",
-    "github": "https://github.com/singhaganesh/Ecommerce-Web",
+    "demo": "https://chat-app-web-tan.vercel.app",
+    "github": "https://github.com/singhaganesh/chat-app-web",
     "stars": 0,
     "forks": 0,
-    "updatedAt": "2026-04-09T18:02:58Z"
+    "updatedAt": "2026-04-09T18:17:32Z"
   },
   {
     "id": 1201007541,
@@ -31,7 +31,24 @@
     "github": "https://github.com/singhaganesh/Antigravity-IDE-Portfolio",
     "stars": 0,
     "forks": 0,
-    "updatedAt": "2026-04-09T17:32:02Z"
+    "updatedAt": "2026-04-09T18:07:49Z"
+  },
+  {
+    "id": 1138840383,
+    "name": "Ecommerce Web",
+    "originalName": "Ecommerce-Web",
+    "tag": "JavaScript",
+    "desc": "Fullstack Ecommerce Project (Spring Boot + Frontend)",
+    "architecture": "```mermaid\ngraph TD\n    subgraph Clients\n        U[User / Customer]\n        S[Seller]\n        A[Admin]\n    end\n\n    subgraph \"Frontend (React + Vite)\"\n        UI[User Interface / React Router]\n        State[Redux Toolkit State]\n        Axios[Axios HTTP Client]\n        \n        UI <--> State\n        UI <--> Axios\n    end\n\n    subgraph \"Backend (Spring Boot)\"\n        Auth[Spring Security + JWT Filter]\n        Controllers[REST Controllers]\n        Services[Business Logic Layer]\n        Repositories[Spring Data JPA]\n        \n        Auth -->|Validated Requests| Controllers\n        Controllers -->|DTOs| Services\n        Services -->|Entities| Repositories\n    end\n\n    subgraph \"Storage & Services\"\n        DB[(PostgreSQL / MySQL)]\n        Cloud[Cloudinary / File Storage]\n    end\n\n    %% Client to Frontend\n    U -->|Browses / Shops| UI\n    S -->|Manages Inventory| UI\n    A -->|System Admin| UI\n\n    %% Frontend to Backend\n    Axios <-->|REST API Calls w/ Bearer Token| Auth\n\n    %% Backend to Storage\n    Repositories <-->|SQL Queries| DB\n    Services -->|Uploads Media| Cloud\n```\n---",
+    "stack": [
+      "JavaScript"
+    ],
+    "tagColor": "#f7df1e",
+    "demo": "#",
+    "github": "https://github.com/singhaganesh/Ecommerce-Web",
+    "stars": 0,
+    "forks": 0,
+    "updatedAt": "2026-04-09T18:02:58Z"
   },
   {
     "id": 1157856577,
@@ -66,22 +83,5 @@
     "stars": 0,
     "forks": 0,
     "updatedAt": "2026-04-09T08:54:18Z"
-  },
-  {
-    "id": 1013762329,
-    "name": "Chat App Web",
-    "originalName": "chat-app-web",
-    "tag": "JavaScript",
-    "desc": "No description available",
-    "architecture": null,
-    "stack": [
-      "JavaScript"
-    ],
-    "tagColor": "#f7df1e",
-    "demo": "https://chat-app-web-tan.vercel.app",
-    "github": "https://github.com/singhaganesh/chat-app-web",
-    "stars": 0,
-    "forks": 0,
-    "updatedAt": "2026-04-04T07:27:37Z"
   }
 ]
