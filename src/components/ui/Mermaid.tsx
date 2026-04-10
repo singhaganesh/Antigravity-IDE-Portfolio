@@ -105,6 +105,9 @@ const Mermaid = ({ chart }: MermaidProps) => {
         maxScale={4}
         centerOnInit={true}
         limitToBounds={false}
+        wheel={{
+          step: 0.01,
+        }}
       >
         <Controls />
         <TransformComponent wrapperClass="!w-full !h-full" contentClass="!w-full !h-full flex items-center justify-center cursor-grab active:cursor-grabbing">
