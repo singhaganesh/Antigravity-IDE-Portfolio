@@ -27,7 +27,7 @@ Unlike traditional portfolios, **Antigravity IDE** treats every section as a "fi
 
 ---
 
-## 📐 System Architecture
+## System Architecture
 
 ```mermaid
 graph TD
