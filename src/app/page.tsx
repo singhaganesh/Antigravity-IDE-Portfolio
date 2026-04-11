@@ -56,7 +56,7 @@ export default function Home() {
   const rolePills = [
     { label: 'Full Stack Dev', color: '#4ec9b0' },
     { label: 'React / Next.js', color: '#61dafb' },
-    { label: 'Node.js Backend', color: '#68a063' },
+    { label: 'Spring Boot Backend', color: '#68a063' },
     { label: 'Open to Work', color: '#c586c0' },
   ];
 

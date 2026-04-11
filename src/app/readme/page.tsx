@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import Image from 'next/image';
 import { aboutInfo, stats } from '@/data/profile';
 import { motion } from 'framer-motion';
 import { User, MapPin, Briefcase, Calendar, Globe, Rocket, Code2, Layout, Zap, Github, ExternalLink } from 'lucide-react';
@@ -15,16 +16,25 @@ const ReadmePage = () => {
 
       {/* Header Section */}
       <div className="mb-16">
-        <div className="flex items-center gap-4 mb-4">
-           <div className="bg-[#00e5cc]/10 p-3 rounded-xl border border-[#00e5cc]/20">
-              <User size={32} className="text-[#00e5cc]" />
+        <div className="flex items-center gap-8 mb-4">
+           {/* Profile Photo at Left of Heading */}
+           <div className="w-32 h-32 rounded-2xl overflow-hidden border-2 border-[#00e5cc]/30 shadow-[0_0_30px_rgba(0,229,204,0.15)] flex-shrink-0">
+              <Image 
+                src="/profile.jpeg" 
+                alt="Ganesh Singha" 
+                width={128} 
+                height={128}
+                className="object-cover w-full h-full"
+              />
            </div>
-           <h1 className="text-[64px] font-black text-white leading-none font-display">Ganesh Singha</h1>
+           <div>
+              <h1 className="text-[72px] font-black text-white leading-tight font-display tracking-tight">Ganesh Singha</h1>
+              <p className="text-text-muted text-[20px] font-mono mt-2 flex items-center gap-3">
+                <Zap size={20} className="text-text-yellow" />
+                Full Stack Developer & Mobile Engineer
+              </p>
+           </div>
         </div>
-        <p className="text-text-muted text-[18px] font-mono mt-4 flex items-center gap-3">
-          <Zap size={18} className="text-text-yellow" />
-          Full Stack Developer & Mobile Engineer
-        </p>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-[1fr_350px] gap-16">

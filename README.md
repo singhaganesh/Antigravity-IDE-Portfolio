@@ -4,12 +4,28 @@ An immersive, high-fidelity developer portfolio designed to look and feel exactl
 
 ---
 
+## 👋 About the Developer
+
+I'm **Ganesh Singha**, a **Full Stack Developer** dedicated to building scalable web applications and purposeful user experiences. I work across the entire stack—from pixel-perfect frontends to robust backend architectures.
+
+- **Location:** Burdwan, India
+- **Experience:** 3+ Years
+- **Availability:** Open to Work / Immediate
+- **Specialization:** Java, Spring Boot, React, Android (Kotlin)
+
+### 📈 Professional Stats
+- **3+** Years Experience
+- **20+** Projects Completed
+- **10+** Happy Clients
+
+---
+
 ## 🚀 Concept: The Portfolio as an IDE
 
 Unlike traditional portfolios, **Antigravity IDE** treats every section as a "file" in a coding environment. Navigation doesn't just change the page; it opens a new tab, updates the breadcrumbs, and highlights the file tree—mimicking the daily workflow of a software engineer.
 
 ### Key Features
-- **Interactive File Explorer:** Navigate through "Home," "About," "Projects," and "Skills" as if they were files in a repository.
+- **Interactive File Explorer:** Navigate through "Home," "Experience," "Projects," and "Skills" as if they were files in a repository.
 - **System Architecture Viewer:** Explore deep-dive logic with interactive, zoomable **Mermaid.js** diagrams for every major project.
 - **Agent Manager:** A resizable AI-assistant panel (Gemini 1.5 Flash) that provides context and planning information.
 - **Automated Sync:** A custom synchronization engine that pulls real-time repository data, stars, and forks directly from the GitHub API.
@@ -17,20 +33,20 @@ Unlike traditional portfolios, **Antigravity IDE** treats every section as a "fi
 
 ---
 
-## Tech Stack
+## 🛠️ Tech Stack
 
 - **Next.js 14**: Core full-stack framework with App Router support.
 - **TypeScript**: Typed JavaScript for robust and maintainable code.
 - **Tailwind CSS 3**: Utility-first CSS for custom IDE-accurate styling.
-- Framer Motion 11: Fluid animations for tab switching and panel transitions.
+- **Framer Motion 11**: Fluid animations for tab switching and panel transitions.
 - **Mermaid.js**: Interactive SVG rendering for system architecture diagrams.
 - **React Context API**: Global state management for active file and tab tracking.
 - **GitHub REST API**: Automated synchronization of repository data and metadata.
-- Lucide React: Modern and consistent icon set for the IDE interface.
+- **Lucide React**: Modern and consistent icon set for the IDE interface.
 
 ---
 
-## System Architecture
+## 📐 System Architecture
 
 ```mermaid
 graph TD
@@ -50,14 +66,15 @@ graph TD
 
     subgraph "Editor Area (Routed Content)"
         Home[page.tsx]
-        About[about/page.tsx]
+        Readme[readme/page.tsx]
         Projects[projects/page.tsx]
         Skills[skills/page.tsx]
+        Experience[experience/page.tsx]
     end
 
     Context --> TitleBar & SideBar & TabBar & AgentPanel & StatusBar
     Layout -->|Renders Children| EditorArea
-    EditorArea --- Home & About & Projects & Skills
+    EditorArea --- Home & Readme & Projects & Skills & Experience
     
     subgraph "Data Services"
         Sync[scripts/sync-projects.mjs]
