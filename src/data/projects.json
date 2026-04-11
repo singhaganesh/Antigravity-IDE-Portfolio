@@ -7,14 +7,19 @@
     "desc": "An interactive, Antigravity-themed developer portfolio built with Next.js 14, TypeScript, and Tailwind CSS. Features a functional file tree, multi-tab navigation, and dynamic GitHub project synchronization.",
     "architecture": "```mermaid\ngraph TD\n    subgraph \"Workspace Shell (Persistent)\"\n        Layout[src/app/layout.tsx]\n        Context[ActiveFileContext.tsx]\n        Layout -->|Provides State| Context\n    end\n\n    subgraph \"IDE Chrome Components\"\n        TitleBar[TitleBar.tsx]\n        SideBar[Sidebar.tsx]\n        TabBar[TabBar.tsx]\n        AgentPanel[AgentPanel.tsx]\n        StatusBar[StatusBar.tsx]\n    end\n\n    subgraph \"Editor Area (Routed Content)\"\n        Home[page.tsx]\n        About[about/page.tsx]\n        Projects[projects/page.tsx]\n        Skills[skills/page.tsx]\n    end\n\n    Context --> TitleBar & SideBar & TabBar & AgentPanel & StatusBar\n    Layout -->|Renders Children| EditorArea\n    EditorArea --- Home & About & Projects & Skills\n    \n    subgraph \"Data Services\"\n        Sync[scripts/sync-projects.mjs]\n        JSON[src/data/projects.json]\n        Sync -->|Fetch & Format| JSON\n        JSON -->|Populate Grid| Projects\n    end\n```\n\n---",
     "stack": [
-      "TypeScript"
+      "TypeScript",
+      "Core",
+      "UI & Animation",
+      "Visuals",
+      "State Management",
+      "Data"
     ],
     "tagColor": "#3178c6",
     "demo": "#",
     "github": "https://github.com/singhaganesh/Antigravity-IDE-Portfolio",
     "stars": 0,
     "forks": 0,
-    "updatedAt": "2026-04-10T05:56:28Z"
+    "updatedAt": "2026-04-11T04:06:46Z"
   },
   {
     "id": 1157856577,
@@ -24,7 +29,12 @@
     "desc": "A comprehensive EV Charging Management System featuring real-time slot booking, live telemetry, and automated payments. Built with Spring Boot, React, and Jetpack Compose",
     "architecture": "```mermaid\ngraph TD\n    %% Users\n    U_Customer([Customer / End User])\n    U_Owner([Station Owner / Admin])\n\n    %% Frontends\n    subgraph Client Applications\n        MobileApp[Android App<br/>Kotlin / Jetpack Compose]\n        WebApp[Web Dashboard<br/>React / Vite / Redux]\n    end\n\n    %% Backend Infrastructure\n    subgraph Backend Services\n        REST_API[Spring Boot REST API<br/>Java 21]\n        WebSocket[WebSocket Server<br/>STOMP Telemetry]\n    end\n\n    %% Database Layer\n    subgraph Data Persistence\n        Postgres[(PostgreSQL Database<br/>Supabase)]\n    end\n\n    %% External Services\n    subgraph Third-Party Integrations\n        Stripe[Payment Gateways<br/>Stripe & Razorpay]\n        Maps[Mapping Services<br/>Google Maps / Nominatim]\n        SMS[SMS Provider<br/>OTP Auth]\n    end\n\n    %% Define Interactions\n    U_Customer -->|Searches & Books| MobileApp\n    U_Owner -->|Manages Stations| WebApp\n\n    MobileApp <-->|HTTPS / REST + JWT| REST_API\n    WebApp <-->|HTTPS / REST + JWT| REST_API\n    \n    MobileApp <-->|Real-time Charging Status| WebSocket\n    WebApp <-->|Live Slot Updates| WebSocket\n\n    REST_API <-->|JPA / Hibernate| Postgres\n    WebSocket -->|Reads Data| Postgres\n\n    REST_API <-->|Processes Transactions & Webhooks| Stripe\n    REST_API -->|Triggers Login Texts| SMS\n    MobileApp -->|Renders UI Location Data| Maps\n    WebApp -->|Reverse Geocoding| Maps\n```\n\n### Data Flow: Complete Request Lifecycle\n\n```\n1. CLIENT REQUEST\n   Mobile/Web sends: POST /api/bookings\n   Headers: Authorization: Bearer <JWT_TOKEN>\n   Body: { userId, slotId, vehicleType, startTime, endTime }\n\n2. NETWORK LAYER\n   Request → Nginx (reverse proxy) → Spring Boot (8080)\n\n3. SECURITY LAYER\n   JwtRequestFilter:\n   ├─ Extract JWT from Authorization header\n   ├─ JwtUtil.validateToken(token)\n   ├─ Verify signature + expiration\n   ├─ Extract userId + role\n   └─ Set SecurityContext\n\n4. CONTROLLER LAYER\n   BookingController.createBooking(BookingRequest)\n   ├─ Validate @NotNull, @Future annotations\n   └─ Call BookingService\n\n5. SERVICE LAYER (Business Logic)\n   BookingService.createBooking():\n   ├─ Fetch User from database\n   ├─ Fetch ChargerSlot from database\n   ├─ Validate slot is AVAILABLE\n   ├─ Check for overlapping bookings\n   ├─ Verify TRUCK support if needed\n   ├─ Calculate expiresAt = startTime + 15 minutes\n   ├─ Create Booking entity\n   ├─ Update slot.status = BOOKED\n   └─ Call repository.save()\n\n6. REPOSITORY LAYER (Data Access)\n   BookingRepository.save(booking):\n   ├─ JPA generates INSERT SQL\n   └─ Hibernate executes against PostgreSQL\n\n7. DATABASE LAYER\n   PostgreSQL executes:\n   INSERT INTO bookings (...) VALUES (...)\n   UPDATE charger_slots SET status='BOOKED' WHERE id=...\n\n8. RESPONSE BUILD\n   Service returns Booking entity\n   → Controller converts to JSON\n   → Return 201 CREATED with booking details\n\n9. WEBSOCKET BROADCAST\n   WebSocketController.notifySlotStatusChange()\n   └─ @SendTo(\"/topic/slot-updates\")\n      Broadcast to all connected admin dashboards\n\n10. CLIENT RESPONSE\n    Mobile/Web app receives:\n    ├─ Status: 201 CREATED\n    ├─ Body: { id, status, expiresAt, ... }\n    └─ UI updates to show booking confirmed\n\n11. BACKGROUND TASKS\n    @Scheduled (every 60 seconds):\n    BookingService.expireUnstartedBookings()\n    ├─ Find CONFIRMED bookings where now() > expiresAt\n    └─ Set status = EXPIRED, free slot\n```\n\n### External Integrations\n\n**Stripe Payment Gateway**\n- **Purpose:** Secure payment processing\n- **Flow:** Create Intent → Client processes → Webhook updates → DB records payment\n- **Webhook URL:** `POST /api/payments/webhook`\n- **Events:** `payment_intent.succeeded`, `payment_intent.payment_failed`\n\n**SMS OTP Provider**\n- **Purpose:** Two-factor authentication via mobile\n- **Flow:** User requests OTP → SMS sent → User enters OTP → JWT granted\n- **Current Status:** Implementation ready; provider TBD\n\n**WebSocket (STOMP)**\n- **Purpose:** Real-time slot status updates\n- **Endpoint:** `WS /ws`\n- **Subscribe:** `/topic/slot-updates`\n- **Broadcasts:** When slot status changes (BOOKED, CHARGING, AVAILABLE)\n\n---",
     "stack": [
-      "Kotlin"
+      "Kotlin",
+      "Spring Boot 3.3.5",
+      "PostgreSQL",
+      "React 19 + Redux",
+      "Jetpack Compose",
+      "Stripe"
     ],
     "tagColor": "#858585",
     "demo": "#",

@@ -19,11 +19,14 @@ Unlike traditional portfolios, **Antigravity IDE** treats every section as a "fi
 
 ## Tech Stack
 
-- **Core:** [Next.js 14](https://nextjs.org/) (App Router), [TypeScript](https://www.typescriptlang.org/)
-- **UI & Animation:** [Tailwind CSS](https://tailwindcss.com/), [Framer Motion](https://www.framer.com/motion/)
-- **Visuals:** [Mermaid.js](https://mermaid.js.org/) (Architecture), [Lucide React](https://lucide.dev/) (Icons)
-- **State Management:** React Context API (Active File Tracking)
-- **Data:** GitHub REST API (Automated Project Syncing)
+- **Next.js 14**: Core full-stack framework with App Router support.
+- **TypeScript**: Typed JavaScript for robust and maintainable code.
+- **Tailwind CSS 3**: Utility-first CSS for custom IDE-accurate styling.
+- **Framer Motion 11**: Fluid animations for tab switching and panel transitions.
+- **Mermaid.js**: Interactive SVG rendering for system architecture diagrams.
+- **React Context API**: Global state management for active file and tab tracking.
+- **GitHub REST API**: Automated synchronization of repository data and metadata.
+- **Lucide React**: Modern and consistent icon set for the IDE interface.
 
 ---
 

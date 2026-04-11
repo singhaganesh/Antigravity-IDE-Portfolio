@@ -34,6 +34,62 @@ async function getArchitecture(repoName) {
   }
 }
 
+async function getTechStack(repoName) {
+  try {
+    const branches = ['main', 'master'];
+    let text = '';
+    
+    for (const branch of branches) {
+      const response = await fetch(`https://raw.githubusercontent.com/${USERNAME}/${repoName}/${branch}/README.md`);
+      if (response.ok) {
+        text = await response.text();
+        break;
+      }
+    }
+
+    if (!text) return [];
+
+    // Regex to find "Tech Stack" or "Built With" or "Technologies" 
+    // Allowing for emojis or other text before/after the words
+    const regex = /## .*?(?:Tech Stack|Built With|Technologies).*?([\s\S]*?)(?=\n## |$)/i;
+    const match = text.match(regex);
+    
+    if (match) {
+      const content = match[1].trim();
+      const lines = content.split('\n');
+      const stack = [];
+
+      for (let line of lines) {
+        line = line.trim();
+        if (!line) continue;
+
+        let tech = null;
+
+        // Handle Bullet Points (- Item: description or **Item**: description)
+        if (line.startsWith('-') || line.startsWith('*') || /^\d+\./.test(line)) {
+          tech = line.replace(/^[-*\d.]+\s*/, '').trim();
+        }
+
+        if (tech) {
+          // Cleanup
+          let cleaned = tech.replace(/\*\*|\__/g, ''); // Remove Bold
+          cleaned = cleaned.replace(/\[([^\]]+)\]\([^)]+\)/g, '$1'); // Remove Links
+          cleaned = cleaned.split(':')[0].trim(); // Remove trailing descriptions (split by colon)
+          if (cleaned && cleaned.length < 50) {
+            stack.push(cleaned);
+          }
+        }
+      }
+      
+      return stack;
+    }
+    return [];
+  } catch (error) {
+    console.error(`Failed to fetch Tech Stack for ${repoName}:`, error.message);
+    return [];
+  }
+}
+
 async function fetchProjects() {
   console.log(`Fetching repositories for ${USERNAME}...`);
   try {
@@ -54,6 +110,17 @@ async function fetchProjects() {
         console.log(`Processing ${repo.name}...`);
         
         const architecture = await getArchitecture(repo.name);
+        const readmeStack = await getTechStack(repo.name);
+        
+        // Merge primary language with README stack and topics
+        const combinedStack = [
+          repo.language,
+          ...readmeStack,
+          ...(repo.topics || []).filter(t => t !== 'portfolio')
+        ].filter(Boolean);
+
+        // Deduplicate and limit to top 10 items
+        const finalStack = [...new Set(combinedStack)].slice(0, 10);
         
         projects.push({
           id: repo.id,
@@ -61,8 +128,8 @@ async function fetchProjects() {
           originalName: repo.name,
           tag: repo.language || 'Project',
           desc: repo.description || 'No description available',
-          architecture: architecture, // New surgically extracted field
-          stack: getStack(repo),
+          architecture: architecture,
+          stack: finalStack,
           tagColor: getLanguageColor(repo.language),
           demo: repo.homepage || '#',
           github: repo.html_url,
