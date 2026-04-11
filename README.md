@@ -17,7 +17,7 @@ Unlike traditional portfolios, **Antigravity IDE** treats every section as a "fi
 
 ---
 
-## 🛠️ Tech Stack
+## Tech Stack
 
 - **Core:** [Next.js 14](https://nextjs.org/) (App Router), [TypeScript](https://www.typescriptlang.org/)
 - **UI & Animation:** [Tailwind CSS](https://tailwindcss.com/), [Framer Motion](https://www.framer.com/motion/)
