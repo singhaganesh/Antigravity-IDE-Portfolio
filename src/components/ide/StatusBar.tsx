@@ -8,46 +8,50 @@ const StatusBar = () => {
   const { activeFile, cursorPosition } = useActiveFile();
 
   return (
-    <div className="h-[22px] bg-[#181818] border-t border-border-color fixed bottom-0 left-0 right-0 flex items-center justify-between select-none px-3 text-muted z-50">
-      <div className="flex items-center gap-4 text-[12px]">
-        <div className="flex items-center gap-1 hover:bg-[#ffffff10] px-1 cursor-pointer transition-colors">
+    <div className="h-[28px] bg-[#181818] border-t border-border-color fixed bottom-0 left-0 right-0 flex items-center justify-between select-none px-3 text-muted z-50">
+      <div className="flex items-center gap-4 text-[12px] h-full">
+        <div className="flex items-center gap-1 hover:bg-[#ffffff10] px-2 h-full cursor-pointer transition-colors">
           <GitBranch size={12} />
           <span>main</span>
           <RotateIcon />
         </div>
-        <div className="flex items-center gap-2 hover:bg-[#ffffff10] px-1 cursor-pointer transition-colors">
-          <AlertCircle size={12} />
-          <span>0</span>
-          <AlertTriangle size={12} />
-          <span>0</span>
+        <div className="flex items-center gap-3 hover:bg-[#ffffff10] px-2 h-full cursor-pointer transition-colors">
+          <div className="flex items-center gap-1">
+            <AlertCircle size={12} />
+            <span>0</span>
+          </div>
+          <div className="flex items-center gap-1">
+            <AlertTriangle size={12} />
+            <span>0</span>
+          </div>
         </div>
       </div>
 
-      <div className="flex items-center gap-4 text-[12px] ml-auto">
-        <div className="flex items-center gap-1 hover:bg-[#ffffff10] px-1 cursor-pointer transition-colors">
+      <div className="flex items-center h-full ml-auto text-[12px]">
+        <div className="flex items-center gap-1 hover:bg-[#ffffff10] px-2 h-full cursor-pointer transition-colors">
           <span>Ln {cursorPosition.line}, Col {cursorPosition.column}</span>
         </div>
-        <div className="flex items-center gap-1 hover:bg-[#ffffff10] px-1 cursor-pointer transition-colors">
+        <div className="flex items-center gap-1 hover:bg-[#ffffff10] px-2 h-full cursor-pointer transition-colors">
           <span>Spaces: 2</span>
         </div>
-        <div className="flex items-center gap-1 hover:bg-[#ffffff10] px-1 cursor-pointer transition-colors">
+        <div className="flex items-center gap-1 hover:bg-[#ffffff10] px-2 h-full cursor-pointer transition-colors">
           <span>UTF-8</span>
         </div>
-        <div className="flex items-center gap-1 hover:bg-[#ffffff10] px-1 cursor-pointer transition-colors">
+        <div className="flex items-center gap-1 hover:bg-[#ffffff10] px-2 h-full cursor-pointer transition-colors">
           <span>LF</span>
         </div>
-        <div className="flex items-center gap-1 hover:bg-[#ffffff10] px-1 cursor-pointer transition-colors">
+        <div className="flex items-center gap-1 hover:bg-[#ffffff10] px-2 h-full cursor-pointer transition-colors">
           <span>{'{ }'} {activeFile.lang}</span>
         </div>
-        <div className="flex items-center gap-1 hover:bg-[#ffffff10] px-1 cursor-pointer transition-colors text-white">
+        <div className="flex items-center gap-1 hover:bg-[#ffffff10] px-2 h-full cursor-pointer transition-colors text-white">
           <Sparkles size={12} className="text-[#00e5cc]" />
           <span>Autocomplete (0)</span>
         </div>
-        <div className="flex items-center gap-1 hover:bg-[#ffffff10] px-1 cursor-pointer transition-colors">
+        <div className="flex items-center gap-1 hover:bg-[#ffffff10] px-2 h-full cursor-pointer transition-colors">
           <Heart size={12} />
           <span className="hidden sm:inline">Antigravity</span>
         </div>
-        <div className="flex items-center hover:bg-[#ffffff10] px-1 cursor-pointer transition-colors">
+        <div className="flex items-center hover:bg-[#ffffff10] px-3 h-full cursor-pointer transition-colors">
           <Bell size={12} />
         </div>
       </div>
