@@ -11,6 +11,12 @@ function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
+const CustomSearchIcon = ({ size = 14, className }: { size?: number, className?: string }) => (
+  <svg width={size} height={size} viewBox="0 0 32 32" fill="currentColor" xmlns="http://www.w3.org/2000/svg" className={className}>
+    <path d="M 19 3 C 13.488281 3 9 7.488281 9 13 C 9 15.394531 9.839844 17.589844 11.25 19.3125 L 3.28125 27.28125 L 4.71875 28.71875 L 12.6875 20.75 C 14.410156 22.160156 16.605469 23 19 23 C 24.511719 23 29 18.511719 29 13 C 29 7.488281 24.511719 3 19 3 Z M 19 5 C 23.429688 5 27 8.570313 27 13 C 27 17.429688 23.429688 21 19 21 C 14.570313 21 11 17.429688 11 13 C 11 8.570313 14.570313 5 19 5 Z"></path>
+  </svg>
+);
+
 const TitleBar = () => {
   const { 
     activeFile, 
@@ -25,7 +31,7 @@ const TitleBar = () => {
   } = useActiveFile();
 
   return (
-    <div className="h-[35px] bg-bg-sidebar border-b border-border-color flex items-center justify-between select-none px-3">
+    <div className="h-[45px] bg-bg-sidebar border-b border-border-color flex items-center justify-between select-none px-3">
       {/* Left: macOS Traffic Lights / Hamburger */}
       <div className="flex items-center gap-2">
         <div className="md:hidden">
@@ -39,13 +45,13 @@ const TitleBar = () => {
           <Image 
             src="/antigravity_logo.svg" 
             alt="Antigravity Logo" 
-            width={18} 
-            height={18}
+            width={22} 
+            height={22}
             className="opacity-90"
           />
         </div>
         
-        <div className="hidden xl:flex items-center gap-1 ml-4 text-[13px] text-muted">
+        <div className="hidden xl:flex items-center gap-1 ml-4 text-[14px] text-muted">
           {['File', 'Edit', 'Selection', 'View', 'Go', 'Run', 'Terminal', 'Help'].map(m => (
             <span key={m} className="px-2 py-0.5 hover:bg-bg-hover rounded transition-colors cursor-pointer">{m}</span>
           ))}
@@ -54,7 +60,7 @@ const TitleBar = () => {
 
       {/* Center: Project and File Name */}
       <div className="flex-1 flex justify-center items-center px-8">
-        <div className="text-[12px] text-muted flex items-center gap-1 max-w-[500px] truncate">
+        <div className="text-[13px] text-muted flex items-center gap-1 max-w-[500px] truncate">
           <span>Antigravity-IDE-Portfolio</span>
           <span>-</span>
           <span>Antigravity</span>
@@ -97,18 +103,18 @@ const TitleBar = () => {
         </div>
 
         <div className="hidden lg:flex items-center gap-3 mr-4 text-muted border-l border-border-color pl-4">
-          <Search size={14} className="hover:text-white cursor-pointer" />
-          <Settings size={14} className="hover:text-white cursor-pointer" />
-          <Sparkles size={14} className="text-[#00e5cc] cursor-pointer" />
-          <div className="w-6 h-6 rounded-full bg-purple-600 flex items-center justify-center text-[10px] text-white font-bold cursor-pointer">
+          <CustomSearchIcon size={16} className="hover:text-white cursor-pointer" />
+          <Settings size={16} className="hover:text-white cursor-pointer" />
+          <Sparkles size={16} className="text-[#00e5cc] cursor-pointer" />
+          <div className="w-7 h-7 rounded-full bg-purple-600 flex items-center justify-center text-[11px] text-white font-bold cursor-pointer">
             G
           </div>
         </div>
         
         <div className="flex items-center gap-4 text-muted">
-          <Minus size={14} className="hover:text-white cursor-pointer" />
-          <Square size={12} className="hover:text-white cursor-pointer" />
-          <X size={14} className="hover:text-[#ff5f57] cursor-pointer" />
+          <Minus size={16} className="hover:text-white cursor-pointer" />
+          <Square size={14} className="hover:text-white cursor-pointer" />
+          <X size={16} className="hover:text-[#ff5f57] cursor-pointer" />
         </div>
       </div>
     </div>

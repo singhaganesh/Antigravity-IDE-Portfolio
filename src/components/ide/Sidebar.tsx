@@ -24,7 +24,6 @@ const Sidebar = () => {
     { name: 'skills.json', path: '/skills', color: '#cbcb41', letter: 'J' },
     { name: 'experience.log', path: '/experience', color: '#407af3', letter: 'L' },
     { name: 'contact.css', path: '/contact', color: '#563d7c', letter: 'C' },
-    { name: 'resume.tex', path: '#', color: '#519aba', letter: 'T', isDecorative: true },
     { name: 'Ganesh_Resume.pdf', path: '#', color: '#ff0000', letter: 'P', isDecorative: true },
   ];
 
