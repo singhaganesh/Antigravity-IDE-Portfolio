@@ -15,7 +15,7 @@ export interface FileMetadata {
 
 export const FILE_MAP: { [key: string]: FileMetadata } = {
   "/": { name: "home.tsx", lang: "TypeScript React", tabBorder: "#61dafb", dot: "#61dafb", color: "#61dafb", letter: "R", path: "/" },
-  "/about": { name: "about.html", lang: "HTML", tabBorder: "#e34c26", dot: "#e34c26", color: "#e34c26", letter: "H", path: "/about" },
+  "/about": { name: "README.md", lang: "Markdown", tabBorder: "#519aba", dot: "#519aba", color: "#519aba", letter: "M", path: "/about" },
   "/projects": { name: "projects.js", lang: "JavaScript", tabBorder: "#f7df1e", dot: "#f7df1e", color: "#f7df1e", letter: "J", path: "/projects" },
   "/skills": { name: "skills.json", lang: "JSON", tabBorder: "#cbcb41", dot: "#cbcb41", color: "#cbcb41", letter: "J", path: "/skills" },
   "/experience": { name: "experience.log", lang: "Markdown", tabBorder: "#407af3", dot: "#407af3", color: "#407af3", letter: "L", path: "/experience" },

@@ -19,7 +19,7 @@ const Sidebar = () => {
 
   const files: FileEntry[] = [
     { name: 'home.tsx', path: '/', color: '#61dafb', letter: 'R' },
-    { name: 'about.html', path: '/about', color: '#e34c26', letter: 'H' },
+    { name: 'README.md', path: '/about', color: '#519aba', letter: 'M' },
     { name: 'projects.js', path: '/projects', color: '#f7df1e', letter: 'J' },
     { name: 'skills.json', path: '/skills', color: '#cbcb41', letter: 'J' },
     { name: 'experience.log', path: '/experience', color: '#407af3', letter: 'L' },
