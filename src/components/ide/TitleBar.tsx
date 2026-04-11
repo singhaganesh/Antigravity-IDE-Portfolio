@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import Image from 'next/image';
 import { Search, Minus, Square, X, Menu, Settings, Sparkles } from 'lucide-react';
 import { useActiveFile } from '@/context/ActiveFileContext';
 import { clsx, type ClassValue } from 'clsx';
@@ -34,10 +35,14 @@ const TitleBar = () => {
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
           />
         </div>
-        <div className="hidden md:flex items-center gap-2">
-          <div className="w-3 h-3 rounded-full bg-[#ff5f57]" />
-          <div className="w-3 h-3 rounded-full bg-[#ffbd2e]" />
-          <div className="w-3 h-3 rounded-full bg-[#28c840]" />
+        <div className="hidden md:flex items-center gap-2 ml-1">
+          <Image 
+            src="/antigravity_logo.svg" 
+            alt="Antigravity Logo" 
+            width={18} 
+            height={18}
+            className="opacity-90"
+          />
         </div>
         
         <div className="hidden xl:flex items-center gap-1 ml-4 text-[13px] text-muted">

@@ -10,14 +10,14 @@ export interface Stat {
 }
 
 export const aboutInfo: InfoRow[] = [
-  { label: "Location", value: "Burdwan, India", valueColor: "text-text-primary" },
+  { label: "Location", value: "Kolkata, India", valueColor: "text-text-primary" },
   { label: "Available", value: "Immediately", valueColor: "text-text-cyan" },
   { label: "Languages", value: "English, Bengali, Hindi", valueColor: "text-text-primary" },
-  { label: "Experience", value: "3+ Years", valueColor: "text-text-primary" },
+  { label: "Experience", value: "< 1 Year", valueColor: "text-text-primary" },
 ];
 
 export const stats: Stat[] = [
-  { number: "3+", label: "Years Exp" },
+  { number: "Junior", label: "Engineer" },
   { number: "20+", label: "Projects" },
   { number: "10+", label: "Clients" },
 ];
