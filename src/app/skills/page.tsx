@@ -1,7 +1,9 @@
 'use client';
 
 import React from 'react';
-import { skillClusters, learning, experience } from '@/data/skills';
+import { learning, experience } from '@/data/skills';
+import skillsData from '@/data/skills.json';
+import { motion } from 'framer-motion';
 
 const SkillsPage = () => {
   return (
@@ -19,29 +21,42 @@ const SkillsPage = () => {
         </p>
       </div>
 
-      {/* Skill clusters */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
-        {skillClusters.map((cluster) => (
-          <div key={cluster.label} className="flex flex-col">
-            <div className="flex items-center gap-2 mb-5">
-              <span className="text-[18px]" style={{ color: cluster.color }}>{cluster.icon}</span>
-              <span className="text-[13px] font-mono font-bold uppercase tracking-wider" style={{ color: cluster.color }}>
-                {cluster.label}
-              </span>
-              <div className="flex-1 border-t border-border-color ml-2" />
+      {/* Skills Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-x-16 gap-y-12 mb-16">
+        {Object.entries(skillsData).map(([category, skills]) => (
+          <div key={category} className="flex flex-col">
+            <div className="flex flex-col mb-6">
+              <h2 className="text-[18px] font-bold text-[#ffb86c] tracking-[0.2em] uppercase font-mono mb-2">
+                {category}
+              </h2>
+              <div className="h-[1px] w-full bg-border-color opacity-50" />
             </div>
-            
-            <div className="flex flex-wrap gap-2">
-              {cluster.skills.map((skill) => (
-                <span 
-                  key={skill}
-                  className="bg-bg-sidebar border border-border-color rounded text-[13px] font-mono text-text-primary px-3 py-1.5 hover:border-current transition-colors duration-150 cursor-default"
-                  style={{ borderColor: 'var(--tw-colors-border-color)' }}
-                  onMouseEnter={(e) => (e.currentTarget.style.borderColor = cluster.color)}
-                  onMouseLeave={(e) => (e.currentTarget.style.borderColor = '#3d3d3d')}
-                >
-                  {skill}
-                </span>
+
+            <div className="space-y-6">
+              {skills.map((skill: any) => (
+                <div key={skill.name} className="group">
+                  <div className="flex justify-between items-center mb-2">
+                    <span className="text-[14px] font-mono text-text-muted group-hover:text-white transition-colors">
+                      {skill.name}
+                    </span>
+                    <span className="text-[14px] font-mono font-bold" style={{ color: skill.color }}>
+                      {skill.level}%
+                    </span>
+                  </div>
+                  <div className="h-[2px] w-full bg-bg-sidebar relative overflow-hidden rounded-full">
+                    <motion.div 
+                      initial={{ width: 0 }}
+                      whileInView={{ width: `${skill.level}%` }}
+                      transition={{ duration: 1, ease: "easeOut" }}
+                      viewport={{ once: true }}
+                      className="h-full absolute left-0 top-0"
+                      style={{ 
+                        backgroundColor: skill.color,
+                        boxShadow: `0 0 10px ${skill.color}44`
+                      }}
+                    />
+                  </div>
+                </div>
               ))}
             </div>
           </div>

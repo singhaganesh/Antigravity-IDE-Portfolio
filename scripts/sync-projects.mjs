@@ -59,25 +59,44 @@ async function getTechStack(repoName) {
       const lines = content.split('\n');
       const stack = [];
 
+      // Category words to skip if they are bolded (since they aren't real tech)
+      const categoriesToSkip = [
+        'backend', 'frontend', 'mobile', 'testing', 'code quality', 
+        'containerization', 'orchestration', 'ci/cd', 'vcs', 'server', 
+        'reverse proxy', 'ssl/tls', 'monitoring', 'logging', 'core', 
+        'ui & animation', 'visuals', 'state management', 'data',
+        'category', 'technology', 'purpose', 'version'
+      ];
+
       for (let line of lines) {
         line = line.trim();
         if (!line) continue;
 
-        // Strictly look for bullet points containing bolded text (**Tech Name**)
-        if (line.startsWith('-') || line.startsWith('*') || /^\d+\./.test(line)) {
-          const content = line.replace(/^[-*\d.]+\s*/, '').trim();
+        // Find ALL bolded occurrences in the line (**item**)
+        const boldMatches = line.matchAll(/\*\*([^*]+)\*\*/g);
+        
+        for (const boldMatch of boldMatches) {
+          let tech = boldMatch[1].trim();
           
-          // Regex to capture only what is inside **bold**
-          const boldMatch = content.match(/\*\*([^*]+)\*\*/);
+          // Cleanup links inside bold
+          tech = tech.replace(/\[([^\]]+)\]\([^)]+\)/g, '$1');
           
-          if (boldMatch) {
-            let tech = boldMatch[1].trim();
-            // Basic cleanup for links inside the bold text
-            tech = tech.replace(/\[([^\]]+)\]\([^)]+\)/g, '$1');
-            
-            if (tech && tech.length < 50) {
-              stack.push(tech);
-            }
+          const lowerTech = tech.toLowerCase();
+          
+          // Skip if the tech name is just a generic category or header label
+          const isCategory = categoriesToSkip.some(cat => lowerTech.includes(cat));
+          
+          if (tech && tech.length < 50 && !isCategory) {
+            stack.push(tech);
+          }
+        }
+
+        // Fallback: If no bold matches found but it's a simple list item
+        if (stack.length === 0 && (line.startsWith('-') || line.startsWith('*'))) {
+          let fallbackTech = line.replace(/^[-*\d.]+\s*/, '').split(':')[0].trim();
+          fallbackTech = fallbackTech.replace(/\*\*|\__/g, '');
+          if (fallbackTech && fallbackTech.length < 50) {
+            stack.push(fallbackTech);
           }
         }
       }

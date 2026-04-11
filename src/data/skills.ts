@@ -1,3 +1,9 @@
+export interface Language {
+  name: string;
+  level: number;
+  color: string;
+}
+
 export interface SkillCluster {
   label: string;
   color: string;
@@ -11,6 +17,14 @@ export interface Experience {
   dates: string;
   description: string;
 }
+
+export const languages: Language[] = [
+  { name: "Python", level: 92, color: "#ff79c6" },
+  { name: "Java", level: 72, color: "#f89820" },
+  { name: "JavaScript", level: 78, color: "#f1fa8c" },
+  { name: "TypeScript", level: 74, color: "#8be9fd" },
+  { name: "SQL", level: 88, color: "#bd93f9" },
+];
 
 export const skillClusters: SkillCluster[] = [
   { 
