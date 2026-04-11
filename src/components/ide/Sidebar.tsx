@@ -22,9 +22,9 @@ const Sidebar = () => {
     { name: 'about.html', path: '/about', color: '#e34c26', letter: 'H' },
     { name: 'projects.js', path: '/projects', color: '#f7df1e', letter: 'J' },
     { name: 'skills.json', path: '/skills', color: '#cbcb41', letter: 'J' },
-    { name: 'experience.ts', path: '#', color: '#3178c6', letter: 'T', isDecorative: true },
+    { name: 'experience.log', path: '/experience', color: '#407af3', letter: 'L' },
     { name: 'contact.css', path: '/contact', color: '#563d7c', letter: 'C' },
-    { name: 'README.md', path: '#', color: '#519aba', letter: 'M', isDecorative: true },
+    { name: 'resume.tex', path: '#', color: '#519aba', letter: 'T', isDecorative: true },
     { name: 'Ganesh_Resume.pdf', path: '#', color: '#ff0000', letter: 'P', isDecorative: true },
   ];
 

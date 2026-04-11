@@ -75,22 +75,6 @@ const SkillsPage = () => {
         </div>
       </div>
 
-      {/* Experience timeline */}
-      <div className="mt-14">
-        <div className="text-text-green font-mono text-[14px] mb-8">{"// experience_log:"}</div>
-        <div className="border-l border-border-color ml-2 pl-8 space-y-10 relative">
-          {experience.map((item) => (
-            <div key={item.role} className="relative">
-              <div className="w-3 h-3 rounded-full bg-[#00e5cc] absolute -left-[38.5px] top-1.5 shadow-[0_0_8px_rgba(0,229,204,0.5)]" />
-              <h3 className="text-[16px] font-bold text-white font-mono">{item.role}</h3>
-              <div className="text-[13px] text-text-muted font-mono mt-0.5">{item.company} | {item.dates}</div>
-              <p className="text-[13px] text-text-primary font-mono mt-2 leading-relaxed max-w-2xl">
-                {item.description}
-              </p>
-            </div>
-          ))}
-        </div>
-      </div>
     </div>
   );
 };
