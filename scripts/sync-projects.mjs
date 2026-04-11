@@ -63,20 +63,21 @@ async function getTechStack(repoName) {
         line = line.trim();
         if (!line) continue;
 
-        let tech = null;
-
-        // Handle Bullet Points (- Item: description or **Item**: description)
+        // Strictly look for bullet points containing bolded text (**Tech Name**)
         if (line.startsWith('-') || line.startsWith('*') || /^\d+\./.test(line)) {
-          tech = line.replace(/^[-*\d.]+\s*/, '').trim();
-        }
-
-        if (tech) {
-          // Cleanup
-          let cleaned = tech.replace(/\*\*|\__/g, ''); // Remove Bold
-          cleaned = cleaned.replace(/\[([^\]]+)\]\([^)]+\)/g, '$1'); // Remove Links
-          cleaned = cleaned.split(':')[0].trim(); // Remove trailing descriptions (split by colon)
-          if (cleaned && cleaned.length < 50) {
-            stack.push(cleaned);
+          const content = line.replace(/^[-*\d.]+\s*/, '').trim();
+          
+          // Regex to capture only what is inside **bold**
+          const boldMatch = content.match(/\*\*([^*]+)\*\*/);
+          
+          if (boldMatch) {
+            let tech = boldMatch[1].trim();
+            // Basic cleanup for links inside the bold text
+            tech = tech.replace(/\[([^\]]+)\]\([^)]+\)/g, '$1');
+            
+            if (tech && tech.length < 50) {
+              stack.push(tech);
+            }
           }
         }
       }
