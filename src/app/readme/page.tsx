@@ -5,7 +5,7 @@ import Image from 'next/image';
 import { aboutInfo, stats as baseStats } from '@/data/profile';
 import educationData from '@/data/education.json';
 import { motion } from 'framer-motion';
-import { User, MapPin, Briefcase, Calendar, Globe, Rocket, Code2, Layout, Zap, Github, ExternalLink, GraduationCap } from 'lucide-react';
+import { User, MapPin, Briefcase, Calendar, Globe, Rocket, Code2, Layout, Zap, Github, ExternalLink, GraduationCap, Terminal, ShieldCheck } from 'lucide-react';
 
 const ReadmePage = () => {
   const [repoCount, setRepoCount] = useState<number | null>(null);
@@ -41,27 +41,53 @@ const ReadmePage = () => {
     <div className="px-10 py-12 animate-fadeUp">
       {/* Code comment label */}
       <div className="text-text-green text-[15px] font-mono mb-8">
-        {"<!-- README.md — the human behind the code -->"}
+        {"<!-- README.md — human behind tech -->"}
       </div>
 
-      {/* Header Section */}
+      {/* Header Section (Technical Refactor) */}
       <div className="mb-16">
-        <div className="flex items-center gap-8 mb-4">
-          <div className="w-32 h-32 rounded-2xl overflow-hidden border-2 border-[#00e5cc]/30 shadow-[0_0_30px_rgba(0,229,204,0.15)] flex-shrink-0">
-            <Image
-              src="/profile.jpeg"
-              alt="Ganesh Singha"
-              width={128}
-              height={128}
-              className="object-cover w-full h-full"
-            />
+        <div className="flex items-center gap-10">
+          {/* Profile Photo */}
+          <div className="relative group">
+            <div className="w-44 h-44 rounded-2xl overflow-hidden border-2 border-[#00e5cc]/30 shadow-[0_0_40px_rgba(0,229,204,0.1)] flex-shrink-0 relative z-10 transition-transform duration-500 group-hover:scale-[1.02]">
+              <Image
+                src="/profile.jpeg"
+                alt="Developer Profile"
+                width={176}
+                height={176}
+                className="object-cover w-full h-full grayscale-[20%] group-hover:grayscale-0 transition-all duration-500"
+              />
+            </div>
+            {/* Decorative background element */}
+            <div className="absolute -inset-2 bg-gradient-to-tr from-[#00e5cc]/10 to-transparent rounded-2xl blur-xl opacity-50 group-hover:opacity-100 transition-opacity" />
           </div>
-          <div>
-            <h1 className="text-[72px] font-black text-white leading-tight font-display tracking-tight">Ganesh Singha</h1>
-            <p className="text-text-muted text-[20px] font-mono mt-2 flex items-center gap-3">
-              <Zap size={20} className="text-text-yellow" />
-              Full Stack Developer & Mobile Engineer
-            </p>
+
+          <div className="flex flex-col gap-3">
+            <div className="flex items-center gap-2 mb-1">
+              {['Java', 'Spring Boot', 'React', 'Android'].map((tech) => (
+                <span key={tech} className="bg-bg-sidebar border border-border-color text-text-muted text-[10px] font-mono font-bold px-2 py-0.5 rounded transition-colors hover:border-text-cyan hover:text-white cursor-default">
+                  [{tech.toUpperCase()}]
+                </span>
+              ))}
+            </div>
+            
+            <h1 className="text-[52px] font-black text-white leading-[1.1] font-display tracking-tight max-w-2xl">
+              Full Stack Developer & <br />
+              <span className="text-text-cyan">Mobile Engineer</span>
+            </h1>
+
+            <div className="flex items-center gap-6 mt-2">
+              <div className="flex items-center gap-2 text-text-muted font-mono text-[13px]">
+                <Terminal size={14} className="text-text-cyan" />
+                <span className="text-white">user:</span>
+                <span className="text-text-orange font-bold">ganesh_singha.dev</span>
+              </div>
+              <div className="flex items-center gap-2 text-text-muted font-mono text-[13px]">
+                <Globe size={14} className="text-text-blue" />
+                <span className="text-white">region:</span>
+                <span className="text-text-blue">kolkata/india</span>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -88,7 +114,7 @@ const ReadmePage = () => {
             </div>
           </section>
 
-          {/* Education Section (New) */}
+          {/* Education Section */}
           <section>
             <h2 className="text-[24px] font-bold text-white mb-8 border-b border-border-color pb-2 flex items-center gap-3">
               <GraduationCap size={22} className="text-text-purple" />
@@ -147,10 +173,13 @@ const ReadmePage = () => {
         {/* Sidebar Info Area */}
         <div className="space-y-8">
           {/* Status Card */}
-          <div className="bg-bg-sidebar border border-border-color rounded-xl p-8 shadow-2xl">
+          <div className="bg-bg-sidebar border border-border-color rounded-xl p-8 shadow-2xl relative overflow-hidden">
+            {/* Subtle background glow */}
+            <div className="absolute -top-24 -right-24 w-48 h-48 bg-[#00e5cc]/5 blur-[60px] rounded-full" />
+            
             <div className="flex items-center gap-3 mb-6">
               <div className="w-3 h-3 rounded-full bg-text-green animate-pulse shadow-[0_0_8px_#4ec9b0]" />
-              <span className="text-text-green font-mono text-[13px] font-bold uppercase tracking-widest">Available Now</span>
+              <span className="text-text-green font-mono text-[13px] font-bold uppercase tracking-widest">Active Signal</span>
             </div>
             <div className="space-y-5">
               {aboutInfo.map((info) => (
@@ -171,8 +200,8 @@ const ReadmePage = () => {
           </div>
           {/* Terminal Hint */}
           <div className="bg-[#1e1e1e] border border-border-color p-4 rounded-lg font-mono text-[12px] text-text-muted opacity-60">
-            <p className="">$ whoami</p>
-            <p className="text-white mt-1 font-bold">ganesh_singha.dev</p>
+            <p className="">$ finger ganesh</p>
+            <p className="text-white mt-1 font-bold">status: active_duty</p>
           </div>
         </div>
       </div>
