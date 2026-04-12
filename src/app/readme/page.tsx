@@ -4,8 +4,9 @@ import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { aboutInfo, stats as baseStats } from '@/data/profile';
 import educationData from '@/data/education.json';
+import credentialsData from '@/data/credentials.json';
 import { motion } from 'framer-motion';
-import { User, MapPin, Briefcase, Calendar, Globe, Rocket, Code2, Layout, Zap, Github, ExternalLink, GraduationCap, Terminal, ShieldCheck } from 'lucide-react';
+import { User, MapPin, Briefcase, Calendar, Globe, Rocket, Code2, Layout, Zap, Github, ExternalLink, GraduationCap, Terminal, ShieldCheck, Trophy, FileText, FileCheck } from 'lucide-react';
 
 const ReadmePage = () => {
   const [repoCount, setRepoCount] = useState<number | null>(null);
@@ -26,7 +27,6 @@ const ReadmePage = () => {
     fetchGitHubStats();
   }, []);
 
-  // Update stats dynamically
   const stats = baseStats.map(stat => {
     if (stat.label === "Projects") {
       return {
@@ -44,10 +44,9 @@ const ReadmePage = () => {
         {"<!-- README.md — human behind tech -->"}
       </div>
 
-      {/* Header Section (Technical Refactor) */}
+      {/* Header Section */}
       <div className="mb-16">
         <div className="flex items-center gap-10">
-          {/* Profile Photo */}
           <div className="relative group">
             <div className="w-44 h-44 rounded-2xl overflow-hidden border-2 border-[#00e5cc]/30 shadow-[0_0_40px_rgba(0,229,204,0.1)] flex-shrink-0 relative z-10 transition-transform duration-500 group-hover:scale-[1.02]">
               <Image
@@ -58,7 +57,6 @@ const ReadmePage = () => {
                 className="object-cover w-full h-full grayscale-[20%] group-hover:grayscale-0 transition-all duration-500"
               />
             </div>
-            {/* Decorative background element */}
             <div className="absolute -inset-2 bg-gradient-to-tr from-[#00e5cc]/10 to-transparent rounded-2xl blur-xl opacity-50 group-hover:opacity-100 transition-opacity" />
           </div>
 
@@ -70,12 +68,10 @@ const ReadmePage = () => {
                 </span>
               ))}
             </div>
-            
             <h1 className="text-[52px] font-black text-white leading-[1.1] font-display tracking-tight max-w-2xl">
               Full Stack Developer & <br />
               <span className="text-text-cyan">Mobile Engineer</span>
             </h1>
-
             <div className="flex items-center gap-6 mt-2">
               <div className="flex items-center gap-2 text-text-muted font-mono text-[13px]">
                 <Terminal size={14} className="text-text-cyan" />
@@ -138,6 +134,47 @@ const ReadmePage = () => {
             </div>
           </section>
 
+          {/* Credential Vault Section (New) */}
+          <section>
+            <h2 className="text-[24px] font-bold text-white mb-8 border-b border-border-color pb-2 flex items-center gap-3">
+              <ShieldCheck size={22} className="text-text-cyan" />
+              Credential Vault
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {credentialsData.map((cred, i) => (
+                <a 
+                  key={i} 
+                  href={cred.fileUrl} 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="bg-bg-sidebar/40 border border-border-color p-5 rounded-xl hover:border-text-cyan/40 hover:bg-bg-sidebar/60 transition-all group flex flex-col gap-4 relative overflow-hidden"
+                >
+                  <div className="flex items-start justify-between">
+                    <div className="p-3 bg-bg-editor rounded-lg border border-border-color group-hover:border-text-cyan/30 transition-colors text-text-muted group-hover:text-text-cyan">
+                      {cred.type === 'certification' ? <FileCheck size={24} /> : <Trophy size={24} />}
+                    </div>
+                    <div className="text-[10px] font-mono text-text-muted uppercase tracking-[0.2em] opacity-40">
+                      {cred.type}.pdf
+                    </div>
+                  </div>
+                  <div>
+                    <h3 className="text-white font-bold text-[15px] font-mono group-hover:text-text-cyan transition-colors leading-tight">{cred.name}</h3>
+                    <p className="text-text-muted font-mono text-[12px] mt-1">{cred.org}</p>
+                  </div>
+                  <div className="mt-2 pt-3 border-t border-border-color/30 flex items-center justify-between text-[11px] font-mono">
+                    <span className="text-text-green opacity-70 group-hover:opacity-100 flex items-center gap-1.5">
+                      <Terminal size={12} />
+                      EXECUTE: VIEW_DOC
+                    </span>
+                    <span className="text-text-muted opacity-40 group-hover:opacity-100 transition-opacity">↗</span>
+                  </div>
+                  {/* Decorative background scanline */}
+                  <div className="absolute top-0 left-0 w-full h-[1px] bg-[#00e5cc]/10 -translate-y-full group-hover:translate-y-[200px] transition-transform duration-[2000ms] ease-linear" />
+                </a>
+              ))}
+            </div>
+          </section>
+
           {/* Philosophy Section */}
           <section className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-4">
             <div className="bg-bg-sidebar/40 border border-border-color p-6 rounded-lg hover:border-text-blue/30 transition-colors group">
@@ -172,11 +209,8 @@ const ReadmePage = () => {
 
         {/* Sidebar Info Area */}
         <div className="space-y-8">
-          {/* Status Card */}
           <div className="bg-bg-sidebar border border-border-color rounded-xl p-8 shadow-2xl relative overflow-hidden">
-            {/* Subtle background glow */}
             <div className="absolute -top-24 -right-24 w-48 h-48 bg-[#00e5cc]/5 blur-[60px] rounded-full" />
-            
             <div className="flex items-center gap-3 mb-6">
               <div className="w-3 h-3 rounded-full bg-text-green animate-pulse shadow-[0_0_8px_#4ec9b0]" />
               <span className="text-text-green font-mono text-[13px] font-bold uppercase tracking-widest">Active Signal</span>
@@ -198,7 +232,6 @@ const ReadmePage = () => {
               ))}
             </div>
           </div>
-          {/* Terminal Hint */}
           <div className="bg-[#1e1e1e] border border-border-color p-4 rounded-lg font-mono text-[12px] text-text-muted opacity-60">
             <p className="">$ finger ganesh</p>
             <p className="text-white mt-1 font-bold">status: active_duty</p>
