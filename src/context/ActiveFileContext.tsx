@@ -1,6 +1,6 @@
 'use client';
 
-import React, { createContext, useContext, useEffect, useState, useCallback, useRef } from 'react';
+import React, { createContext, useContext, useEffect, useState } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 
 export interface FileMetadata {
@@ -15,17 +15,11 @@ export interface FileMetadata {
 
 export const FILE_MAP: { [key: string]: FileMetadata } = {
   "/": { name: "home.tsx", lang: "TypeScript React", tabBorder: "#61dafb", dot: "#61dafb", color: "#61dafb", letter: "R", path: "/" },
-  "/readme": { name: "README.md", lang: "Markdown", tabBorder: "#519aba", dot: "#519aba", color: "#519aba", letter: "M", path: "/readme" },
+  "/readme": { name: "README.md", lang: "Markdown", tabBorder: "#4ec9b0", dot: "#4ec9b0", color: "#4ec9b0", letter: "M", path: "/readme" },
   "/projects": { name: "projects.js", lang: "JavaScript", tabBorder: "#f7df1e", dot: "#f7df1e", color: "#f7df1e", letter: "J", path: "/projects" },
   "/skills": { name: "skills.json", lang: "JSON", tabBorder: "#cbcb41", dot: "#cbcb41", color: "#cbcb41", letter: "J", path: "/skills" },
-  "/experience": { name: "experience.log", lang: "Markdown", tabBorder: "#407af3", dot: "#407af3", color: "#407af3", letter: "L", path: "/experience" },
   "/contact": { name: "contact.css", lang: "CSS", tabBorder: "#563d7c", dot: "#563d7c", color: "#563d7c", letter: "C", path: "/contact" },
 };
-
-export interface CursorPosition {
-  line: number;
-  column: number;
-}
 
 interface ActiveFileContextType {
   activeFile: FileMetadata;
@@ -36,14 +30,18 @@ interface ActiveFileContextType {
   setIsTerminalOpen: (open: boolean) => void;
   isSidebarOpen: boolean;
   setIsSidebarOpen: (open: boolean) => void;
+  sidebarView: 'explorer' | 'search';
+  setSidebarView: (view: 'explorer' | 'search') => void;
   isAgentPanelOpen: boolean;
   setIsAgentPanelOpen: (open: boolean) => void;
   agentPanelWidth: number;
   setAgentPanelWidth: (width: number) => void;
   isMobileMenuOpen: boolean;
   setIsMobileMenuOpen: (open: boolean) => void;
-  cursorPosition: CursorPosition;
-  setCursorPosition: (pos: CursorPosition) => void;
+  isCommandPaletteOpen: boolean;
+  setIsCommandPaletteOpen: (open: boolean) => void;
+  cursorPosition: { line: number; column: number };
+  setCursorPosition: (pos: { line: number; column: number }) => void;
 }
 
 const ActiveFileContext = createContext<ActiveFileContextType | undefined>(undefined);
@@ -55,64 +53,42 @@ export const ActiveFileProvider: React.FC<{ children: React.ReactNode }> = ({ ch
   const [openTabs, setOpenTabs] = useState<string[]>(["/"]);
   const [isTerminalOpen, setIsTerminalOpen] = useState(true);
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const [sidebarView, setSidebarView] = useState<'explorer' | 'search'>('explorer');
   const [isAgentPanelOpen, setIsAgentPanelOpen] = useState(true);
   const [agentPanelWidth, setAgentPanelWidth] = useState(300);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [cursorPosition, setCursorPosition] = useState<CursorPosition>({ line: 1, column: 1 });
+  const [isCommandPaletteOpen, setIsCommandPaletteOpen] = useState(false);
+  const [cursorPosition, setCursorPosition] = useState({ line: 1, column: 1 });
 
-  // Track if we're in the middle of a close operation
-  const isClosingTab = useRef(false);
-
-  const handleSetCursorPosition = useCallback((pos: CursorPosition) => {
-    setCursorPosition(pos);
-  }, []);
-
-  // Only react to pathname changes - NOT openTabs changes
   useEffect(() => {
     const currentFile = FILE_MAP[pathname];
     if (currentFile) {
       setActiveFile(currentFile);
-      // Only add tab if we're not closing a tab and tab doesn't exist
-      if (!isClosingTab.current) {
-        setOpenTabs(prev => {
-          if (!prev.includes(pathname)) {
-            return [...prev, pathname];
-          }
-          return prev;
-        });
+      if (!openTabs.includes(pathname)) {
+        setOpenTabs(prev => [...prev, pathname]);
       }
-      // Reset the flag after the effect runs
-      isClosingTab.current = false;
     }
     setIsMobileMenuOpen(false);
-    setCursorPosition({ line: 1, column: 1 });
   }, [pathname]);
 
-  const openTab = useCallback((path: string) => {
-    setOpenTabs(prev => {
-      if (!prev.includes(path)) {
-        return [...prev, path];
-      }
-      return prev;
-    });
+  const openTab = (path: string) => {
+    if (!openTabs.includes(path)) {
+      setOpenTabs(prev => [...prev, path]);
+    }
     router.push(path);
-  }, [router]);
+  };
 
-  const closeTab = useCallback((path: string) => {
-    isClosingTab.current = true;
-    setOpenTabs(prev => {
-      const newTabs = prev.filter(t => t !== path);
-      // Navigate to another tab if closing the active one
-      if (pathname === path) {
-        if (newTabs.length > 0) {
-          router.push(newTabs[newTabs.length - 1]);
-        } else {
-          router.push("/");
-        }
+  const closeTab = (path: string) => {
+    const newTabs = openTabs.filter(t => t !== path);
+    setOpenTabs(newTabs);
+    if (pathname === path) {
+      if (newTabs.length > 0) {
+        router.push(newTabs[newTabs.length - 1]);
+      } else {
+        router.push("/");
       }
-      return newTabs;
-    });
-  }, [pathname, router]);
+    }
+  };
 
   return (
     <ActiveFileContext.Provider value={{ 
@@ -124,14 +100,18 @@ export const ActiveFileProvider: React.FC<{ children: React.ReactNode }> = ({ ch
       setIsTerminalOpen, 
       isSidebarOpen,
       setIsSidebarOpen,
+      sidebarView,
+      setSidebarView,
       isAgentPanelOpen,
       setIsAgentPanelOpen,
       agentPanelWidth,
       setAgentPanelWidth,
       isMobileMenuOpen, 
       setIsMobileMenuOpen,
+      isCommandPaletteOpen,
+      setIsCommandPaletteOpen,
       cursorPosition,
-      setCursorPosition: handleSetCursorPosition
+      setCursorPosition
     }}>
       {children}
     </ActiveFileContext.Provider>
