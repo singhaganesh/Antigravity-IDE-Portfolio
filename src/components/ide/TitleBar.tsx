@@ -1,7 +1,8 @@
 'use client';
 
 import React from 'react';
-import { Search, Minus, Square, X, Menu, Settings, Sparkles, LayoutPanelLeft, LayoutPanelTop, LayoutPanelRight } from 'lucide-react';
+import Image from 'next/image';
+import { Search, Minus, Square, X, Menu, Settings, Sparkles } from 'lucide-react';
 import { useActiveFile } from '@/context/ActiveFileContext';
 import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
@@ -32,7 +33,7 @@ const TitleBar = () => {
 
   return (
     <div className="h-[35px] bg-bg-sidebar border-b border-border-color flex items-center justify-between select-none px-3 shrink-0">
-      {/* Left: macOS Traffic Lights / Hamburger */}
+      {/* Left: Logo / Hamburger */}
       <div className="flex items-center gap-2">
         <div className="md:hidden">
           <Menu 
@@ -41,10 +42,14 @@ const TitleBar = () => {
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
           />
         </div>
-        <div className="hidden md:flex items-center gap-2">
-          <div className="w-3 h-3 rounded-full bg-[#ff5f57]" />
-          <div className="w-3 h-3 rounded-full bg-[#ffbd2e]" />
-          <div className="w-3 h-3 rounded-full bg-[#28c840]" />
+        <div className="hidden md:flex items-center ml-1">
+          <Image 
+            src="/assets/icons/Antigravity-logo.svg" 
+            alt="Antigravity Logo" 
+            width={18} 
+            height={18}
+            className="opacity-80 hover:opacity-100 transition-opacity cursor-pointer"
+          />
         </div>
         
         <div className="hidden xl:flex items-center gap-1 ml-4 text-[13px] text-muted">
@@ -54,7 +59,7 @@ const TitleBar = () => {
         </div>
       </div>
 
-      {/* Center: Branding Text (Restored) */}
+      {/* Center: Branding Text */}
       <div className="flex-1 flex justify-center items-center px-8">
         <div className="text-[12px] text-muted flex items-center gap-1 max-w-[500px] truncate">
           <span>Antigravity-IDE-Portfolio</span>

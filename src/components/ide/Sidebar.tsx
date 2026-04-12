@@ -80,7 +80,7 @@ const Sidebar = () => {
 
   return (
     <>
-      <div className="w-[240px] h-full bg-bg-sidebar border-r border-border-color hidden md:flex flex-col select-none overflow-hidden">
+      <div className="w-[260px] h-full bg-bg-sidebar border-r border-border-color hidden md:flex flex-col select-none overflow-hidden">
         {sidebarContent}
       </div>
 

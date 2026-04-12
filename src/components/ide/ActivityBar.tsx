@@ -1,7 +1,6 @@
 'use client';
 
 import React from 'react';
-import Link from 'next/navigation';
 import { Files, Search, GitBranch, Package, Blocks, Settings } from 'lucide-react';
 import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
@@ -12,7 +11,7 @@ function cn(...inputs: ClassValue[]) {
 }
 
 const ActivityBar = () => {
-  const { sidebarView, setSidebarView, setIsSidebarOpen } = useActiveFile();
+  const { sidebarView, setSidebarView, isSidebarOpen, setIsSidebarOpen } = useActiveFile();
 
   const icons = [
     { id: 'explorer', icon: Files, label: 'Explorer' },
@@ -24,9 +23,8 @@ const ActivityBar = () => {
 
   const handleIconClick = (id: string) => {
     if (id === 'explorer' || id === 'search') {
-      if (sidebarView === id) {
+      if (isSidebarOpen && sidebarView === id) {
         setIsSidebarOpen(false);
-        setSidebarView('explorer');
       } else {
         setSidebarView(id as any);
         setIsSidebarOpen(true);
@@ -37,7 +35,7 @@ const ActivityBar = () => {
   return (
     <div className="w-[48px] h-full bg-bg-sidebar border-r border-border-color flex flex-col items-center select-none py-2 shrink-0">
       {icons.map(({ id, icon: Icon, label }) => {
-        const isActive = sidebarView === id;
+        const isActive = isSidebarOpen && sidebarView === id;
         return (
           <div
             key={id}
