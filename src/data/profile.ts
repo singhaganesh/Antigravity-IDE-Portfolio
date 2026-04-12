@@ -19,5 +19,4 @@ export const aboutInfo: InfoRow[] = [
 export const stats: Stat[] = [
   { number: "Junior", label: "Engineer" },
   { number: "20+", label: "Projects" },
-  { number: "10+", label: "Clients" },
 ];

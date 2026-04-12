@@ -1,12 +1,41 @@
 'use client';
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
-import { aboutInfo, stats } from '@/data/profile';
+import { aboutInfo, stats as baseStats } from '@/data/profile';
 import { motion } from 'framer-motion';
 import { User, MapPin, Briefcase, Calendar, Globe, Rocket, Code2, Layout, Zap, Github, ExternalLink } from 'lucide-react';
 
 const ReadmePage = () => {
+  const [repoCount, setRepoCount] = useState<number | null>(null);
+
+  useEffect(() => {
+    const fetchGitHubStats = async () => {
+      try {
+        const response = await fetch('https://api.github.com/users/singhaganesh');
+        if (response.ok) {
+          const data = await response.json();
+          setRepoCount(data.public_repos);
+        }
+      } catch (error) {
+        console.error('Failed to fetch GitHub stats:', error);
+      }
+    };
+
+    fetchGitHubStats();
+  }, []);
+
+  // Update stats dynamically
+  const stats = baseStats.map(stat => {
+    if (stat.label === "Projects") {
+      return {
+        ...stat,
+        number: repoCount !== null ? `${repoCount}+` : "..."
+      };
+    }
+    return stat;
+  });
+
   return (
     <div className="px-10 py-12 animate-fadeUp">
       {/* Code comment label */}
@@ -17,31 +46,31 @@ const ReadmePage = () => {
       {/* Header Section */}
       <div className="mb-16">
         <div className="flex items-center gap-8 mb-4">
-           {/* Profile Photo at Left of Heading */}
-           <div className="w-32 h-32 rounded-2xl overflow-hidden border-2 border-[#00e5cc]/30 shadow-[0_0_30px_rgba(0,229,204,0.15)] flex-shrink-0">
-              <Image 
-                src="/profile.jpeg" 
-                alt="Ganesh Singha" 
-                width={128} 
-                height={128}
-                className="object-cover w-full h-full"
-              />
-           </div>
-           <div>
-              <h1 className="text-[72px] font-black text-white leading-tight font-display tracking-tight">Ganesh Singha</h1>
-              <p className="text-text-muted text-[20px] font-mono mt-2 flex items-center gap-3">
-                <Zap size={20} className="text-text-yellow" />
-                Full Stack Developer & Mobile Engineer
-              </p>
-           </div>
+          {/* Profile Photo at Left of Heading */}
+          <div className="w-32 h-32 rounded-2xl overflow-hidden border-2 border-[#00e5cc]/30 shadow-[0_0_30px_rgba(0,229,204,0.15)] flex-shrink-0">
+            <Image
+              src="/profile.jpeg"
+              alt="Ganesh Singha"
+              width={128}
+              height={128}
+              className="object-cover w-full h-full"
+            />
+          </div>
+          <div>
+            <h1 className="text-[72px] font-black text-white leading-tight font-display tracking-tight">Ganesh Singha</h1>
+            <p className="text-text-muted text-[20px] font-mono mt-2 flex items-center gap-3">
+              <Zap size={20} className="text-text-yellow" />
+              Full Stack Developer & Mobile Engineer
+            </p>
+          </div>
         </div>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-[1fr_350px] gap-16">
-        
+
         {/* Main Content Area */}
         <div className="space-y-12">
-          
+
           {/* Bio Section */}
           <section>
             <h2 className="text-[24px] font-bold text-white mb-6 border-b border-border-color pb-2 flex items-center gap-3">
@@ -50,13 +79,13 @@ const ReadmePage = () => {
             </h2>
             <div className="space-y-6 text-[16px] font-mono leading-relaxed text-text-primary">
               <p>
-                Hi, I&apos;m Ganesh — a <span className="text-text-cyan font-bold underline decoration-text-cyan/30">Full Stack Developer</span> and Junior Engineer from Kolkata, India. I specialize in building highly scalable web architectures and immersive mobile experiences.
+                Hi, I&apos;m Ganesh — a <span className="text-text-cyan font-bold underline decoration-text-cyan/30">Backend-focused Full Stack Engineer</span> from Kolkata, India. My core strength lies in building robust, scalable systems with <span className="text-text-yellow font-semibold">Spring Boot</span>, and I bring that same precision to the full stack — from <span className="text-text-green font-semibold">React</span> on the web to <span className="text-text-green font-semibold">Jetpack Compose</span> on mobile, containerized with <span className="text-text-blue font-semibold">Docker</span> and shipped through solid <span className="text-text-blue font-semibold">CI/CD pipelines</span>.
               </p>
               <p>
-                I have a track record of delivering high-impact systems, including a <span className="text-text-yellow font-semibold">patented EV charging platform</span> and an <span className="text-text-green font-semibold">AI-powered IoT chatbot</span> that reduced manual data querying by 60%.
+                I stay sharp on the AI frontier too — working with modern <span className="text-text-purple font-semibold">CLI-based AI tools</span> and architecting <span className="text-text-cyan font-semibold">RAG (Retrieval-Augmented Generation)</span> systems that make intelligent applications actually useful in production.
               </p>
               <p>
-                Currently working at <span className="text-text-blue font-semibold underline decoration-text-blue/30">SEPLE NovaEdge</span>, I am bridging the gap between IoT ecosystems and AI automation, creating systems that solve complex real-world problems with simple, intuitive interfaces.
+                I have a track record of delivering high-impact work: a <span className="text-text-yellow font-semibold">patented EV charging platform</span>, and an <span className="text-text-green font-semibold">AI-powered IoT chatbot</span> that cut manual data querying by 60%. Currently at <span className="text-text-blue font-semibold underline decoration-text-blue/30">SEPLE NovaEdge</span>, I&apos;m connecting IoT ecosystems with AI automation — turning complex engineering problems into systems that just work.
               </p>
             </div>
           </section>
@@ -82,20 +111,20 @@ const ReadmePage = () => {
 
           {/* Links Section */}
           <div className="flex gap-6 pt-4">
-             <a href="https://github.com/singhaganesh" target="_blank" rel="noreferrer" className="flex items-center gap-2 text-text-muted hover:text-white transition-colors font-mono text-[14px]">
-                <Github size={16} />
-                github.com/singhaganesh
-             </a>
-             <a href="/projects" className="flex items-center gap-2 text-[#00e5cc] hover:underline transition-colors font-mono text-[14px]">
-                <ExternalLink size={16} />
-                explore_projects( )
-             </a>
+            <a href="https://github.com/singhaganesh" target="_blank" rel="noreferrer" className="flex items-center gap-2 text-text-muted hover:text-white transition-colors font-mono text-[14px]">
+              <Github size={16} />
+              github.com/singhaganesh
+            </a>
+            <a href="/projects" className="flex items-center gap-2 text-[#00e5cc] hover:underline transition-colors font-mono text-[14px]">
+              <ExternalLink size={16} />
+              explore_projects( )
+            </a>
           </div>
         </div>
 
         {/* Sidebar Info Area */}
         <div className="space-y-8">
-          
+
           {/* Status Card */}
           <div className="bg-bg-sidebar border border-border-color rounded-xl p-8 shadow-2xl">
             <div className="flex items-center gap-3 mb-6">
@@ -113,19 +142,19 @@ const ReadmePage = () => {
             </div>
 
             <div className="mt-8 pt-6 border-t border-border-color flex flex-col gap-4">
-               {stats.map((stat) => (
-                 <div key={stat.label} className="flex justify-between items-end">
-                    <span className="text-text-muted font-mono text-[12px]">{stat.label}</span>
-                    <span className="text-[24px] font-black text-white font-display leading-none">{stat.number}</span>
-                 </div>
-               ))}
+              {stats.map((stat) => (
+                <div key={stat.label} className="flex justify-between items-end">
+                  <span className="text-text-muted font-mono text-[12px]">{stat.label}</span>
+                  <span className="text-[24px] font-black text-white font-display leading-none">{stat.number}</span>
+                </div>
+              ))}
             </div>
           </div>
 
           {/* Terminal Hint */}
           <div className="bg-[#1e1e1e] border border-border-color p-4 rounded-lg font-mono text-[12px] text-text-muted opacity-60">
-             <p className="">$ whoami</p>
-             <p className="text-white mt-1 font-bold">ganesh_singha.dev</p>
+            <p className="">$ whoami</p>
+            <p className="text-white mt-1 font-bold">ganesh_singha.dev</p>
           </div>
 
         </div>
