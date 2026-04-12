@@ -19,6 +19,7 @@ export const FILE_MAP: { [key: string]: FileMetadata } = {
   "/experience": { name: "experience.ts", lang: "TypeScript", tabBorder: "#3178c6", dot: "#3178c6", color: "#3178c6", letter: "T", path: "/experience" },
   "/projects": { name: "projects.js", lang: "JavaScript", tabBorder: "#f7df1e", dot: "#f7df1e", color: "#f7df1e", letter: "J", path: "/projects" },
   "/skills": { name: "skills.json", lang: "JSON", tabBorder: "#cbcb41", dot: "#cbcb41", color: "#cbcb41", letter: "J", path: "/skills" },
+  "/adventures": { name: "adventures.bike", lang: "Markdown", tabBorder: "#ff0000", dot: "#ff0000", color: "#ff0000", letter: "B", path: "/adventures" },
   "/contact": { name: "contact.css", lang: "CSS", tabBorder: "#563d7c", dot: "#563d7c", color: "#563d7c", letter: "C", path: "/contact" },
 };
 

@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Search, FileCode, Sparkles, X, ChevronRight, Hash } from 'lucide-react';
+import { Search, FileCode, Sparkles, X, ChevronRight, Hash, FileText, Zap, Cpu, Send, Bike } from 'lucide-react';
 import { useActiveFile, FILE_MAP } from '@/context/ActiveFileContext';
 
 const CommandPalette = () => {
@@ -14,6 +14,7 @@ const CommandPalette = () => {
   const files = [
     { name: 'home.tsx', path: '/', color: '#61dafb', letter: 'R', dir: 'src/' },
     { name: 'experience.ts', path: '/experience', color: '#3178c6', letter: 'T', dir: 'src/' },
+    { name: 'adventures.bike', path: '/adventures', color: '#ff0000', letter: 'B', dir: 'src/' },
     { name: 'projects.js', path: '/projects', color: '#f7df1e', letter: 'J', dir: 'src/' },
     { name: 'skills.json', path: '/skills', color: '#cbcb41', letter: 'J', dir: 'data/' },
     { name: 'contact.css', path: '/contact', color: '#563d7c', letter: 'C', dir: 'src/' },
@@ -84,7 +85,6 @@ const CommandPalette = () => {
         exit={{ opacity: 0, scale: 0.95, y: -20 }}
         className="relative w-full max-w-[650px] bg-[#252526] border border-border-color rounded-lg shadow-2xl overflow-hidden font-mono"
       >
-        {/* Search Input */}
         <div className="flex items-center px-4 py-3 gap-3 border-b border-border-color bg-[#1e1e1e]">
           <span className="text-muted text-[14px]">{">"}</span>
           <input
@@ -101,7 +101,6 @@ const CommandPalette = () => {
         </div>
 
         <div className="max-h-[400px] overflow-y-auto py-2 scrollbar-thin">
-          {/* Commands Section */}
           {filteredCommands.length > 0 && (
             <div className="mb-2">
               <div className="px-4 py-1 text-[10px] font-bold text-muted uppercase tracking-widest opacity-50">Commands</div>
@@ -121,7 +120,6 @@ const CommandPalette = () => {
             </div>
           )}
 
-          {/* Files Section */}
           {filteredFiles.length > 0 && (
             <div>
               <div className="px-4 py-1 text-[10px] font-bold text-muted uppercase tracking-widest opacity-50">Files</div>
@@ -153,7 +151,6 @@ const CommandPalette = () => {
           )}
         </div>
 
-        {/* Footer */}
         <div className="bg-[#1e1e1e] border-t border-border-color px-4 py-2 flex items-center justify-between text-[10px] text-muted uppercase tracking-widest">
           <div className="flex gap-4">
             <span className="flex items-center gap-1.5"><span className="text-[12px]">↑↓</span> navigate</span>

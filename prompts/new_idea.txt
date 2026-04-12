@@ -1,0 +1,102 @@
+1. The IDE Metaphor: File Naming & Context
+Since your portfolio mimics an IDE, we need to represent this gallery as a "file." Good options would be adventures.md, biker_ganesh.config, or an image preview tab. Let's go with a Markdown file metaphor, as it allows for a mix of text and imagery.
+
+First, update your src/context/ActiveFileContext.tsx to register the new route in the FILE_MAP:
+
+TypeScript
+// Inside src/context/ActiveFileContext.tsx
+import { Camera } from 'lucide-react'; // Or an Image icon
+
+const FILE_MAP: Record<string, FileData> = {
+  // ... existing routes
+  '/achievements': {
+    name: 'biker_ganesh.md',
+    language: 'markdown',
+    icon: <Camera className="text-purple-400" size={16} />,
+  },
+};
+2. Building the Route (src/app/achievements/page.tsx)
+Create a new Next.js route for the gallery. Since you have framer-motion installed, we can make the images fade in sequentially and implement a smooth grid layout.
+
+Here is a recommended structure for your new page:
+
+TypeScript
+'use client';
+
+import { motion } from 'framer-motion';
+import Image from 'next/image';
+
+const achievements = [
+  {
+    id: 1,
+    title: "Sandakphu via Nepal Border",
+    category: "International Expedition",
+    image: "/assets/riding/sandakphu.jpg", // Add your Insta pics to public/
+    span: "col-span-2 row-span-2" // Make major milestones larger
+  },
+  {
+    id: 2,
+    title: "YouTube Milestone",
+    category: "150+ Subscribers",
+    image: "/assets/riding/youtube-milestone.jpg",
+    span: "col-span-1 row-span-1"
+  },
+  {
+    id: 3,
+    title: "Ride To Rock Community",
+    category: "Gangasagar Group Ride",
+    image: "/assets/riding/gangasagar.jpg",
+    span: "col-span-1 row-span-1"
+  },
+  // Add more entries here...
+];
+
+export default function AchievementsPage() {
+  return (
+    <div className="flex flex-col h-full overflow-y-auto p-6 md:p-12 text-slate-300">
+      <div className="max-w-5xl mx-auto w-full">
+        <h1 className="text-3xl font-bold text-white mb-2 font-display">
+          # MotoVlogging & Expeditions
+        </h1>
+        <p className="text-slate-400 mb-8 font-mono text-sm">
+          > Life beyond the keyboard. Documenting journeys, community rides, and pushing limits on two wheels.
+        </p>
+
+        {/* CSS Grid for the Image Gallery */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 auto-rows-[200px]">
+          {achievements.map((item, index) => (
+            <motion.div
+              key={item.id}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: index * 0.1, duration: 0.4 }}
+              className={`relative group overflow-hidden rounded-md border border-slate-700/50 bg-slate-800/50 ${item.span}`}
+            >
+              <Image
+                src={item.image}
+                alt={item.title}
+                fill
+                className="object-cover transition-transform duration-500 group-hover:scale-105"
+              />
+              {/* IDE-style overlay on hover */}
+              <div className="absolute inset-0 bg-editor/80 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-4">
+                <span className="text-cyan-400 font-mono text-xs mb-1">
+                  // {item.category}
+                </span>
+                <h3 className="text-white font-semibold font-display">
+                  {item.title}
+                </h3>
+              </div>
+            </motion.div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+3. Key Design Features for this Setup:
+The "Bento Box" Grid: By using Tailwind's CSS grid (grid-cols-3 and auto-rows), you can make your most important photos (like the Sandakphu trip) take up a larger 2x2 square (col-span-2 row-span-2), while smaller updates (like gear shots or your SMK Gullwing helmet) take up standard 1x1 squares.
+
+The IDE Hover State: When a user hovers over an image, instead of a standard generic overlay, it fades into a slightly transparent terminal background (bg-editor/80) and displays the title using code comment syntax (// International Expedition).
+
+Sidebar Integration: Don't forget to update your src/components/ide/Sidebar.tsx to include the new path so users can actually click and open the file from the explorer pane.

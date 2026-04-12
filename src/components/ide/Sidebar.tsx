@@ -22,7 +22,8 @@ const Sidebar = () => {
     { name: 'README.md', path: '/readme', color: '#519aba', letter: 'M' },
     { name: 'projects.js', path: '/projects', color: '#f7df1e', letter: 'J' },
     { name: 'skills.json', path: '/skills', color: '#cbcb41', letter: 'J' },
-    { name: 'experience.log', path: '/experience', color: '#407af3', letter: 'L' },
+    { name: 'experience.ts', path: '/experience', color: '#3178c6', letter: 'T' },
+    { name: 'adventures.bike', path: '/adventures', color: '#ff0000', letter: 'B' },
     { name: 'contact.css', path: '/contact', color: '#563d7c', letter: 'C' },
     { name: 'Ganesh_Resume.pdf', path: '#', color: '#ff0000', letter: 'P', isDecorative: true },
   ];
