@@ -21,8 +21,14 @@ const TitleBar = () => {
     setIsTerminalOpen,
     isAgentPanelOpen,
     setIsAgentPanelOpen,
-    setIsCommandPaletteOpen
+    setIsCommandPaletteOpen,
+    setSidebarView
   } = useActiveFile();
+
+  const handleSearchClick = () => {
+    setSidebarView('search');
+    setIsSidebarOpen(true);
+  };
 
   return (
     <div className="h-[35px] bg-bg-sidebar border-b border-border-color flex items-center justify-between select-none px-3 shrink-0">
@@ -48,19 +54,14 @@ const TitleBar = () => {
         </div>
       </div>
 
-      {/* Center: Search / Command Palette Trigger */}
+      {/* Center: Branding Text (Restored) */}
       <div className="flex-1 flex justify-center items-center px-8">
-        <div 
-          onClick={() => setIsCommandPaletteOpen(true)}
-          className="bg-[#3c3c3c] border border-border-color/50 rounded-md px-4 py-0.5 text-[12px] text-muted w-full max-w-[500px] flex items-center justify-between hover:bg-[#454545] cursor-pointer transition-colors group"
-        >
-          <div className="flex items-center gap-2 overflow-hidden truncate">
-            <Search size={12} className="text-muted flex-shrink-0 group-hover:text-white" />
-            <span className="truncate group-hover:text-white">ganesh-singha : {activeFile.name}</span>
-          </div>
-          <div className="hidden md:block bg-[#4e4e4e] text-muted text-[10px] px-1.5 rounded flex-shrink-0 ml-2 border border-border-color/50">
-            Ctrl P
-          </div>
+        <div className="text-[12px] text-muted flex items-center gap-1 max-w-[500px] truncate">
+          <span>Antigravity-IDE-Portfolio</span>
+          <span>-</span>
+          <span>Antigravity</span>
+          <span>-</span>
+          <span className="text-white font-medium">{activeFile.name}</span>
         </div>
       </div>
 

@@ -116,7 +116,7 @@ export default function Home() {
   ];
 
   return (
-    <div className="relative min-h-full flex flex-col items-center justify-center p-6 overflow-hidden animate-fadeUp">
+    <div className="relative min-h-max flex flex-col items-center justify-center p-6 py-20 animate-fadeUp">
       
       {/* Top Section: System Header */}
       <div className="absolute top-10 w-full px-10 hidden xl:flex justify-between items-start pointer-events-none">
