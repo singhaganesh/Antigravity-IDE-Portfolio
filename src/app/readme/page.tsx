@@ -3,8 +3,9 @@
 import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { aboutInfo, stats as baseStats } from '@/data/profile';
+import educationData from '@/data/education.json';
 import { motion } from 'framer-motion';
-import { User, MapPin, Briefcase, Calendar, Globe, Rocket, Code2, Layout, Zap, Github, ExternalLink } from 'lucide-react';
+import { User, MapPin, Briefcase, Calendar, Globe, Rocket, Code2, Layout, Zap, Github, ExternalLink, GraduationCap } from 'lucide-react';
 
 const ReadmePage = () => {
   const [repoCount, setRepoCount] = useState<number | null>(null);
@@ -46,7 +47,6 @@ const ReadmePage = () => {
       {/* Header Section */}
       <div className="mb-16">
         <div className="flex items-center gap-8 mb-4">
-          {/* Profile Photo at Left of Heading */}
           <div className="w-32 h-32 rounded-2xl overflow-hidden border-2 border-[#00e5cc]/30 shadow-[0_0_30px_rgba(0,229,204,0.15)] flex-shrink-0">
             <Image
               src="/profile.jpeg"
@@ -67,10 +67,8 @@ const ReadmePage = () => {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-[1fr_350px] gap-16">
-
         {/* Main Content Area */}
-        <div className="space-y-12">
-
+        <div className="space-y-16">
           {/* Bio Section */}
           <section>
             <h2 className="text-[24px] font-bold text-white mb-6 border-b border-border-color pb-2 flex items-center gap-3">
@@ -90,8 +88,32 @@ const ReadmePage = () => {
             </div>
           </section>
 
+          {/* Education Section (New) */}
+          <section>
+            <h2 className="text-[24px] font-bold text-white mb-8 border-b border-border-color pb-2 flex items-center gap-3">
+              <GraduationCap size={22} className="text-text-purple" />
+              Education
+            </h2>
+            <div className="space-y-10 border-l-2 border-border-color ml-3 pl-8">
+              {educationData.map((edu, i) => (
+                <div key={i} className="relative group">
+                  <div className={`absolute -left-[41px] top-1.5 w-4 h-4 rounded-full border-2 border-bg-editor transition-all duration-300 ${edu.status === 'active' ? 'bg-text-green shadow-[0_0_10px_#4ec9b0]' : 'bg-text-muted opacity-50'}`} />
+                  <div className="flex flex-col gap-1">
+                    <h3 className="text-white font-bold text-[18px] font-mono group-hover:text-text-cyan transition-colors">{edu.institution}</h3>
+                    <div className="flex items-center gap-3 text-text-cyan font-mono text-[14px] font-semibold">
+                      <span>{edu.degree}</span>
+                      <span className="text-border-color">|</span>
+                      <span className="text-text-yellow">{edu.grade}</span>
+                    </div>
+                    <p className="text-text-muted font-mono text-[13px] mt-1 italic">{edu.duration}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </section>
+
           {/* Philosophy Section */}
-          <section className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <section className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-4">
             <div className="bg-bg-sidebar/40 border border-border-color p-6 rounded-lg hover:border-text-blue/30 transition-colors group">
               <Code2 className="mb-4 text-text-blue group-hover:scale-110 transition-transform" />
               <h3 className="font-bold text-white mb-2 font-mono">Clean Code</h3>
@@ -124,14 +146,12 @@ const ReadmePage = () => {
 
         {/* Sidebar Info Area */}
         <div className="space-y-8">
-
           {/* Status Card */}
           <div className="bg-bg-sidebar border border-border-color rounded-xl p-8 shadow-2xl">
             <div className="flex items-center gap-3 mb-6">
               <div className="w-3 h-3 rounded-full bg-text-green animate-pulse shadow-[0_0_8px_#4ec9b0]" />
               <span className="text-text-green font-mono text-[13px] font-bold uppercase tracking-widest">Available Now</span>
             </div>
-
             <div className="space-y-5">
               {aboutInfo.map((info) => (
                 <div key={info.label} className="flex flex-col gap-1">
@@ -140,7 +160,6 @@ const ReadmePage = () => {
                 </div>
               ))}
             </div>
-
             <div className="mt-8 pt-6 border-t border-border-color flex flex-col gap-4">
               {stats.map((stat) => (
                 <div key={stat.label} className="flex justify-between items-end">
@@ -150,13 +169,11 @@ const ReadmePage = () => {
               ))}
             </div>
           </div>
-
           {/* Terminal Hint */}
           <div className="bg-[#1e1e1e] border border-border-color p-4 rounded-lg font-mono text-[12px] text-text-muted opacity-60">
             <p className="">$ whoami</p>
             <p className="text-white mt-1 font-bold">ganesh_singha.dev</p>
           </div>
-
         </div>
       </div>
     </div>
