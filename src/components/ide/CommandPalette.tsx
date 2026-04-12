@@ -13,7 +13,7 @@ const CommandPalette = () => {
 
   const files = [
     { name: 'home.tsx', path: '/', color: '#61dafb', letter: 'R', dir: 'src/' },
-    { name: 'about.html', path: '/readme', color: '#e34c26', letter: 'H', dir: 'src/' },
+    { name: 'experience.ts', path: '/experience', color: '#3178c6', letter: 'T', dir: 'src/' },
     { name: 'projects.js', path: '/projects', color: '#f7df1e', letter: 'J', dir: 'src/' },
     { name: 'skills.json', path: '/skills', color: '#cbcb41', letter: 'J', dir: 'data/' },
     { name: 'contact.css', path: '/contact', color: '#563d7c', letter: 'C', dir: 'src/' },
