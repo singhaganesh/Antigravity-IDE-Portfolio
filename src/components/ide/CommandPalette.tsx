@@ -15,11 +15,11 @@ const CommandPalette = () => {
   const files = [
     { name: 'home.tsx', path: '/', dir: 'src/' },
     { name: 'experience.ts', path: '/experience', dir: 'src/' },
-    { name: 'adventures.bike', path: '/adventures', dir: 'src/' },
+    { name: 'adventures.bike', path: '/adventures', dir: './' },
     { name: 'projects.js', path: '/projects', dir: 'src/' },
     { name: 'skills.java', path: '/skills', dir: 'src/' },
     { name: 'contact.json', path: '/contact', dir: 'src/' },
-    { name: 'README.md', path: '/readme', dir: './' },
+    { name: 'README.md', path: '/readme', dir: 'src/' },
   ];
 
   const commands = [

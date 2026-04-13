@@ -7,12 +7,18 @@ import { ChevronRight } from 'lucide-react';
 const Breadcrumb = () => {
   const { activeFile } = useActiveFile();
 
+  const isRootFile = ['/adventures'].includes(activeFile.path);
+
   return (
     <div className="h-[22px] border-b border-border-color bg-bg-editor px-3 flex items-center gap-1 select-none flex-nowrap overflow-hidden">
-      <span className="text-[12px] text-muted flex-shrink-0">ganesh-singha</span>
+      <span className="text-[12px] text-muted flex-shrink-0">PORTFOLIO</span>
       <ChevronRight size={12} className="text-muted flex-shrink-0" />
-      <span className="text-[12px] text-muted flex-shrink-0">src</span>
-      <ChevronRight size={12} className="text-muted flex-shrink-0" />
+      {!isRootFile && (
+        <>
+          <span className="text-[12px] text-muted flex-shrink-0">src</span>
+          <ChevronRight size={12} className="text-muted flex-shrink-0" />
+        </>
+      )}
       <span className="text-[12px] text-primary truncate">{activeFile.name}</span>
     </div>
   );

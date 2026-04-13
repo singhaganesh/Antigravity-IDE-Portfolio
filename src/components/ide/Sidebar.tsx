@@ -1,7 +1,7 @@
 'use client';
 
-import React from 'react';
-import { X } from 'lucide-react';
+import React, { useState } from 'react';
+import { X, ChevronDown, ChevronRight } from 'lucide-react';
 import { usePathname } from 'next/navigation';
 import { useActiveFile } from '@/context/ActiveFileContext';
 import { FileIcon } from './FileIcon';
@@ -15,47 +15,105 @@ interface FileEntry {
 const Sidebar = () => {
   const { isMobileMenuOpen, setIsMobileMenuOpen, openTab } = useActiveFile();
   const pathname = usePathname();
+  const [isSrcOpen, setIsSrcOpen] = useState(true);
+  const [isPortfolioOpen, setIsPortfolioOpen] = useState(true);
 
-  const files: FileEntry[] = [
+  const srcFiles: FileEntry[] = [
     { name: 'home.tsx', path: '/' },
     { name: 'README.md', path: '/readme' },
     { name: 'projects.js', path: '/projects' },
     { name: 'skills.java', path: '/skills' },
     { name: 'experience.ts', path: '/experience' },
-    { name: 'adventures.bike', path: '/adventures' },
     { name: 'contact.json', path: '/contact' },
+  ];
+
+  const rootFiles: FileEntry[] = [
+    { name: 'adventures.bike', path: '/adventures' },
     { name: 'Ganesh_Resume.pdf', path: '#', isDecorative: true },
   ];
 
   const sidebarContent = (
     <>
-      <div className="px-4 py-3 flex items-center justify-between text-muted shrink-0">
-        <span className="text-[11px] font-bold tracking-[0.2em] uppercase">PORTFOLIO</span>
+      <div className="px-4 py-2 pt-3 text-[11px] text-muted tracking-widest select-none">
+        EXPLORER
+      </div>
+      
+      <div 
+        className="px-1 py-1 flex items-center justify-between hover:bg-[#2a2d2e] cursor-pointer transition-colors group"
+        onClick={() => setIsPortfolioOpen(!isPortfolioOpen)}
+      >
+        <div className="flex items-center gap-1 font-bold text-[11px] tracking-[0.2em] uppercase text-text-primary">
+          <div className="text-muted group-hover:text-text-primary transition-colors">
+            {isPortfolioOpen ? <ChevronDown size={16} /> : <ChevronRight size={16} />}
+          </div>
+          PORTFOLIO
+        </div>
         {isMobileMenuOpen && (
           <X 
             size={16} 
-            className="md:hidden cursor-pointer" 
-            onClick={() => setIsMobileMenuOpen(false)} 
+            className="md:hidden cursor-pointer text-muted hover:text-text-primary mr-3" 
+            onClick={(e) => { e.stopPropagation(); setIsMobileMenuOpen(false); }} 
           />
         )}
       </div>
 
-      <div className="flex flex-col py-1 overflow-y-auto no-scrollbar">
-        {files.map((file) => {
-          const isActive = !file.isDecorative && pathname === file.path;
+      {isPortfolioOpen && (
+        <div className="flex flex-col py-1 overflow-y-auto no-scrollbar">
+          {/* Src Folder */}
+          <div 
+            className="flex items-center gap-1.5 px-4 h-[28px] cursor-pointer hover:bg-[#2a2d2e] transition-colors select-none text-muted"
+            onClick={() => setIsSrcOpen(!isSrcOpen)}
+          >
+            {isSrcOpen ? <ChevronDown size={16} /> : <ChevronRight size={16} />}
+            <span className="text-[13px] font-mono text-text-primary">src</span>
+          </div>
 
+          {/* Src Files */}
+        {isSrcOpen && srcFiles.map((file) => {
+          const isActive = !file.isDecorative && pathname === file.path;
           return (
             <div
               key={file.name}
               className={[
-                "flex items-center gap-2 px-4 h-[28px] transition-colors select-none",
+                "flex items-center pl-9 pr-4 h-[28px] transition-colors select-none relative",
                 file.isDecorative ? "cursor-default" : "cursor-pointer",
                 isActive ? "bg-[#37373d]" : "",
                 !file.isDecorative && !isActive ? "hover:bg-[#2a2d2e]" : ""
               ].join(" ")}
               onClick={() => !file.isDecorative && openTab(file.path)}
             >
-              <div className="w-4 flex items-center justify-center shrink-0">
+              <div className="absolute left-[22px] top-0 bottom-0 w-[1px] bg-border-color/30" />
+              <div className="w-4 flex items-center justify-center shrink-0 mr-2 z-10">
+                <FileIcon filename={file.name} size={14} />
+              </div>
+              <span
+                className={[
+                  "text-[13px] font-mono z-10",
+                  file.isDecorative ? "text-text-muted" : "",
+                  !file.isDecorative && isActive ? "text-text-blue font-medium" : "text-text-primary",
+                ].join(" ")}
+              >
+                {file.name}
+              </span>
+            </div>
+          );
+        })}
+
+        {/* Root Files */}
+        {rootFiles.map((file) => {
+          const isActive = !file.isDecorative && pathname === file.path;
+          return (
+            <div
+              key={file.name}
+              className={[
+                "flex items-center gap-1.5 px-4 h-[28px] transition-colors select-none",
+                file.isDecorative ? "cursor-default" : "cursor-pointer",
+                isActive ? "bg-[#37373d]" : "",
+                !file.isDecorative && !isActive ? "hover:bg-[#2a2d2e]" : ""
+              ].join(" ")}
+              onClick={() => !file.isDecorative && openTab(file.path)}
+            >
+              <div className="w-[16px] flex items-center justify-center shrink-0">
                 <FileIcon filename={file.name} size={14} />
               </div>
               <span
@@ -70,7 +128,8 @@ const Sidebar = () => {
             </div>
           );
         })}
-      </div>
+        </div>
+      )}
     </>
   );
 
