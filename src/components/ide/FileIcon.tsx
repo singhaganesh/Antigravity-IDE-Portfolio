@@ -96,6 +96,19 @@ export const FileIcon: React.FC<FileIconProps> = ({ filename, size = 16, classNa
           ),
           defaultColor: '#f7df1e'
         };
+      case 'java':
+        return {
+          Component: (props: any) => (
+            <svg width={size} height={size} viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
+               <path d="M10.15 8.35C10.15 8.35 9.75 7.9 8.25 7.9C6.75 7.9 6.35 8.35 6.35 8.35C6.35 8.35 6.35 9 8.25 9C10.15 9 10.15 8.35 10.15 8.35ZM11 6.5C11 6.5 10 5.5 8 5.5C6 5.5 5 6.5 5 6.5C5 6.5 5 7.5 8 7.5C11 7.5 11 6.5 11 6.5ZM10.5 4.5C10.5 4.5 9.7 3.8 8.1 3.8C6.5 3.8 5.7 4.5 5.7 4.5V5C5.7 5 6.5 4.2 8.1 4.2C9.7 4.2 10.5 5 10.5 5V4.5Z" fill="currentColor"/>
+               <path d="M11 6C11.552 6 12 5.552 12 5C12 4.448 11.552 4 11 4" stroke="currentColor" strokeWidth="0.8" strokeLinecap="round"/>
+               <path d="M6.5 1.5C6.5 1.5 7 2.5 6 3" stroke="currentColor" strokeWidth="0.8" strokeLinecap="round"/>
+               <path d="M8.5 1C8.5 1 9 2 8 2.5" stroke="currentColor" strokeWidth="0.8" strokeLinecap="round"/>
+               <path d="M10.5 1C10.5 1 11 2 10 2.5" stroke="currentColor" strokeWidth="0.8" strokeLinecap="round"/>
+            </svg>
+          ),
+          defaultColor: '#E76F00'
+        };
       case 'json':
         return {
           Component: (props: any) => <BracesIcon size={size} color={props.style.color || '#F1E05A'} />,

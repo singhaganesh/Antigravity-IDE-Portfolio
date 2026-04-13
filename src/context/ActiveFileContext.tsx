@@ -16,9 +16,9 @@ export const FILE_MAP: { [key: string]: FileMetadata } = {
   "/readme": { name: "README.md", lang: "Markdown", tabBorder: "#4ec9b0", dot: "#4ec9b0", path: "/readme" },
   "/experience": { name: "experience.ts", lang: "TypeScript", tabBorder: "#3178c6", dot: "#3178c6", path: "/experience" },
   "/projects": { name: "projects.js", lang: "JavaScript", tabBorder: "#f7df1e", dot: "#f7df1e", path: "/projects" },
-  "/skills": { name: "skills.json", lang: "JSON", tabBorder: "#cbcb41", dot: "#cbcb41", path: "/skills" },
+  "/skills": { name: "skills.java", lang: "Java", tabBorder: "#E76F00", dot: "#E76F00", path: "/skills" },
   "/adventures": { name: "adventures.bike", lang: "Markdown", tabBorder: "#ff0000", dot: "#ff0000", path: "/adventures" },
-  "/contact": { name: "contact.css", lang: "CSS", tabBorder: "#563d7c", dot: "#563d7c", path: "/contact" },
+  "/contact": { name: "contact.json", lang: "JSON", tabBorder: "#cbcb41", dot: "#cbcb41", path: "/contact" },
 };
 
 interface ActiveFileContextType {

@@ -20,10 +20,10 @@ const Sidebar = () => {
     { name: 'home.tsx', path: '/' },
     { name: 'README.md', path: '/readme' },
     { name: 'projects.js', path: '/projects' },
-    { name: 'skills.json', path: '/skills' },
+    { name: 'skills.java', path: '/skills' },
     { name: 'experience.ts', path: '/experience' },
     { name: 'adventures.bike', path: '/adventures' },
-    { name: 'contact.css', path: '/contact' },
+    { name: 'contact.json', path: '/contact' },
     { name: 'Ganesh_Resume.pdf', path: '#', isDecorative: true },
   ];
 

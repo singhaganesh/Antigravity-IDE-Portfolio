@@ -17,8 +17,8 @@ const CommandPalette = () => {
     { name: 'experience.ts', path: '/experience', dir: 'src/' },
     { name: 'adventures.bike', path: '/adventures', dir: 'src/' },
     { name: 'projects.js', path: '/projects', dir: 'src/' },
-    { name: 'skills.json', path: '/skills', dir: 'data/' },
-    { name: 'contact.css', path: '/contact', dir: 'src/' },
+    { name: 'skills.java', path: '/skills', dir: 'src/' },
+    { name: 'contact.json', path: '/contact', dir: 'src/' },
     { name: 'README.md', path: '/readme', dir: './' },
   ];
 

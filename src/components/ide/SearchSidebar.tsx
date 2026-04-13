@@ -10,10 +10,10 @@ const SearchSidebar = () => {
   const [query, setQuery] = useState('');
 
   const searchIndex = [
-    { title: 'Skills', content: 'Java, Spring Boot, React, Next.js, Android, Kotlin, Docker, PostgreSQL', path: '/skills', filename: 'skills.json' },
+    { title: 'Skills', content: 'Java, Spring Boot, React, Next.js, Android, Kotlin, Docker, PostgreSQL', path: '/skills', filename: 'skills.java' },
     { title: 'Projects', content: 'EV Charging Platform, ThingsBoard Bot, Ecommerce Web, OrbitCart, Mermaid Diagrams', path: '/projects', filename: 'projects.js' },
     { title: 'Experience', content: 'SEPLE NovaEdge, Junior Engineer, Kolkata, IoT, AI Automation, RAG systems', path: '/readme', filename: 'experience.ts' },
-    { title: 'Contact', content: 'LinkedIn, Email, Instagram, YouTube, ganeshsingha741@gmail.com, biker_ganesh', path: '/contact', filename: 'contact.css' },
+    { title: 'Contact', content: 'LinkedIn, Email, Instagram, YouTube, ganeshsingha741@gmail.com, biker_ganesh', path: '/contact', filename: 'contact.json' },
     { title: 'About', content: 'Ganesh Singha, Full Stack Engineer, Kolkata, Backend specialist', path: '/readme', filename: 'README.md' },
   ];
 

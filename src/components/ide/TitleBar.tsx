@@ -72,10 +72,10 @@ const TitleBar = () => {
 
       {/* Right: Layout Controls & Window Buttons */}
       <div className="flex items-center gap-3">
-        <div className="hidden md:flex items-center gap-1 mr-4 bg-[#ffffff05] p-0.5 rounded-md border border-border-color/50">
-          <button onClick={() => setIsSidebarOpen(!isSidebarOpen)} className={cn("p-1 rounded transition-colors", isSidebarOpen ? "bg-[#ffffff15] text-white" : "text-muted hover:text-white")} title="Toggle Sidebar"><SidebarIcon isActive={isSidebarOpen} /></button>
-          <button onClick={() => setIsTerminalOpen(!isTerminalOpen)} className={cn("p-1 rounded transition-colors", isTerminalOpen ? "bg-[#ffffff15] text-white" : "text-muted hover:text-white")} title="Toggle Terminal"><TerminalIcon isActive={isTerminalOpen} /></button>
-          <button onClick={() => setIsAgentPanelOpen(!isAgentPanelOpen)} className={cn("p-1 rounded transition-colors", isAgentPanelOpen ? "bg-[#ffffff15] text-white" : "text-muted hover:text-white")} title="Toggle Agent Panel"><AgentIcon isActive={isAgentPanelOpen} /></button>
+        <div className="hidden md:flex items-center gap-2 mr-4">
+          <button onClick={() => setIsSidebarOpen(!isSidebarOpen)} className={cn("p-1 rounded-md transition-colors", isSidebarOpen ? "text-white" : "text-muted hover:text-white")} title="Toggle Sidebar"><PanelIcon isActive={isSidebarOpen} panel="left" /></button>
+          <button onClick={() => setIsTerminalOpen(!isTerminalOpen)} className={cn("p-1 rounded-md transition-colors", isTerminalOpen ? "text-white" : "text-muted hover:text-white")} title="Toggle Terminal"><PanelIcon isActive={isTerminalOpen} panel="bottom" /></button>
+          <button onClick={() => setIsAgentPanelOpen(!isAgentPanelOpen)} className={cn("p-1 rounded-md transition-colors", isAgentPanelOpen ? "text-white" : "text-muted hover:text-white")} title="Toggle Agent Panel"><PanelIcon isActive={isAgentPanelOpen} panel="right" /></button>
         </div>
 
         <div className="hidden lg:flex items-center gap-3 mr-4 text-muted border-l border-border-color pl-4">
@@ -104,16 +104,36 @@ const TitleBar = () => {
   );
 };
 
-const SidebarIcon = ({ isActive }: { isActive: boolean }) => (
-  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" className={isActive ? "opacity-100" : "opacity-60"}><rect x="2.5" y="2.5" width="11" height="11" rx="1.5" stroke="currentColor" strokeWidth="1.2"/><path d="M6.5 2.5V13.5" stroke="currentColor" strokeWidth="1.2"/>{!isActive && <rect x="3" y="3" width="3" height="10" fill="currentColor" opacity="0.2"/>}</svg>
-);
+const PanelIcon = ({ 
+  isActive, 
+  panel 
+}: { 
+  isActive: boolean, 
+  panel: 'left' | 'bottom' | 'right' 
+}) => {
+  const clipId = `clip-${panel}`;
+  return (
+    <svg width="18" height="18" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" className={isActive ? "text-white cursor-pointer" : "text-muted hover:text-white cursor-pointer"}>
+      <defs>
+        <clipPath id={clipId}>
+          <rect x="2.5" y="2.5" width="11" height="11" rx="1.5" />
+        </clipPath>
+      </defs>
+      
+      {/* Background fill if active */}
+      {isActive && panel === 'left' && <rect x="2" y="2" width="4.5" height="12" fill="currentColor" clipPath={`url(#${clipId})`} />}
+      {isActive && panel === 'bottom' && <rect x="2" y="10" width="12" height="5" fill="currentColor" clipPath={`url(#${clipId})`} />}
+      {isActive && panel === 'right' && <rect x="9.5" y="2" width="5" height="12" fill="currentColor" clipPath={`url(#${clipId})`} />}
 
-const TerminalIcon = ({ isActive }: { isActive: boolean }) => (
-  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" className={isActive ? "opacity-100" : "opacity-60"}><rect x="2.5" y="2.5" width="11" height="11" rx="1.5" stroke="currentColor" strokeWidth="1.2"/><path d="M2.5 10.5H13.5" stroke="currentColor" strokeWidth="1.2"/>{!isActive && <rect x="3" y="11" width="10" height="2" fill="currentColor" opacity="0.2"/>}</svg>
-);
+      {/* The outline */}
+      <rect x="2.5" y="2.5" width="11" height="11" rx="1.5" stroke="currentColor" strokeWidth="1.2" fill="none" />
 
-const AgentIcon = ({ isActive }: { isActive: boolean }) => (
-  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" className={isActive ? "opacity-100" : "opacity-60"}><rect x="2.5" y="2.5" width="11" height="11" rx="1.5" stroke="currentColor" strokeWidth="1.2"/><path d="M9.5 2.5V13.5" stroke="currentColor" strokeWidth="1.2"/>{!isActive && <rect x="10" y="3" width="3" height="10" fill="currentColor" opacity="0.2"/>}</svg>
-);
+      {/* The divider line */}
+      {panel === 'left' && <path d="M6.5 2.5V13.5" stroke="currentColor" strokeWidth="1.2" />}
+      {panel === 'bottom' && <path d="M2.5 10H13.5" stroke="currentColor" strokeWidth="1.2" />}
+      {panel === 'right' && <path d="M9.5 2.5V13.5" stroke="currentColor" strokeWidth="1.2" />}
+    </svg>
+  );
+};
 
 export default TitleBar;

@@ -73,7 +73,7 @@ const SkillsPage = () => {
     <div className="px-10 py-12 animate-fadeUp">
       {/* Code comment label */}
       <div className="text-text-green text-[15px] font-mono mb-8">
-        {"// skills.json — my technical universe"}
+        {"// skills.java — my technical universe"}
       </div>
 
       {/* Section heading */}

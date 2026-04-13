@@ -94,7 +94,7 @@ const ContactPage = () => {
   return (
     <div className="px-10 py-12 animate-fadeUp max-w-6xl mx-auto">
       <div className="text-text-green text-[15px] font-mono mb-6">
-        {"/* contact.css — open_connection( ) */"}
+        {"// contact.json — open_connection( )"}
       </div>
 
       <div className="mb-12">
