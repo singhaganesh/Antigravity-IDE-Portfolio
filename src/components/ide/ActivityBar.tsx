@@ -49,19 +49,26 @@ const ActivityBar = () => {
             key={id}
             onClick={() => handleIconClick(id)}
             className={cn(
-              "w-full h-12 flex items-center justify-center relative hover:text-white transition-colors cursor-pointer",
-              isActive ? "text-white" : "text-muted"
+              "w-full h-12 flex items-center justify-center relative transition-all cursor-pointer group px-2",
             )}
             title={label}
           >
-            {isActive && <div className="absolute left-0 w-[2px] h-10 bg-white" />}
-            <Icon size={24} strokeWidth={1.5} />
+            <div className={cn(
+              "w-9 h-9 flex items-center justify-center rounded-lg transition-all",
+              isActive 
+                ? "bg-bg-selected text-white" 
+                : "text-muted group-hover:bg-bg-hover group-hover:text-white"
+            )}>
+              <Icon size={22} strokeWidth={1.5} />
+            </div>
           </div>
         );
       })}
       <div className="flex-1" />
-      <div className="w-full h-12 flex items-center justify-center text-muted hover:text-white cursor-pointer" title="Settings">
-        <Settings size={24} strokeWidth={1.5} />
+      <div className="w-full h-12 flex items-center justify-center relative transition-all cursor-pointer group px-2 mb-2" title="Settings">
+        <div className="w-9 h-9 flex items-center justify-center rounded-lg text-muted group-hover:bg-bg-hover group-hover:text-white transition-all">
+          <Settings size={22} strokeWidth={1.5} />
+        </div>
       </div>
     </div>
   );

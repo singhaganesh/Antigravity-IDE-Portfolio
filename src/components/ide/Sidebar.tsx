@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { X } from 'lucide-react';
+import { X, FileCode2, FileJson, FileText, FileType, Bike, FileSearch, Terminal, Hash, FileSignature } from 'lucide-react';
 import { usePathname } from 'next/navigation';
 import { useActiveFile } from '@/context/ActiveFileContext';
 
@@ -9,7 +9,7 @@ interface FileEntry {
   name: string;
   path: string;
   color: string;
-  letter: string;
+  icon: React.ElementType;
   isDecorative?: boolean;
 }
 
@@ -18,14 +18,14 @@ const Sidebar = () => {
   const pathname = usePathname();
 
   const files: FileEntry[] = [
-    { name: 'home.tsx', path: '/', color: '#61dafb', letter: 'R' },
-    { name: 'README.md', path: '/readme', color: '#519aba', letter: 'M' },
-    { name: 'projects.js', path: '/projects', color: '#f7df1e', letter: 'J' },
-    { name: 'skills.json', path: '/skills', color: '#cbcb41', letter: 'J' },
-    { name: 'experience.ts', path: '/experience', color: '#3178c6', letter: 'T' },
-    { name: 'adventures.bike', path: '/adventures', color: '#ff0000', letter: 'B' },
-    { name: 'contact.css', path: '/contact', color: '#563d7c', letter: 'C' },
-    { name: 'Ganesh_Resume.pdf', path: '#', color: '#ff0000', letter: 'P', isDecorative: true },
+    { name: 'home.tsx', path: '/', color: '#61dafb', icon: FileCode2 },
+    { name: 'README.md', path: '/readme', color: '#519aba', icon: FileSignature },
+    { name: 'projects.js', path: '/projects', color: '#f7df1e', icon: FileCode2 },
+    { name: 'skills.json', path: '/skills', color: '#cbcb41', icon: FileJson },
+    { name: 'experience.ts', path: '/experience', color: '#3178c6', icon: FileCode2 },
+    { name: 'adventures.bike', path: '/adventures', color: '#ff0000', icon: Bike },
+    { name: 'contact.css', path: '/contact', color: '#563d7c', icon: FileType },
+    { name: 'Ganesh_Resume.pdf', path: '#', color: '#ff0000', icon: FileText, isDecorative: true },
   ];
 
   const sidebarContent = (
@@ -44,30 +44,31 @@ const Sidebar = () => {
       <div className="flex flex-col py-1 overflow-y-auto no-scrollbar">
         {files.map((file) => {
           const isActive = !file.isDecorative && pathname === file.path;
+          const Icon = file.icon;
 
           return (
             <div
               key={file.name}
               className={[
-                "flex items-center gap-6 px-4 h-[32px] transition-colors select-none",
+                "flex items-center gap-2 px-4 h-[28px] transition-colors select-none",
                 file.isDecorative ? "cursor-default" : "cursor-pointer",
-                isActive ? "bg-bg-selected border-l-2 border-white" : "",
-                !file.isDecorative && !isActive ? "hover:bg-bg-hover" : ""
+                isActive ? "bg-[#37373d]" : "",
+                !file.isDecorative && !isActive ? "hover:bg-[#2a2d2e]" : ""
               ].join(" ")}
               onClick={() => !file.isDecorative && openTab(file.path)}
             >
-              <div
-                className="w-4 h-4 flex items-center justify-center rounded-sm text-[10px] font-bold text-bg-sidebar shrink-0 ml-1"
-                style={{ backgroundColor: file.color }}
-              >
-                {file.letter}
+              <div className="w-4 flex items-center justify-center shrink-0">
+                <Icon 
+                  size={14} 
+                  style={{ color: file.color }} 
+                  strokeWidth={2}
+                />
               </div>
               <span
                 className={[
                   "text-[13px] font-mono",
-                  file.isDecorative ? "text-[#858585]" : "",
-                  !file.isDecorative && isActive ? "text-white" : "",
-                  !file.isDecorative && !isActive ? "text-text-primary" : ""
+                  file.isDecorative ? "text-text-muted" : "",
+                  !file.isDecorative && isActive ? "text-text-blue font-medium" : "text-text-primary",
                 ].join(" ")}
               >
                 {file.name}
