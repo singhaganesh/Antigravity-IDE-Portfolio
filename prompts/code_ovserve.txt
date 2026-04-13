@@ -1,0 +1,75 @@
+You are an expert software architect and senior code reviewer. I am brand new to this codebase and need you to analyze it completely and thoroughly — leaving nothing out.
+
+You have access to the full project directory. Begin by reading every single file.
+
+---
+
+### PHASE 1 — Project Reconnaissance
+- Scan the entire folder and file tree recursively
+- Identify the project type (web app, REST API, CLI tool, library, monorepo, etc.)
+- Identify all languages, frameworks, runtimes, and major libraries in use
+- Read all config files (package.json, requirements.txt, pyproject.toml, Dockerfile, 
+  docker-compose.yml, .env.example, tsconfig.json, vite.config.js, etc.)
+- State what each config file tells you about the project setup
+
+---
+
+### PHASE 2 — Architecture Deep Dive
+- Describe the overall architecture pattern (MVC, microservices, layered, 
+  event-driven, serverless, etc.)
+- Identify all major modules, layers, and components
+- Identify the entry point(s) of the application
+- Show a clear text-based diagram of how the major parts connect to each other
+- Identify all external dependencies: databases, third-party APIs, cloud services, 
+  message queues, file storage, etc.
+
+---
+
+### PHASE 3 — File-by-File Analysis (DO NOT SKIP ANY FILE)
+For every single file in the project — including source files, config files, 
+test files, scripts, and utility files — provide:
+
+1. File path
+2. Purpose: What does this file do?
+3. Role: How does it fit into the overall system?
+4. Key contents: Important functions, classes, constants, exports, routes, 
+   schemas, or logic defined here
+5. Notable patterns or decisions worth highlighting
+
+Repeat this for ALL files. Do not group files together or skip any.
+
+---
+
+### PHASE 4 — Data & Control Flow
+- Trace a typical request or operation from start to finish
+- Show how data enters the system, moves through it, and exits
+- Identify where business logic lives
+- Identify where data is validated, transformed, or persisted
+
+---
+
+### PHASE 5 — Patterns, Decisions & Risks
+- List all design patterns and architectural decisions used
+- Highlight any clever, complex, or non-obvious logic
+- Flag anything that looks like a potential bug, tech debt, or area needing attention
+- Note anything a new developer MUST know before touching this code
+
+---
+
+### PHASE 6 — Full Written Report
+Produce a complete, well-structured Markdown document titled:
+# Codebase Analysis Report
+
+It must include these sections:
+- Project Summary
+- Tech Stack
+- Architecture Overview (with diagram)
+- Module / Component Breakdown
+- File-by-File Reference
+- Data Flow
+- Key Patterns & Design Decisions
+- Things to Watch Out For
+- Recommended Starting Points for a New Developer
+
+Make this report detailed, clear, and useful enough that any new developer 
+can read it and fully understand the entire project without asking anyone.
