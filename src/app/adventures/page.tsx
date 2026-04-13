@@ -1,62 +1,182 @@
 'use client';
 
-import React from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
-import { Bike, Zap, Compass, Calendar, Code2, MapPin } from 'lucide-react';
+import { Bike, Zap, Compass, Calendar, Code2, MapPin, ChevronLeft, ChevronRight } from 'lucide-react';
 
 // Hardcoded Data to optimize performance
 const adventuresData = [
   {
-    "id": 1,
+    "id": 6,
     "title": "Sandakphu Expedition",
-    "date": "Oct 2025",
-    "location": "Indo-Nepal Border",
-    "aspect": "16/10",
+    "date": "May 2025",
+    "location": "Nepal",
+    "aspect": "3/4",
     "desc": "Reached an altitude of 11,930ft via the challenging terrain of the Nepal border. This expedition was a true test of human endurance and machine performance in sub-zero temperatures and thin air. Documented the entire journey through the lens of a developer exploring nature's complex architecture.",
     "images": [
-      "https://images.unsplash.com/photo-1558981403-c5f9199ad25e?q=80&w=1000",
-      "https://images.unsplash.com/photo-1558981453-22a9d67df40d?q=80&w=1000",
-      "https://images.unsplash.com/photo-1558981359-219d6364c9c8?q=80&w=1000"
+      "/assets/photos/sandakphu-2.jpeg",
+      "/assets/photos/sandakphu-3.jpeg",
+      "/assets/photos/sandakphu-4.jpeg",
+      "/assets/photos/sandakphu-1.jpeg",
     ]
   },
-  {
-    "id": 2,
-    "title": "Binary Battleground 2K25",
-    "date": "Jan 2025",
-    "location": "Brainware University",
+    {
+    "id": 5,
+    "title": "Tilicho Trek",
+    "date": "Oct 2025",
+    "location": "Nepal",
     "aspect": "3/4",
-    "desc": "Secured 1st Place at the annual university coding competition. Solved complex algorithmic problems under tight deadlines, demonstrating deep proficiency in Java and problem-solving logic. This milestone reinforces my commitment to writing performant and elegant 'Antigravity Code'.",
+    "desc": "Embarking on one of the highest altitude treks in the world. The journey to Tilicho Lake (4,919m) represents the peak of high-altitude exploration, requiring meticulous planning and resilience against the elements.",
     "images": [
-      "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?q=80&w=1000",
-      "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?q=80&w=1000"
-    ]
-  },
-  {
-    "id": 3,
-    "title": "Ride To Rock: Gangasagar",
-    "date": "Dec 2024",
-    "location": "Gangasagar, WB",
-    "aspect": "4/3",
-    "desc": "Joined the 'Ride To Rock' community journey to the sacred confluence of the Ganges. This community ride focused on the harmony between different riding styles and collective documentation of the local environment. A perfect example of life beyond the keyboard.",
-    "images": [
-      "https://images.unsplash.com/photo-1444491741275-3747c53c99b4?q=80&w=1000",
-      "https://images.unsplash.com/photo-1469474968028-56623f02e42e?q=80&w=1000"
+      "/assets/photos/tilicho-4.jpeg",
+      "/assets/photos/tilicho-1.jpeg",
+      "/assets/photos/tilicho-2.jpeg",
+      "/assets/photos/tilicho-3.jpeg"
     ]
   },
   {
     "id": 4,
-    "title": "Burdwan to Kolkata Sprints",
-    "date": "Ongoing",
-    "location": "NH-19 / West Bengal",
-    "aspect": "16/9",
-    "desc": "Regular highway sprints documenting machine health and fuel efficiency across varying weather conditions. These solo tours serve as my primary method for testing touring gear like the SMK Gullwing helmet and analyzing real-world performance metrics.",
+    "title": "Manang Exploration",
+    "date": "Oct 2025",
+    "location": "Nepal",
+    "aspect": "3/4",
+    "desc": "Navigating the rugged heart of the Annapurna circuit. Manang served as a high-altitude base for acclimatization and exploration of the surrounding glacial valleys and ancient stone architectures.",
     "images": [
-      "https://images.unsplash.com/photo-1471440671318-55fc17642271?q=80&w=1000",
-      "https://images.unsplash.com/photo-1511068122820-006ec463c79b?q=80&w=1000"
+      "/assets/photos/manang-4.jpeg",
+      "/assets/photos/manang-1.jpeg",
+      "/assets/photos/manang-2.jpeg",
+      "/assets/photos/manang-3.jpeg",
+      "/assets/photos/manang-5.jpeg",
+      "/assets/photos/manang-6.jpeg"
+    ]
+  },
+  {
+    "id": 3,
+    "title": "Purulia Sprints",
+    "date": "Aug 2025",
+    "location": "Purulia, WB",
+    "aspect": "3/4",
+    "desc": "Exploring the red soil and rocky hills of Purulia. This ride focused on low-altitude endurance and testing machine agility through the winding curves of the Ayodhya Hills region.",
+    "images": [
+      "/assets/photos/purulia-1.jpeg",
+      "/assets/photos/purulia-4.jpeg",
+      "/assets/photos/purulia-2.jpeg",
+      "/assets/photos/purulia-3.jpeg"
+    ]
+  },
+  {
+    "id": 2,
+    "title": "Darjeeling Ride",
+    "date": "May 2024",
+    "location": "Darjeeling, WB",
+    "aspect": "4/3",
+    "desc": "A classic ascent to the 'Queen of the Hills'. Documenting machine health and cooling efficiency across the steep gradients and misty climate of the North Bengal tea gardens.",
+    "images": [
+      "/assets/photos/darjeeling-1.jpeg",
+      "/assets/photos/darjeeling-2.jpeg",
+      "/assets/photos/darjeeling-3.jpeg"
+    ]
+  },
+    {
+    "id": 1,
+    "title": "Mustang Valley",
+    "date": "Oct 2023",
+    "location": "Nepal",
+    "aspect": "3/4",
+    "desc": "An iconic journey through the forbidden kingdom. Mustang's desert-like terrain and wind-swept canyons provided the ultimate environment for testing long-range touring equipment.",
+    "images": [
+      "/assets/photos/mustang-1.jpeg",
+      "/assets/photos/mustang-5.jpeg",
+      "/assets/photos/mustang-3.jpeg",
+      "/assets/photos/mustang-4.jpeg",
+      "/assets/photos/mustang-2.jpeg"
     ]
   }
 ];
+
+const AdventureGallery = ({ item }: { item: typeof adventuresData[0] }) => {
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const [showLeft, setShowLeft] = useState(false);
+  const [showRight, setShowRight] = useState(false);
+
+  const checkScroll = () => {
+    if (scrollRef.current) {
+      const { scrollLeft, scrollWidth, clientWidth } = scrollRef.current;
+      setShowLeft(scrollLeft > 5);
+      setShowRight(scrollLeft < scrollWidth - clientWidth - 5);
+    }
+  };
+
+  useEffect(() => {
+    checkScroll();
+    window.addEventListener('resize', checkScroll);
+    return () => window.removeEventListener('resize', checkScroll);
+  }, []);
+
+  const scroll = (direction: 'left' | 'right') => {
+    if (scrollRef.current) {
+      const { scrollLeft, clientWidth } = scrollRef.current;
+      const scrollTo = direction === 'left' 
+        ? scrollLeft - clientWidth * 0.8 
+        : scrollLeft + clientWidth * 0.8;
+      
+      scrollRef.current.scrollTo({ left: scrollTo, behavior: 'smooth' });
+    }
+  };
+
+  return (
+    <div className="relative group/gallery">
+      {/* Smart Navigation Buttons */}
+      {showLeft && (
+        <button 
+          onClick={() => scroll('left')}
+          className="absolute left-2 top-1/2 -translate-y-1/2 z-30 w-10 h-10 rounded-full bg-bg-editor/80 border border-border-color flex items-center justify-center text-white opacity-0 group-hover/gallery:opacity-100 transition-all hover:border-text-cyan hover:text-text-cyan shadow-xl"
+        >
+          <ChevronLeft size={24} />
+        </button>
+      )}
+      
+      {showRight && (
+        <button 
+          onClick={() => scroll('right')}
+          className="absolute right-2 top-1/2 -translate-y-1/2 z-30 w-10 h-10 rounded-full bg-bg-editor/80 border border-border-color flex items-center justify-center text-white opacity-0 group-hover/gallery:opacity-100 transition-all hover:border-text-cyan hover:text-text-cyan shadow-xl"
+        >
+          <ChevronRight size={24} />
+        </button>
+      )}
+
+      {/* Horizontal Image Gallery */}
+      <div 
+        ref={scrollRef}
+        onScroll={checkScroll}
+        className="flex gap-6 overflow-x-auto pb-6 no-scrollbar snap-x scroll-smooth"
+      >
+        {item.images.map((img, imgIdx) => (
+          <div 
+            key={imgIdx} 
+            className="relative h-[400px] rounded-xl overflow-hidden border border-border-color group snap-start bg-bg-sidebar/20"
+            style={{ 
+              aspectRatio: item.aspect || "16/9",
+              flexShrink: 0
+            }}
+          >
+            <Image
+              src={img}
+              alt={`${item.title} - ${imgIdx}`}
+              fill
+              className="object-cover transition-transform duration-700 group-hover:scale-105"
+            />
+            {/* Preserved Scanning Animation */}
+            <div className="absolute top-0 left-0 w-full h-[1px] bg-text-cyan/30 -translate-y-full group-hover:translate-y-[400px] transition-transform duration-[3000ms] ease-linear pointer-events-none z-20" />
+            {/* Decorative Overlay */}
+            <div className="absolute inset-0 bg-gradient-to-t from-bg-editor/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
 
 export default function AdventuresPage() {
   return (
@@ -79,7 +199,7 @@ export default function AdventuresPage() {
 
         {/* New Timeline Layout */}
         <div className="relative border-l border-border-color ml-4 pl-10 space-y-24 py-4">
-          {adventuresData.map((item, index) => (
+          {[...adventuresData].sort((a, b) => b.id - a.id).map((item, index) => (
             <motion.div
               key={item.id}
               initial={{ opacity: 0, x: -20 }}
@@ -117,30 +237,7 @@ export default function AdventuresPage() {
                   </p>
                 </div>
 
-                {/* Horizontal Image Gallery with Dynamic Aspect Ratio */}
-                <div className="flex gap-6 overflow-x-auto pb-6 no-scrollbar snap-x scroll-smooth">
-                  {item.images.map((img, imgIdx) => (
-                    <div 
-                      key={imgIdx} 
-                      className="relative h-[280px] rounded-xl overflow-hidden border border-border-color group snap-start bg-bg-sidebar/20"
-                      style={{ 
-                        aspectRatio: item.aspect || "16/9",
-                        flexShrink: 0
-                      }}
-                    >
-                      <Image
-                        src={img}
-                        alt={`${item.title} - ${imgIdx}`}
-                        fill
-                        className="object-cover transition-transform duration-700 group-hover:scale-105"
-                      />
-                      {/* Preserved Scanning Animation */}
-                      <div className="absolute top-0 left-0 w-full h-[1px] bg-text-cyan/30 -translate-y-full group-hover:translate-y-[280px] transition-transform duration-[3000ms] ease-linear pointer-events-none z-20" />
-                      {/* Decorative Overlay */}
-                      <div className="absolute inset-0 bg-gradient-to-t from-bg-editor/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-                    </div>
-                  ))}
-                </div>
+                <AdventureGallery item={item} />
               </div>
             </motion.div>
           ))}
