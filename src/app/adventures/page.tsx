@@ -4,7 +4,66 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Image from 'next/image';
 import { Bike, Map, Youtube, Award, Camera, Globe, Compass, Zap, ChevronLeft, ChevronRight } from 'lucide-react';
-import adventuresData from '@/data/adventures.json';
+
+// Hardcoded Data to optimize performance
+const adventuresData = [
+  {
+    "id": 1,
+    "title": "Sandakphu Expedition",
+    "category": "Mountain/Off-road",
+    "desc": "Reached 11,930ft via the Nepal border. Testing endurance and machine performance.",
+    "images": [
+      "https://images.unsplash.com/photo-1558981403-c5f9199ad25e?q=80&w=1000",
+      "https://images.unsplash.com/photo-1558981453-22a9d67df40d?q=80&w=1000"
+    ],
+    "span": "md:col-span-2 md:row-span-2",
+    "type": "expedition"
+  },
+  {
+    "id": 2,
+    "title": "Binary Battleground",
+    "category": "System Achievement",
+    "desc": "1st Place Winner at Brainware University coding competition.",
+    "images": [
+      "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?q=80&w=1000"
+    ],
+    "span": "md:col-span-1 md:row-span-1",
+    "type": "achievement"
+  },
+  {
+    "id": 3,
+    "title": "MotoVlog: Community Ride",
+    "category": "YouTube Content",
+    "desc": "Documenting the 'Ride To Rock' community journey to Gangasagar.",
+    "images": [
+      "https://images.unsplash.com/photo-1444491741275-3747c53c99b4?q=80&w=1000"
+    ],
+    "span": "md:col-span-1 md:row-span-1",
+    "type": "youtube"
+  },
+  {
+    "id": 4,
+    "title": "The SMK Gullwing",
+    "category": "Gear Review",
+    "desc": "In-depth review of the SMK Gullwing flip-up helmet for touring.",
+    "images": [
+      "https://images.unsplash.com/photo-1542362567-b05ecd13b1f2?q=80&w=1000"
+    ],
+    "span": "md:col-span-1 md:row-span-2",
+    "type": "gear"
+  },
+  {
+    "id": 5,
+    "title": "Burdwan to Kolkata",
+    "category": "Solo Touring",
+    "desc": "Regular highway sprints documenting machine health and fuel efficiency.",
+    "images": [
+      "https://images.unsplash.com/photo-1471440671318-55fc17642271?q=80&w=1000"
+    ],
+    "span": "md:col-span-2 md:row-span-1",
+    "type": "touring"
+  }
+];
 
 const iconMap: { [key: string]: any } = {
   expedition: Map,

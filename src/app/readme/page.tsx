@@ -2,11 +2,66 @@
 
 import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
-import { aboutInfo, stats as baseStats } from '@/data/profile';
-import educationData from '@/data/education.json';
-import credentialsData from '@/data/credentials.json';
 import { motion } from 'framer-motion';
 import { User, MapPin, Briefcase, Calendar, Globe, Rocket, Code2, Layout, Zap, Github, ExternalLink, GraduationCap, Terminal, ShieldCheck, Trophy, FileText, FileCheck } from 'lucide-react';
+
+// Hardcoded Data to optimize performance (Moved from external JSON/TS files)
+const aboutInfo = [
+  { label: "Location", value: "Kolkata, India", valueColor: "text-text-primary" },
+  { label: "Available", value: "Immediately", valueColor: "text-text-cyan" },
+  { label: "Languages", value: "English, Bengali, Hindi", valueColor: "text-text-primary" },
+  { label: "Experience", value: "< 1 Year", valueColor: "text-text-primary" },
+];
+
+const baseStats = [
+  { number: "Junior", label: "Engineer" },
+  { number: "20+", label: "Projects" },
+];
+
+const educationData = [
+  {
+    "institution": "Brainware University",
+    "degree": "Master of Computer Applications",
+    "duration": "2024 — Pursuing",
+    "grade": "CGPA: 8.97",
+    "status": "active"
+  },
+  {
+    "institution": "MAKAUT",
+    "degree": "Bachelor of Computer Applications",
+    "duration": "2021 — 2024",
+    "grade": "CGPA: 8.43",
+    "status": "completed"
+  },
+  {
+    "institution": "Gobindapur High School",
+    "degree": "Higher Secondary",
+    "duration": "2019 — 2021",
+    "grade": "93.20%",
+    "status": "completed"
+  }
+];
+
+const credentialsData = [
+  {
+    "name": "Claude Code in Action",
+    "org": "Anthropic Academy",
+    "fileUrl": "/assets/credentials/Claude-Code-in-Action.pdf",
+    "type": "certification"
+  },
+  {
+    "name": "Software Engineering Job Simulation",
+    "org": "Hewlett Packard Enterprise",
+    "fileUrl": "/assets/credentials/HewlettPacklettEnterprice.pdf",
+    "type": "certification"
+  },
+  {
+    "name": "1st Place - Binary Battleground 2K25",
+    "org": "Brainware University",
+    "fileUrl": "/assets/credentials/Binary-Coding.pdf",
+    "type": "achievement"
+  }
+];
 
 const ReadmePage = () => {
   const [repoCount, setRepoCount] = useState<number | null>(null);
