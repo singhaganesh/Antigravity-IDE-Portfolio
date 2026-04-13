@@ -1,15 +1,14 @@
 'use client';
 
 import React from 'react';
-import { X, FileCode2, FileJson, FileText, FileType, Bike, FileSearch, Terminal, Hash, FileSignature } from 'lucide-react';
+import { X } from 'lucide-react';
 import { usePathname } from 'next/navigation';
 import { useActiveFile } from '@/context/ActiveFileContext';
+import { FileIcon } from './FileIcon';
 
 interface FileEntry {
   name: string;
   path: string;
-  color: string;
-  icon: React.ElementType;
   isDecorative?: boolean;
 }
 
@@ -18,14 +17,14 @@ const Sidebar = () => {
   const pathname = usePathname();
 
   const files: FileEntry[] = [
-    { name: 'home.tsx', path: '/', color: '#61dafb', icon: FileCode2 },
-    { name: 'README.md', path: '/readme', color: '#519aba', icon: FileSignature },
-    { name: 'projects.js', path: '/projects', color: '#f7df1e', icon: FileCode2 },
-    { name: 'skills.json', path: '/skills', color: '#cbcb41', icon: FileJson },
-    { name: 'experience.ts', path: '/experience', color: '#3178c6', icon: FileCode2 },
-    { name: 'adventures.bike', path: '/adventures', color: '#ff0000', icon: Bike },
-    { name: 'contact.css', path: '/contact', color: '#563d7c', icon: FileType },
-    { name: 'Ganesh_Resume.pdf', path: '#', color: '#ff0000', icon: FileText, isDecorative: true },
+    { name: 'home.tsx', path: '/' },
+    { name: 'README.md', path: '/readme' },
+    { name: 'projects.js', path: '/projects' },
+    { name: 'skills.json', path: '/skills' },
+    { name: 'experience.ts', path: '/experience' },
+    { name: 'adventures.bike', path: '/adventures' },
+    { name: 'contact.css', path: '/contact' },
+    { name: 'Ganesh_Resume.pdf', path: '#', isDecorative: true },
   ];
 
   const sidebarContent = (
@@ -44,7 +43,6 @@ const Sidebar = () => {
       <div className="flex flex-col py-1 overflow-y-auto no-scrollbar">
         {files.map((file) => {
           const isActive = !file.isDecorative && pathname === file.path;
-          const Icon = file.icon;
 
           return (
             <div
@@ -58,11 +56,7 @@ const Sidebar = () => {
               onClick={() => !file.isDecorative && openTab(file.path)}
             >
               <div className="w-4 flex items-center justify-center shrink-0">
-                <Icon 
-                  size={14} 
-                  style={{ color: file.color }} 
-                  strokeWidth={2}
-                />
+                <FileIcon filename={file.name} size={14} />
               </div>
               <span
                 className={[

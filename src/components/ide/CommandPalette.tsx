@@ -4,6 +4,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Search, FileCode, Sparkles, X, ChevronRight, Hash, FileText, Zap, Cpu, Send, Bike } from 'lucide-react';
 import { useActiveFile, FILE_MAP } from '@/context/ActiveFileContext';
+import { FileIcon } from './FileIcon';
 
 const CommandPalette = () => {
   const { isCommandPaletteOpen, setIsCommandPaletteOpen, openTab, setIsAgentPanelOpen } = useActiveFile();
@@ -12,13 +13,13 @@ const CommandPalette = () => {
   const inputRef = useRef<HTMLInputElement>(null);
 
   const files = [
-    { name: 'home.tsx', path: '/', color: '#61dafb', letter: 'R', dir: 'src/' },
-    { name: 'experience.ts', path: '/experience', color: '#3178c6', letter: 'T', dir: 'src/' },
-    { name: 'adventures.bike', path: '/adventures', color: '#ff0000', letter: 'B', dir: 'src/' },
-    { name: 'projects.js', path: '/projects', color: '#f7df1e', letter: 'J', dir: 'src/' },
-    { name: 'skills.json', path: '/skills', color: '#cbcb41', letter: 'J', dir: 'data/' },
-    { name: 'contact.css', path: '/contact', color: '#563d7c', letter: 'C', dir: 'src/' },
-    { name: 'README.md', path: '/readme', color: '#4ec9b0', letter: 'M', dir: './' },
+    { name: 'home.tsx', path: '/', dir: 'src/' },
+    { name: 'experience.ts', path: '/experience', dir: 'src/' },
+    { name: 'adventures.bike', path: '/adventures', dir: 'src/' },
+    { name: 'projects.js', path: '/projects', dir: 'src/' },
+    { name: 'skills.json', path: '/skills', dir: 'data/' },
+    { name: 'contact.css', path: '/contact', dir: 'src/' },
+    { name: 'README.md', path: '/readme', dir: './' },
   ];
 
   const commands = [
@@ -132,9 +133,7 @@ const CommandPalette = () => {
                     className={`flex items-center justify-between px-4 py-2 cursor-pointer transition-colors ${selectedIndex === actualIndex ? "bg-[#04395e] text-white border-l-2 border-[#00e5cc]" : "text-text-muted hover:bg-[#2a2d2e] border-l-2 border-transparent"}`}
                   >
                     <div className="flex items-center gap-3">
-                      <div className="w-4 h-4 flex items-center justify-center rounded-sm text-[9px] font-bold text-bg-sidebar" style={{ backgroundColor: file.color }}>
-                        {file.letter}
-                      </div>
+                      <FileIcon filename={file.name} size={16} />
                       <span className="text-[13px]">{file.name}</span>
                     </div>
                     <span className="text-[11px] opacity-30 italic">{file.dir}</span>

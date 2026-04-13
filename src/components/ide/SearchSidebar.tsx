@@ -1,19 +1,20 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Search, X, ChevronRight, FileText, Zap, Cpu, Send, FileCode } from 'lucide-react';
+import { Search, X, ChevronRight } from 'lucide-react';
 import { useActiveFile } from '@/context/ActiveFileContext';
+import { FileIcon } from './FileIcon';
 
 const SearchSidebar = () => {
   const { setSidebarView, openTab } = useActiveFile();
   const [query, setQuery] = useState('');
 
   const searchIndex = [
-    { title: 'Skills', content: 'Java, Spring Boot, React, Next.js, Android, Kotlin, Docker, PostgreSQL', path: '/skills', icon: Cpu },
-    { title: 'Projects', content: 'EV Charging Platform, ThingsBoard Bot, Ecommerce Web, OrbitCart, Mermaid Diagrams', path: '/projects', icon: Zap },
-    { title: 'Experience', content: 'SEPLE NovaEdge, Junior Engineer, Kolkata, IoT, AI Automation, RAG systems', path: '/readme', icon: FileText },
-    { title: 'Contact', content: 'LinkedIn, Email, Instagram, YouTube, ganeshsingha741@gmail.com, biker_ganesh', path: '/contact', icon: Send },
-    { title: 'About', content: 'Ganesh Singha, Full Stack Engineer, Kolkata, Backend specialist', path: '/readme', icon: FileCode },
+    { title: 'Skills', content: 'Java, Spring Boot, React, Next.js, Android, Kotlin, Docker, PostgreSQL', path: '/skills', filename: 'skills.json' },
+    { title: 'Projects', content: 'EV Charging Platform, ThingsBoard Bot, Ecommerce Web, OrbitCart, Mermaid Diagrams', path: '/projects', filename: 'projects.js' },
+    { title: 'Experience', content: 'SEPLE NovaEdge, Junior Engineer, Kolkata, IoT, AI Automation, RAG systems', path: '/readme', filename: 'experience.ts' },
+    { title: 'Contact', content: 'LinkedIn, Email, Instagram, YouTube, ganeshsingha741@gmail.com, biker_ganesh', path: '/contact', filename: 'contact.css' },
+    { title: 'About', content: 'Ganesh Singha, Full Stack Engineer, Kolkata, Backend specialist', path: '/readme', filename: 'README.md' },
   ];
 
   const results = query.length > 1 ? searchIndex.filter(item => 
@@ -58,7 +59,7 @@ const SearchSidebar = () => {
             >
               <div className="flex items-center gap-2 mb-1">
                 <ChevronRight size={12} className="text-muted group-hover:text-text-cyan transition-colors" />
-                <res.icon size={14} className="text-text-blue" />
+                <FileIcon filename={res.filename} size={14} />
                 <span className="text-[13px] font-mono text-text-primary">{res.title}</span>
               </div>
               <p className="text-[11px] font-mono text-text-muted leading-relaxed line-clamp-2 pl-6">

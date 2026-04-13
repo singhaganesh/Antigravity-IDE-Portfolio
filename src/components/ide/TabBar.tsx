@@ -7,6 +7,7 @@ import { X } from 'lucide-react';
 import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 import { useActiveFile, FILE_MAP } from '@/context/ActiveFileContext';
+import { FileIcon } from './FileIcon';
 
 function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -36,12 +37,7 @@ const TabBar = () => {
             {isActive && <div className="absolute top-0 left-0 right-0 h-[1px] bg-[#007acc]" />}
             
             {/* File Icon */}
-            <div
-              className="w-3.5 h-3.5 flex items-center justify-center rounded-sm text-[9px] font-bold text-bg-sidebar flex-shrink-0"
-              style={{ backgroundColor: tab.color }}
-            >
-              {tab.letter}
-            </div>
+            <FileIcon filename={tab.name} size={14} />
 
             {/* Filename */}
             <span className="text-[13px] whitespace-nowrap">{tab.name}</span>

@@ -8,19 +8,17 @@ export interface FileMetadata {
   lang: string;
   tabBorder: string;
   dot: string;
-  color: string;
-  letter: string;
   path: string;
 }
 
 export const FILE_MAP: { [key: string]: FileMetadata } = {
-  "/": { name: "home.tsx", lang: "TypeScript React", tabBorder: "#61dafb", dot: "#61dafb", color: "#61dafb", letter: "R", path: "/" },
-  "/readme": { name: "README.md", lang: "Markdown", tabBorder: "#4ec9b0", dot: "#4ec9b0", color: "#4ec9b0", letter: "M", path: "/readme" },
-  "/experience": { name: "experience.ts", lang: "TypeScript", tabBorder: "#3178c6", dot: "#3178c6", color: "#3178c6", letter: "T", path: "/experience" },
-  "/projects": { name: "projects.js", lang: "JavaScript", tabBorder: "#f7df1e", dot: "#f7df1e", color: "#f7df1e", letter: "J", path: "/projects" },
-  "/skills": { name: "skills.json", lang: "JSON", tabBorder: "#cbcb41", dot: "#cbcb41", color: "#cbcb41", letter: "J", path: "/skills" },
-  "/adventures": { name: "adventures.bike", lang: "Markdown", tabBorder: "#ff0000", dot: "#ff0000", color: "#ff0000", letter: "B", path: "/adventures" },
-  "/contact": { name: "contact.css", lang: "CSS", tabBorder: "#563d7c", dot: "#563d7c", color: "#563d7c", letter: "C", path: "/contact" },
+  "/": { name: "home.tsx", lang: "TypeScript React", tabBorder: "#61dafb", dot: "#61dafb", path: "/" },
+  "/readme": { name: "README.md", lang: "Markdown", tabBorder: "#4ec9b0", dot: "#4ec9b0", path: "/readme" },
+  "/experience": { name: "experience.ts", lang: "TypeScript", tabBorder: "#3178c6", dot: "#3178c6", path: "/experience" },
+  "/projects": { name: "projects.js", lang: "JavaScript", tabBorder: "#f7df1e", dot: "#f7df1e", path: "/projects" },
+  "/skills": { name: "skills.json", lang: "JSON", tabBorder: "#cbcb41", dot: "#cbcb41", path: "/skills" },
+  "/adventures": { name: "adventures.bike", lang: "Markdown", tabBorder: "#ff0000", dot: "#ff0000", path: "/adventures" },
+  "/contact": { name: "contact.css", lang: "CSS", tabBorder: "#563d7c", dot: "#563d7c", path: "/contact" },
 };
 
 interface ActiveFileContextType {
