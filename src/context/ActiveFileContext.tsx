@@ -42,6 +42,8 @@ interface ActiveFileContextType {
   setIsCommandPaletteOpen: (open: boolean) => void;
   cursorPosition: { line: number; column: number };
   setCursorPosition: (pos: { line: number; column: number }) => void;
+  isLoadingFile: boolean;
+  setIsLoadingFile: (loading: boolean) => void;
 }
 
 const ActiveFileContext = createContext<ActiveFileContextType | undefined>(undefined);
@@ -51,6 +53,7 @@ export const ActiveFileProvider: React.FC<{ children: React.ReactNode }> = ({ ch
   const router = useRouter();
   const [activeFile, setActiveFile] = useState<FileMetadata>(FILE_MAP["/"]);
   const [openTabs, setOpenTabs] = useState<string[]>(["/"]);
+  const [isLoadingFile, setIsLoadingFile] = useState(false);
   const [isTerminalOpen, setIsTerminalOpen] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [sidebarView, setSidebarView] = useState<'explorer' | 'search'>('explorer');
@@ -75,7 +78,14 @@ export const ActiveFileProvider: React.FC<{ children: React.ReactNode }> = ({ ch
     if (!openTabs.includes(path)) {
       setOpenTabs(prev => [...prev, path]);
     }
-    router.push(path);
+    
+    if (path !== pathname) {
+      setIsLoadingFile(true);
+      router.push(path);
+      setTimeout(() => {
+        setIsLoadingFile(false);
+      }, 2000);
+    }
   };
 
   const closeTab = (path: string) => {
@@ -111,7 +121,9 @@ export const ActiveFileProvider: React.FC<{ children: React.ReactNode }> = ({ ch
       isCommandPaletteOpen,
       setIsCommandPaletteOpen,
       cursorPosition,
-      setCursorPosition
+      setCursorPosition,
+      isLoadingFile,
+      setIsLoadingFile
     }}>
       {children}
     </ActiveFileContext.Provider>

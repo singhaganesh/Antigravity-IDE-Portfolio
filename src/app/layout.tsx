@@ -31,7 +31,8 @@ function WorkspaceLayout({ children }: { children: React.ReactNode }) {
     sidebarView,
     isAgentPanelOpen, 
     agentPanelWidth, 
-    setAgentPanelWidth 
+    setAgentPanelWidth,
+    isLoadingFile
   } = useActiveFile();
   const [isResizing, setIsResizing] = useState(false);
 
@@ -79,8 +80,18 @@ function WorkspaceLayout({ children }: { children: React.ReactNode }) {
         <main className="flex-1 flex flex-col min-w-0 bg-bg-editor overflow-hidden relative">
           <TabBar />
           <Breadcrumb />
-          <div className="flex-1 overflow-y-auto scrollbar-thin flex flex-col">
-            {children}
+          <div className="flex-1 overflow-y-auto scrollbar-thin flex flex-col relative">
+            {isLoadingFile && (
+              <div className="absolute inset-0 z-50 bg-bg-editor flex flex-col items-center justify-center">
+                <div className="w-8 h-8 rounded-full border-2 border-border-color border-t-[#00e5cc] animate-spin mb-4" />
+                <div className="text-[#00e5cc] text-[13px] font-mono animate-pulse tracking-widest uppercase">
+                  Reading file...
+                </div>
+              </div>
+            )}
+            <div className={`flex-1 w-full h-full ${isLoadingFile ? 'opacity-0' : 'opacity-100 transition-opacity duration-500'}`}>
+              {children}
+            </div>
           </div>
           <TerminalDrawer />
         </main>
