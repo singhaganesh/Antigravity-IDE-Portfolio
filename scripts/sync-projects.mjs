@@ -23,8 +23,8 @@ async function getArchitecture(repoName) {
 
     if (!text) return null;
 
-    // Regex to find "## System Architecture" and grab content until the next "##" or end of file
-    const regex = /## System Architecture([\s\S]*?)(?=\n## |$)/i;
+    // Regex to find "## System Architecture" (allowing emojis) and grab content until the next "##" or end of file
+    const regex = /## .*?System Architecture([\s\S]*?)(?=\n## |$)/i;
     const match = text.match(regex);
     
     return match ? match[1].trim() : null;
