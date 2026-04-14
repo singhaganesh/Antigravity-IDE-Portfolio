@@ -8,7 +8,7 @@ import {
   Layers, Server, Github, Linkedin, Mail, Instagram, Youtube,
   Binary, Monitor, Database, Phone
 } from 'lucide-react';
-import { GithubLogo, LinkedInLogo, GmailLogo, InstagramLogo } from '@/components/icons/SocialIcons';
+import { GithubLogo, LinkedInLogo, GmailLogo, InstagramLogo, YoutubeLogo, LeetCodeLogo } from '@/components/icons/SocialIcons';
 import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 
@@ -114,10 +114,12 @@ export default function Home() {
   ];
 
   const socialPorts = [
-    { icon: GithubLogo, label: "GITHUB", port: "443", href: "https://github.com/singhaganesh" },
+    { icon: GithubLogo, label: "GITHUB", port: "443", href: "https://github.com/singhaganesh", color: "#ffffff" },
     { icon: LinkedInLogo, label: "LINKEDIN", port: "22", href: "https://www.linkedin.com/in/ganesh-singha/" },
     { icon: GmailLogo, label: "EMAIL", port: "587", href: "mailto:ganeshsingha741@gmail.com" },
-    { icon: InstagramLogo, label: "INSTA", port: "80", href: "https://www.instagram.com/biker_ganesh/" }
+    { icon: InstagramLogo, label: "INSTA", port: "80", href: "https://www.instagram.com/biker_ganesh/", color: "#e4405f" },
+    { icon: YoutubeLogo, label: "YOUTUBE", port: "8080", href: "https://www.youtube.com/@biker_ganesh", color: "#ff0000" },
+    { icon: LeetCodeLogo, label: "LEETCODE", port: "3000", href: "https://leetcode.com/u/ganeshsingha/", color: "#ffa116" }
   ];
 
   return (
@@ -217,8 +219,8 @@ export default function Home() {
       {/* Social Ports: Bottom Connections */}
       <div className="mt-12 flex flex-wrap justify-center gap-3">
         {socialPorts.map((social) => (
-          <a key={social.label} href={social.href} target="_blank" rel="noreferrer" className="flex items-center gap-3 bg-[#1e1e1e]/40 border border-border-color px-4 py-2 rounded-lg hover:border-[#00e5cc]/50 transition-all group">
-            <social.icon size={14} className="text-text-muted group-hover:text-[#00e5cc] transition-colors" />
+          <a key={social.label} href={social.href} target="_blank" rel="noreferrer" className="flex items-center gap-3 bg-[#1e1e1e]/40 border border-border-color px-4 py-2 rounded-lg hover:border-[#00e5cc]/30 hover:bg-[#1e1e1e]/60 transition-all group">
+            <social.icon size={16} style={{ color: social.color }} className="transition-transform group-hover:scale-110" />
             <div className="flex flex-col font-mono">
               <span className="text-[9px] text-text-muted leading-none opacity-50 uppercase font-bold">PORT:{social.port}</span>
               <span className="text-[12px] text-text-primary group-hover:text-white transition-colors">{social.label}</span>

@@ -1,5 +1,29 @@
 [
   {
+    "id": 1201007541,
+    "name": "Antigravity Ide Portfolio",
+    "originalName": "Antigravity-IDE-Portfolio",
+    "tag": "TypeScript",
+    "desc": "An interactive, Antigravity-themed developer portfolio built with Next.js 14, TypeScript, and Tailwind CSS. Features a functional file tree, multi-tab navigation, and dynamic GitHub project synchronization.",
+    "architecture": null,
+    "stack": [
+      "TypeScript",
+      "Next.js 14",
+      "Tailwind CSS 3",
+      "Framer Motion 11",
+      "Mermaid.js",
+      "React Context API",
+      "GitHub REST API",
+      "Lucide React"
+    ],
+    "tagColor": "#3178c6",
+    "demo": "#",
+    "github": "https://github.com/singhaganesh/Antigravity-IDE-Portfolio",
+    "stars": 0,
+    "forks": 0,
+    "updatedAt": "2026-04-14T09:07:31Z"
+  },
+  {
     "id": 1157856577,
     "name": "Ev Project",
     "originalName": "EV-Project",
@@ -20,29 +44,7 @@
     "github": "https://github.com/singhaganesh/EV-Project",
     "stars": 0,
     "forks": 0,
-    "updatedAt": "2026-04-11T05:23:15Z"
-  },
-  {
-    "id": 1201007541,
-    "name": "Antigravity Ide Portfolio",
-    "originalName": "Antigravity-IDE-Portfolio",
-    "tag": "TypeScript",
-    "desc": "An interactive, Antigravity-themed developer portfolio built with Next.js 14, TypeScript, and Tailwind CSS. Features a functional file tree, multi-tab navigation, and dynamic GitHub project synchronization.",
-    "architecture": "```mermaid\ngraph TD\n    subgraph \"Workspace Shell (Persistent)\"\n        Layout[src/app/layout.tsx]\n        Context[ActiveFileContext.tsx]\n        Layout -->|Provides State| Context\n    end\n\n    subgraph \"IDE Chrome Components\"\n        TitleBar[TitleBar.tsx]\n        SideBar[Sidebar.tsx]\n        TabBar[TabBar.tsx]\n        AgentPanel[AgentPanel.tsx]\n        StatusBar[StatusBar.tsx]\n    end\n\n    subgraph \"Editor Area (Routed Content)\"\n        Home[page.tsx]\n        About[about/page.tsx]\n        Projects[projects/page.tsx]\n        Skills[skills/page.tsx]\n    end\n\n    Context --> TitleBar & SideBar & TabBar & AgentPanel & StatusBar\n    Layout -->|Renders Children| EditorArea\n    EditorArea --- Home & About & Projects & Skills\n    \n    subgraph \"Data Services\"\n        Sync[scripts/sync-projects.mjs]\n        JSON[src/data/projects.json]\n        Sync -->|Fetch & Format| JSON\n        JSON -->|Populate Grid| Projects\n    end\n```\n\n---",
-    "stack": [
-      "TypeScript",
-      "Next.js 14",
-      "Tailwind CSS 3",
-      "Mermaid.js",
-      "React Context API",
-      "GitHub REST API"
-    ],
-    "tagColor": "#3178c6",
-    "demo": "#",
-    "github": "https://github.com/singhaganesh/Antigravity-IDE-Portfolio",
-    "stars": 0,
-    "forks": 0,
-    "updatedAt": "2026-04-11T05:06:43Z"
+    "updatedAt": "2026-04-14T07:22:43Z"
   },
   {
     "id": 1138840383,

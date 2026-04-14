@@ -19,7 +19,7 @@ const TabBar = () => {
 
   return (
     <div className="h-[35px] bg-bg-tab-bar border-b border-border-color flex items-center select-none overflow-x-auto no-scrollbar">
-      {openTabs.map((path) => {
+      {Array.from(new Set(openTabs)).map((path) => {
         const tab = FILE_MAP[path];
         if (!tab) return null;
         

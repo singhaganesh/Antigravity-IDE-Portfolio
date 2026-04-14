@@ -158,6 +158,18 @@ const TitleBar = () => {
     );
   }
 
+  const toggleFullScreen = () => {
+    if (!document.fullscreenElement) {
+      document.documentElement.requestFullscreen().catch(err => {
+        showToast("Fullscreen not supported");
+      });
+    } else {
+      if (document.exitFullscreen) {
+        document.exitFullscreen();
+      }
+    }
+  };
+
   return (
     <div className="h-[35px] bg-bg-sidebar border-b border-border-color flex items-center justify-between select-none px-3 shrink-0 relative z-50">
       {/* Left: Logo / Hamburger / Menus */}
@@ -316,7 +328,7 @@ const TitleBar = () => {
         
         <div className="hidden md:flex items-center gap-4 text-muted">
           <Minus size={14} className="hover:text-white cursor-pointer" />
-          <Square size={12} className="hover:text-white cursor-pointer" />
+          <Square size={12} className="hover:text-white cursor-pointer" onClick={toggleFullScreen} />
           <X size={14} className="hover:text-[#ff5f57] cursor-pointer" />
         </div>
       </div>

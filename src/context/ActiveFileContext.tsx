@@ -97,18 +97,24 @@ export const ActiveFileProvider: React.FC<{ children: React.ReactNode }> = ({ ch
     const currentFile = FILE_MAP[pathname];
     if (currentFile) {
       setActiveFile(currentFile);
-      if (!openTabs.includes(pathname)) {
-        setOpenTabs(prev => [...prev, pathname]);
-      }
+      setOpenTabs(prev => {
+        if (!prev.includes(pathname)) {
+          return [...prev, pathname];
+        }
+        return prev;
+      });
     }
     setIsMobileMenuOpen(false);
     setIsLoadingFile(false);
   }, [pathname]);
 
   const openTab = (path: string) => {
-    if (!openTabs.includes(path)) {
-      setOpenTabs(prev => [...prev, path]);
-    }
+    setOpenTabs(prev => {
+      if (!prev.includes(path)) {
+        return [...prev, path];
+      }
+      return prev;
+    });
     
     if (isMobile) {
       setIsSidebarOpen(false);
