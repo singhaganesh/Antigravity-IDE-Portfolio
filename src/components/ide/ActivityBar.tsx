@@ -136,11 +136,6 @@ const ActivityBar = () => {
         );
       })}
       <div className="flex-1" />
-      <div className="w-full h-12 flex items-center justify-center relative transition-all cursor-pointer group px-2 mb-2" title="Settings">
-        <div className="w-9 h-9 flex items-center justify-center rounded-lg text-muted group-hover:bg-bg-hover group-hover:text-white transition-all">
-          <Settings size={22} strokeWidth={1.5} />
-        </div>
-      </div>
     </div>
   );
 };

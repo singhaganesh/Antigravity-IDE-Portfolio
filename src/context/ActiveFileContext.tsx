@@ -128,12 +128,15 @@ export const ActiveFileProvider: React.FC<{ children: React.ReactNode }> = ({ ch
 
   const closeTab = (path: string) => {
     const newTabs = openTabs.filter(t => t !== path);
-    setOpenTabs(newTabs);
-    if (pathname === path) {
-      if (newTabs.length > 0) {
-        router.push(newTabs[newTabs.length - 1]);
-      } else {
+    if (newTabs.length === 0) {
+      setOpenTabs(["/"]);
+      if (pathname !== "/") {
         router.push("/");
+      }
+    } else {
+      setOpenTabs(newTabs);
+      if (pathname === path) {
+        router.push(newTabs[newTabs.length - 1]);
       }
     }
   };
