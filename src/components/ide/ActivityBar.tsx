@@ -51,7 +51,7 @@ const ActivityBar = () => {
     }
   };
 
-  const socialLinks = getSocialLinks();
+  const socialLinks = React.useMemo(() => getSocialLinks(), []);
 
   return (
     <div className="w-[48px] h-full bg-bg-sidebar border-r border-border-color flex flex-col items-center select-none py-2 shrink-0 z-50">
@@ -85,7 +85,7 @@ const ActivityBar = () => {
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
                       exit={{ opacity: 0 }}
-                      className="fixed inset-0 z-40 bg-black/20 backdrop-blur-[2px]"
+                      className="fixed inset-0 z-40 bg-black/20 backdrop-blur-sm"
                       onClick={(e) => { e.stopPropagation(); setIsSocialMenuOpen(false); }}
                     />
                     <div className="absolute top-1/2 left-full -ml-3 z-50 pointer-events-none">

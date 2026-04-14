@@ -72,6 +72,7 @@ export const ActiveFileProvider: React.FC<{ children: React.ReactNode }> = ({ ch
       }
     }
     setIsMobileMenuOpen(false);
+    setIsLoadingFile(false);
   }, [pathname]);
 
   const openTab = (path: string) => {
@@ -82,9 +83,6 @@ export const ActiveFileProvider: React.FC<{ children: React.ReactNode }> = ({ ch
     if (path !== pathname) {
       setIsLoadingFile(true);
       router.push(path);
-      setTimeout(() => {
-        setIsLoadingFile(false);
-      }, 2000);
     }
   };
 

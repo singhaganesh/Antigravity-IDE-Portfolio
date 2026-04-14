@@ -59,7 +59,7 @@ const SearchSidebar = () => {
             >
               <div className="flex items-center gap-2 mb-1">
                 <ChevronRight size={12} className="text-muted group-hover:text-text-cyan transition-colors" />
-                <FileIcon filename={res.filename} size={14} />
+                <FileIcon filename={res.filename} size={16} />
                 <span className="text-[13px] font-mono text-text-primary">{res.title}</span>
               </div>
               <p className="text-[11px] font-mono text-text-muted leading-relaxed line-clamp-2 pl-6">

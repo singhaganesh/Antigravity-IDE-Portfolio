@@ -37,7 +37,7 @@ const TabBar = () => {
             {isActive && <div className="absolute top-0 left-0 right-0 h-[1px] bg-[#007acc]" />}
             
             {/* File Icon */}
-            <FileIcon filename={tab.name} size={14} />
+            <FileIcon filename={tab.name} size={16} />
 
             {/* Filename */}
             <span className="text-[13px] whitespace-nowrap">{tab.name}</span>

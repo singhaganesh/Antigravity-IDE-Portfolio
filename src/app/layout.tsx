@@ -70,7 +70,7 @@ function WorkspaceLayout({ children }: { children: React.ReactNode }) {
       <TitleBar />
       
       <div className="flex flex-1 overflow-hidden relative">
-        <div className="flex h-full overflow-hidden shrink-0">
+        <div className="flex h-full shrink-0 relative z-40">
           <ActivityBar />
           {isSidebarOpen && (
             sidebarView === 'explorer' ? <Sidebar /> : <SearchSidebar />
