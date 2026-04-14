@@ -44,6 +44,9 @@ interface ActiveFileContextType {
   setCursorPosition: (pos: { line: number; column: number }) => void;
   isLoadingFile: boolean;
   setIsLoadingFile: (loading: boolean) => void;
+  toastMessage: string | null;
+  showToast: (message: string) => void;
+  closeAllTabs: () => void;
 }
 
 const ActiveFileContext = createContext<ActiveFileContextType | undefined>(undefined);
@@ -62,6 +65,19 @@ export const ActiveFileProvider: React.FC<{ children: React.ReactNode }> = ({ ch
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isCommandPaletteOpen, setIsCommandPaletteOpen] = useState(false);
   const [cursorPosition, setCursorPosition] = useState({ line: 1, column: 1 });
+  const [toastMessage, setToastMessage] = useState<string | null>(null);
+
+  const showToast = (message: string) => {
+    setToastMessage(message);
+    setTimeout(() => {
+      setToastMessage(null);
+    }, 2500);
+  };
+
+  const closeAllTabs = () => {
+    setOpenTabs(["/"]); // Ensure root at least exists if we don't handle empty states well yet. Or just [] if layout handles empty correctly. ActiveFileContext says activeFile must be a FileMetadata. Let's redirect to home.
+    router.push("/");
+  };
 
   useEffect(() => {
     const currentFile = FILE_MAP[pathname];
@@ -121,7 +137,10 @@ export const ActiveFileProvider: React.FC<{ children: React.ReactNode }> = ({ ch
       cursorPosition,
       setCursorPosition,
       isLoadingFile,
-      setIsLoadingFile
+      setIsLoadingFile,
+      toastMessage,
+      showToast,
+      closeAllTabs
     }}>
       {children}
     </ActiveFileContext.Provider>

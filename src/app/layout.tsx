@@ -13,6 +13,7 @@ import StatusBar from "@/components/ide/StatusBar";
 import TerminalDrawer from "@/components/ide/TerminalDrawer";
 import AgentPanel from "@/components/ide/AgentPanel";
 import CommandPalette from "@/components/ide/CommandPalette";
+import Toast from "@/components/ide/Toast";
 import { ActiveFileProvider, useActiveFile } from "@/context/ActiveFileContext";
 
 const jetbrainsMono = JetBrains_Mono({
@@ -114,6 +115,7 @@ function WorkspaceLayout({ children }: { children: React.ReactNode }) {
 
       <StatusBar />
       <CommandPalette />
+      <Toast />
     </div>
   );
 }

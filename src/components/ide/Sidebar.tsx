@@ -5,6 +5,7 @@ import { X, ChevronDown, ChevronRight } from 'lucide-react';
 import { usePathname } from 'next/navigation';
 import { useActiveFile } from '@/context/ActiveFileContext';
 import { FileIcon } from './FileIcon';
+import { downloadResume } from '@/utils/terminalEngine';
 
 interface FileEntry {
   name: string;
@@ -29,7 +30,7 @@ const Sidebar = () => {
 
   const rootFiles: FileEntry[] = [
     { name: 'adventures.bike', path: '/adventures' },
-    { name: 'Ganesh_Resume.pdf', path: '#', isDecorative: true },
+    { name: 'Ganesh_Resume.pdf', path: '/assets/credentials/Ganesh_resume.pdf', isDecorative: true },
   ];
 
   const sidebarContent = (
@@ -107,11 +108,17 @@ const Sidebar = () => {
               key={file.name}
               className={[
                 "flex items-center gap-1.5 px-4 h-[28px] transition-colors select-none",
-                file.isDecorative ? "cursor-default" : "cursor-pointer",
+                "cursor-pointer",
                 isActive ? "bg-[#37373d]" : "",
-                !file.isDecorative && !isActive ? "hover:bg-[#2a2d2e]" : ""
+                !isActive ? "hover:bg-[#2a2d2e]" : ""
               ].join(" ")}
-              onClick={() => !file.isDecorative && openTab(file.path)}
+              onClick={() => {
+                if (file.name === 'Ganesh_Resume.pdf') {
+                  downloadResume();
+                } else if (!file.isDecorative) {
+                  openTab(file.path);
+                }
+              }}
             >
               <div className="w-[16px] flex items-center justify-center shrink-0">
                 <FileIcon filename={file.name} size={16} />

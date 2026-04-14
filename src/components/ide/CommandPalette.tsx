@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Search, FileCode, Sparkles, X, ChevronRight, Hash, FileText, Zap, Cpu, Send, Bike } from 'lucide-react';
 import { useActiveFile, FILE_MAP } from '@/context/ActiveFileContext';
 import { FileIcon } from './FileIcon';
+import { downloadResume } from '@/utils/terminalEngine';
 
 const CommandPalette = () => {
   const { isCommandPaletteOpen, setIsCommandPaletteOpen, openTab, setIsAgentPanelOpen } = useActiveFile();
@@ -24,6 +25,7 @@ const CommandPalette = () => {
 
   const commands = [
     { id: 'copilot', name: "Open Ganesh's Copilot", icon: Sparkles, action: () => setIsAgentPanelOpen(true), shortcut: 'Ctrl+Shift+C' },
+    { id: 'resume', name: "Download Ganesh's Resume", icon: FileText, action: () => downloadResume(), shortcut: 'PDF' },
   ];
 
   const filteredFiles = files.filter(f => f.name.toLowerCase().includes(query.toLowerCase()));
