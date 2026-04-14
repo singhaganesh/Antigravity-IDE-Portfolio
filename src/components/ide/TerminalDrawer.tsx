@@ -164,22 +164,22 @@ const TerminalDrawer = () => {
       />
       
       {/* Terminal Toolbar */}
-      <div className="flex items-center justify-between px-4 py-1.5 bg-[#1e1e1e] border-b border-border-color shrink-0 pointer-events-none">
-        <div className="flex gap-4 text-[11px] font-bold text-muted uppercase tracking-wider pointer-events-auto items-center">
-          <span className="hover:text-white cursor-pointer transition-colors">Problems</span>
-          <span className="hover:text-white cursor-pointer transition-colors">Output</span>
+      <div className="flex items-center justify-between px-2 md:px-4 py-1.5 bg-[#1e1e1e] border-b border-border-color shrink-0 pointer-events-none">
+        <div className="flex gap-2 md:gap-4 text-[10px] md:text-[11px] font-bold text-muted uppercase tracking-wider pointer-events-auto items-center">
+          <span className="hidden sm:inline hover:text-white cursor-pointer transition-colors">Problems</span>
+          <span className="hidden sm:inline hover:text-white cursor-pointer transition-colors">Output</span>
           <span className="text-white bg-[#37373d] px-2 py-1 rounded-md">Terminal</span>
-          <MoreHorizontal size={14} className="hover:text-white cursor-pointer" />
+          <MoreHorizontal size={14} className="hover:text-white cursor-pointer hidden sm:block" />
         </div>
-        <div className="flex items-center gap-3 pointer-events-auto">
-          <div className="flex items-center gap-2 text-muted text-[11px] hover:text-white cursor-pointer bg-[#ffffff08] px-2 py-0.5 rounded">
+        <div className="flex items-center gap-2 md:gap-3 pointer-events-auto">
+          <div className="hidden sm:flex items-center gap-2 text-muted text-[11px] hover:text-white cursor-pointer bg-[#ffffff08] px-2 py-0.5 rounded">
             <span className="text-[10px] scale-90">npm</span>
             <PlusIcon />
             <ChevronDown size={12} />
           </div>
-          <div className="w-[1px] h-4 bg-border-color mx-1" />
-          <LayoutGrid size={14} className="text-muted hover:text-white cursor-pointer" />
-          <Monitor size={14} className="text-muted hover:text-white cursor-pointer" />
+          <div className="hidden sm:block w-[1px] h-4 bg-border-color mx-1" />
+          <LayoutGrid size={14} className="hidden sm:block text-muted hover:text-white cursor-pointer" />
+          <Monitor size={14} className="hidden sm:block text-muted hover:text-white cursor-pointer" />
           <X 
             size={14} 
             className="text-muted hover:text-white cursor-pointer" 

@@ -8,6 +8,7 @@ import {
   Layers, Server, Github, Linkedin, Mail, Instagram, Youtube,
   Binary, Monitor, Database, Phone
 } from 'lucide-react';
+import { GithubLogo, LinkedInLogo, GmailLogo, InstagramLogo } from '@/components/icons/SocialIcons';
 import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 
@@ -49,7 +50,7 @@ const Typewriter = ({ phrases }: { phrases: string[] }) => {
 };
 
 const ActivityLog = () => {
-  const [logs, setLog] = useState<string[]>([]);
+  const [logs, setLog] = useState<{id: number, text: string}[]>([]);
   const allLogs = [
     "[SYSTEM]: initializing_kernel...",
     "[AUTH]: user_verified: ganesh_singha",
@@ -62,9 +63,13 @@ const ActivityLog = () => {
   ];
 
   useEffect(() => {
+    let idCounter = 0;
     let i = 0;
     const interval = setInterval(() => {
-      setLog(prev => [...prev.slice(-3), allLogs[i]]);
+      setLog(prev => {
+        const newLog = { id: idCounter++, text: allLogs[i] };
+        return [...prev.slice(-3), newLog];
+      });
       i = (i + 1) % allLogs.length;
     }, 4000);
     return () => clearInterval(interval);
@@ -77,10 +82,10 @@ const ActivityLog = () => {
         <span>SYSTEM_LOG</span>
       </div>
       <AnimatePresence>
-        {logs.map((log, idx) => (
-          <motion.div key={log + idx} initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-text-muted flex items-center gap-2">
+        {logs.map((log) => (
+          <motion.div key={log.id} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="text-text-muted flex items-center gap-2">
             <span className="text-[#4ec9b0]/30">{">"}</span>
-            <span className="truncate tracking-tighter">{log}</span>
+            <span className="truncate tracking-tighter">{log.text}</span>
           </motion.div>
         ))}
       </AnimatePresence>
@@ -109,14 +114,14 @@ export default function Home() {
   ];
 
   const socialPorts = [
-    { icon: Github, label: "GITHUB", port: "443", href: "https://github.com/singhaganesh" },
-    { icon: Linkedin, label: "LINKEDIN", port: "22", href: "https://www.linkedin.com/in/ganesh-singha/" },
-    { icon: Mail, label: "EMAIL", port: "587", href: "mailto:ganeshsingha741@gmail.com" },
-    { icon: Instagram, label: "INSTA", port: "80", href: "https://www.instagram.com/biker_ganesh/" }
+    { icon: GithubLogo, label: "GITHUB", port: "443", href: "https://github.com/singhaganesh" },
+    { icon: LinkedInLogo, label: "LINKEDIN", port: "22", href: "https://www.linkedin.com/in/ganesh-singha/" },
+    { icon: GmailLogo, label: "EMAIL", port: "587", href: "mailto:ganeshsingha741@gmail.com" },
+    { icon: InstagramLogo, label: "INSTA", port: "80", href: "https://www.instagram.com/biker_ganesh/" }
   ];
 
   return (
-    <div className="relative min-h-max flex flex-col items-center justify-center p-6 py-20 animate-fadeUp">
+    <div className="relative min-h-max flex flex-col items-center justify-center p-4 sm:p-6 py-12 md:py-20 animate-fadeUp">
       
       {/* Top Section: System Header */}
       <div className="absolute top-10 w-full px-10 hidden xl:flex justify-between items-start pointer-events-none">
@@ -158,8 +163,8 @@ export default function Home() {
           {"// handshake_established: ganesh_singha.dev"}
         </div>
 
-        <div className="animate-float">
-          <h1 className="font-display font-black text-[72px] md:text-[110px] leading-[0.85] flex flex-col items-center">
+        <div className="animate-float mt-8 md:mt-0">
+          <h1 className="font-display font-black text-[55px] md:text-[80px] lg:text-[110px] leading-[0.85] flex flex-col items-center">
             <span className="text-white">GANESH</span>
             <span className="text-[#00e5cc] tracking-tighter">SINGHA</span>
           </h1>
@@ -194,14 +199,14 @@ export default function Home() {
         <div className="grid grid-cols-2 md:grid-cols-4 border border-border-color bg-[#1e1e1e]/20 rounded-xl overflow-hidden shadow-2xl">
           {stats.map((stat, i) => (
             <div key={stat.label} className={cn(
-              "flex flex-col items-center justify-center py-8 px-4 relative",
+              "flex flex-col items-center justify-center py-5 md:py-8 px-2 md:px-4 relative",
               i !== stats.length - 1 && "md:border-r border-border-color",
               i < 2 && "border-b md:border-b-0 border-border-color"
             )}>
-              <span className="text-[32px] font-black font-display leading-none mb-2" style={{ color: stat.color }}>
+              <span className="text-[24px] md:text-[32px] font-black font-display leading-none mb-2" style={{ color: stat.color }}>
                 {stat.value}
               </span>
-              <span className="text-[10px] font-mono text-text-muted font-bold tracking-[0.2em] uppercase opacity-60">
+              <span className="text-[9px] md:text-[10px] font-mono text-text-muted font-bold tracking-[0.2em] uppercase opacity-60 text-center">
                 {stat.label}
               </span>
             </div>

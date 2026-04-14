@@ -47,6 +47,7 @@ interface ActiveFileContextType {
   toastMessage: string | null;
   showToast: (message: string) => void;
   closeAllTabs: () => void;
+  isMobile: boolean;
 }
 
 const ActiveFileContext = createContext<ActiveFileContextType | undefined>(undefined);
@@ -66,6 +67,19 @@ export const ActiveFileProvider: React.FC<{ children: React.ReactNode }> = ({ ch
   const [isCommandPaletteOpen, setIsCommandPaletteOpen] = useState(false);
   const [cursorPosition, setCursorPosition] = useState({ line: 1, column: 1 });
   const [toastMessage, setToastMessage] = useState<string | null>(null);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    checkMobile();
+    if (window.innerWidth < 768) {
+      setIsSidebarOpen(false);
+    }
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   const showToast = (message: string) => {
     setToastMessage(message);
@@ -94,6 +108,10 @@ export const ActiveFileProvider: React.FC<{ children: React.ReactNode }> = ({ ch
   const openTab = (path: string) => {
     if (!openTabs.includes(path)) {
       setOpenTabs(prev => [...prev, path]);
+    }
+    
+    if (isMobile) {
+      setIsSidebarOpen(false);
     }
     
     if (path !== pathname) {
@@ -140,7 +158,8 @@ export const ActiveFileProvider: React.FC<{ children: React.ReactNode }> = ({ ch
       setIsLoadingFile,
       toastMessage,
       showToast,
-      closeAllTabs
+      closeAllTabs,
+      isMobile
     }}>
       {children}
     </ActiveFileContext.Provider>

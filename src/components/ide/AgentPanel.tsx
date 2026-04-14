@@ -163,10 +163,10 @@ const AgentPanel = () => {
       </div>
 
       {/* Footer Disclaimer */}
-      <div className="p-6 text-center mt-auto">
-        <p className="text-[10px] text-muted font-mono leading-relaxed opacity-60">
-          AI may make mistakes. Double-check all generated code.
-        </p>
+      <div className="p-4 text-center mt-auto">
+        <div className="text-[10px] text-[#00e5cc] font-mono leading-relaxed opacity-90 border border-[#00e5cc]/20 bg-[#00e5cc]/10 rounded-md p-2">
+          <strong>Notice:</strong> This is a static demo agent. The actual AI agent for Ganesh is coming in the future!
+        </div>
       </div>
     </div>
   );

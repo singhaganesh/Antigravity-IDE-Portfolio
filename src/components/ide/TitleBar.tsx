@@ -33,7 +33,9 @@ const TitleBar = () => {
   };
 
   const [openMenu, setOpenMenu] = useState<string | null>(null);
-  const menuRef = useRef<HTMLDivElement>(null);
+  const mobileMenuRef = useRef<HTMLDivElement>(null);
+  const desktopMenuRef = useRef<HTMLDivElement>(null);
+  const [mounted, setMounted] = useState(false);
 
   const {
     showToast,
@@ -43,8 +45,12 @@ const TitleBar = () => {
   } = useActiveFile();
 
   useEffect(() => {
+    setMounted(true);
     const handleClickOutside = (event: MouseEvent) => {
-      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+      if (
+        (mobileMenuRef.current && !mobileMenuRef.current.contains(event.target as Node)) &&
+        (desktopMenuRef.current && !desktopMenuRef.current.contains(event.target as Node))
+      ) {
         setOpenMenu(null);
       }
     };
@@ -140,28 +146,69 @@ const TitleBar = () => {
     ]
   };
 
+  if (!mounted) {
+    return (
+      <div className="h-[35px] bg-bg-sidebar border-b border-border-color flex items-center justify-between select-none px-3 shrink-0 relative z-50">
+        <div className="flex items-center gap-2 h-full" />
+        <div className="flex-1 flex justify-center items-center px-4">
+          <div className="opacity-0">Loading...</div>
+        </div>
+        <div className="flex items-center gap-3 justify-end h-full" />
+      </div>
+    );
+  }
+
   return (
     <div className="h-[35px] bg-bg-sidebar border-b border-border-color flex items-center justify-between select-none px-3 shrink-0 relative z-50">
       {/* Left: Logo / Hamburger / Menus */}
-      <div className="flex items-center gap-2 h-full">
-        <div className="md:hidden flex items-center">
-          <Menu 
-            size={16} 
-            className="text-muted hover:text-white cursor-pointer" 
-            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-          />
+      <div className="flex items-center gap-2 h-full shrink-0">
+        <div className="xl:hidden flex items-center h-full relative" ref={mobileMenuRef}>
+          <div 
+            className={cn("px-2 flex items-center h-full rounded-sm transition-colors cursor-pointer", openMenu === 'mobile' ? "bg-bg-hover text-white" : "hover:bg-bg-hover text-muted hover:text-white")}
+            onClick={() => setOpenMenu(openMenu === 'mobile' ? null : 'mobile')}
+          >
+            <Menu size={16} />
+          </div>
+          
+          {openMenu === 'mobile' && (
+             <div className="absolute top-[35px] left-0 mt-[1px] min-w-[240px] bg-[#252526] border border-border-color shadow-xl rounded-md py-1 z-[9999] max-h-[80vh] overflow-y-auto scrollbar-thin">
+                {Object.entries(MENUS).map(([menuName, items]) => (
+                  <div key={menuName}>
+                     <div className="px-6 py-2 text-[10px] font-bold text-[#00e5cc] uppercase tracking-widest bg-[#1e1e1e]/50 border-y border-border-color/30">
+                        {menuName}
+                     </div>
+                     {items.map((item, idx) => {
+                       if (item.separator) return null;
+                       if (item.isHeader) return <div key={`mb-h-${idx}`} className="px-6 py-2 text-[10px] font-bold text-muted uppercase tracking-widest opacity-60">{item.label}</div>;
+                       if (item.subMenu) {
+                         return item.subMenu.map((sub, sIdx) => (
+                           <div key={`mb-sub-${sIdx}`} className="px-8 py-2 hover:bg-[#04395e] hover:text-white text-[13px] text-text-primary cursor-pointer" onClick={(e) => { e.stopPropagation(); sub.action(); setOpenMenu(null); }}>
+                             {item.label}: {sub.label}
+                           </div>
+                         ));
+                       }
+                       return (
+                         <div key={`mb-item-${idx}`} className="px-6 py-2 flex justify-between hover:bg-[#04395e] hover:text-white text-[13px] text-text-primary cursor-pointer" onClick={(e) => { e.stopPropagation(); item.action?.(); setOpenMenu(null); }}>
+                           <span>{item.label}</span>
+                         </div>
+                       );
+                     })}
+                  </div>
+                ))}
+             </div>
+          )}
         </div>
-        <div className="hidden md:flex items-center ml-1">
+        <div className="flex items-center ml-1 mr-2 xl:mr-0">
           <Image 
             src="/assets/icons/Antigravity-logo.svg" 
             alt="Antigravity Logo" 
-            width={18} 
-            height={18}
+            width={16} 
+            height={16}
             className="opacity-80 hover:opacity-100 transition-opacity cursor-pointer"
           />
         </div>
         
-        <div className="hidden xl:flex items-center ml-2 h-full text-[13px] text-muted relative" ref={menuRef}>
+        <div className="hidden xl:flex items-center ml-2 h-full text-[13px] text-muted relative" ref={desktopMenuRef}>
           {Object.entries(MENUS).map(([menuName, items]) => (
             <div key={menuName} className="h-full relative">
               <span 
@@ -232,20 +279,20 @@ const TitleBar = () => {
         </div>
       </div>
 
-      {/* Center: Branding Text */}
-      <div className="flex-1 flex justify-center items-center px-8">
-        <div className="text-[12px] text-muted flex items-center gap-1 max-w-[500px] truncate">
-          <span>Antigravity-IDE-Portfolio</span>
-          <span>-</span>
-          <span>Antigravity</span>
-          <span>-</span>
-          <span className="text-white font-medium">{activeFile.name}</span>
+      {/* Center: Search / Command Palette Box */}
+      <div className="flex-1 flex justify-center items-center px-4 min-w-0">
+        <div className="text-[12px] text-muted flex items-center gap-1 max-w-[200px] md:max-w-[500px] truncate">
+          <span className="hidden sm:inline">Antigravity-IDE-Portfolio</span>
+          <span className="hidden sm:inline">-</span>
+          <span className="hidden md:inline">Antigravity</span>
+          <span className="hidden md:inline">-</span>
+          <span className="text-white font-medium truncate">{activeFile.name}</span>
         </div>
       </div>
 
-      {/* Right: Layout Controls & Window Buttons */}
-      <div className="flex items-center gap-3">
-        <div className="hidden md:flex items-center gap-2 mr-4">
+      {/* Right: Layout Controls */}
+      <div className="flex items-center gap-3 justify-end shrink-0 h-full">
+        <div className="hidden xl:flex items-center gap-2 mr-4">
           <button onClick={() => setIsSidebarOpen(!isSidebarOpen)} className={cn("p-1 rounded-md transition-colors", isSidebarOpen ? "text-white" : "text-muted hover:text-white")} title="Toggle Sidebar"><PanelIcon isActive={isSidebarOpen} panel="left" /></button>
           <button onClick={() => setIsTerminalOpen(!isTerminalOpen)} className={cn("p-1 rounded-md transition-colors", isTerminalOpen ? "text-white" : "text-muted hover:text-white")} title="Toggle Terminal"><PanelIcon isActive={isTerminalOpen} panel="bottom" /></button>
           <button onClick={() => setIsAgentPanelOpen(!isAgentPanelOpen)} className={cn("p-1 rounded-md transition-colors", isAgentPanelOpen ? "text-white" : "text-muted hover:text-white")} title="Toggle Agent Panel"><PanelIcon isActive={isAgentPanelOpen} panel="right" /></button>
@@ -267,7 +314,7 @@ const TitleBar = () => {
           <div className="w-6 h-6 rounded-full bg-purple-600 flex items-center justify-center text-[10px] text-white font-bold cursor-pointer">G</div>
         </div>
         
-        <div className="flex items-center gap-4 text-muted">
+        <div className="hidden md:flex items-center gap-4 text-muted">
           <Minus size={14} className="hover:text-white cursor-pointer" />
           <Square size={12} className="hover:text-white cursor-pointer" />
           <X size={14} className="hover:text-[#ff5f57] cursor-pointer" />

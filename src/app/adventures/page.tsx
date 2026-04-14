@@ -13,7 +13,7 @@ const adventuresData = [
     "date": "May 2025",
     "location": "Nepal",
     "aspect": "3/4",
-    "desc": "Reached an altitude of 11,930ft via the challenging terrain of the Nepal border. This expedition was a true test of human endurance and machine performance in sub-zero temperatures and thin air. Documented the entire journey through the lens of a developer exploring nature's complex architecture.",
+    "desc": "Conquering the grueling, steep roads up to 11,930ft via the Nepal border. This expedition pushed the motorcycle's endurance and rider grit in sub-zero temperatures, proving that the toughest, rockiest terrains yield the most unforgettable motovlogging stories",
     "images": [
       "/assets/photos/sandakphu-2.jpeg",
       "/assets/photos/sandakphu-3.jpeg",
@@ -27,7 +27,7 @@ const adventuresData = [
     "date": "Oct 2025",
     "location": "Nepal",
     "aspect": "3/4",
-    "desc": "Embarking on one of the highest altitude treks in the world. The journey to Tilicho Lake (4,919m) represents the peak of high-altitude exploration, requiring meticulous planning and resilience against the elements.",
+    "desc": "Transitioning from the saddle to the trail for one of the world's highest altitude treks (4,919m). Exploring the extreme elements of the Himalayas, where meticulous route planning meets raw physical endurance far beyond the reach of standard asphalt.",
     "images": [
       "/assets/photos/tilicho-4.jpeg",
       "/assets/photos/tilicho-1.jpeg",
@@ -41,7 +41,7 @@ const adventuresData = [
     "date": "Oct 2025",
     "location": "Nepal",
     "aspect": "3/4",
-    "desc": "Navigating the rugged heart of the Annapurna circuit. Manang served as a high-altitude base for acclimatization and exploration of the surrounding glacial valleys and ancient stone architectures.",
+    "desc": "Navigating the rugged, rocky tracks of the Annapurna circuit. Manang served as an unforgiving high-altitude proving ground, testing long-range touring equipment and suspension against harsh crosswinds and ancient, unpaved mountain roads.",
     "images": [
       "/assets/photos/manang-4.jpeg",
       "/assets/photos/manang-1.jpeg",
@@ -57,7 +57,7 @@ const adventuresData = [
     "date": "Aug 2025",
     "location": "Purulia, WB",
     "aspect": "3/4",
-    "desc": "Exploring the red soil and rocky hills of Purulia. This ride focused on low-altitude endurance and testing machine agility through the winding curves of the Ayodhya Hills region.",
+    "desc": "Carving through the twisting tarmac and red dirt roads of the Ayodhya Hills. A thrilling low-altitude ride focused on cornering agility, machine health, and maintaining optimal tire grip through West Bengal's winding wilderness.",
     "images": [
       "/assets/photos/purulia-1.jpeg",
       "/assets/photos/purulia-4.jpeg",
@@ -71,7 +71,7 @@ const adventuresData = [
     "date": "May 2024",
     "location": "Darjeeling, WB",
     "aspect": "4/3",
-    "desc": "A classic ascent to the 'Queen of the Hills'. Documenting machine health and cooling efficiency across the steep gradients and misty climate of the North Bengal tea gardens.",
+    "desc": "A classic ascent up the tight, winding mountain roads to the Queen of the Hills. This journey tested the bike's cooling efficiency and low-end torque on steep, misty gradients while navigating the slick routes through sprawling tea estates.",
     "images": [
       "/assets/photos/darjeeling-1.jpeg",
       "/assets/photos/darjeeling-2.jpeg",
@@ -84,7 +84,7 @@ const adventuresData = [
     "date": "Oct 2023",
     "location": "Nepal",
     "aspect": "3/4",
-    "desc": "An iconic journey through the forbidden kingdom. Mustang's desert-like terrain and wind-swept canyons provided the ultimate environment for testing long-range touring equipment.",
+    "desc": "An epic endurance ride through the desert-like, wind-swept canyons of the forbidden kingdom. Battling loose gravel, river crossings, and heavy dust to push the absolute limits of adventure motorcycling on some of the most isolated roads.",
     "images": [
       "/assets/photos/mustang-1.jpeg",
       "/assets/photos/mustang-5.jpeg",

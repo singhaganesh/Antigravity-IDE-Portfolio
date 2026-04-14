@@ -15,6 +15,12 @@ import AgentPanel from "@/components/ide/AgentPanel";
 import CommandPalette from "@/components/ide/CommandPalette";
 import Toast from "@/components/ide/Toast";
 import { ActiveFileProvider, useActiveFile } from "@/context/ActiveFileContext";
+import { clsx, type ClassValue } from "clsx";
+import { twMerge } from "tailwind-merge";
+
+function cn(...inputs: ClassValue[]) {
+  return twMerge(clsx(inputs));
+}
 
 const jetbrainsMono = JetBrains_Mono({
   subsets: ["latin"],
@@ -29,11 +35,13 @@ const spaceGrotesk = Space_Grotesk({
 function WorkspaceLayout({ children }: { children: React.ReactNode }) {
   const { 
     isSidebarOpen, 
+    setIsSidebarOpen,
     sidebarView,
     isAgentPanelOpen, 
     agentPanelWidth, 
     setAgentPanelWidth,
-    isLoadingFile
+    isLoadingFile,
+    isMobile
   } = useActiveFile();
   const [isResizing, setIsResizing] = useState(false);
 
@@ -71,10 +79,18 @@ function WorkspaceLayout({ children }: { children: React.ReactNode }) {
       <TitleBar />
       
       <div className="flex flex-1 overflow-hidden relative">
-        <div className="flex h-full shrink-0 relative z-40">
+        {isMobile && isSidebarOpen && (
+          <div 
+            className="absolute inset-0 z-30 bg-black/50 backdrop-blur-sm"
+            onClick={() => setIsSidebarOpen(false)}
+          />
+        )}
+        <div className="flex h-full shrink-0 z-40 relative">
           <ActivityBar />
           {isSidebarOpen && (
-            sidebarView === 'explorer' ? <Sidebar /> : <SearchSidebar />
+            <div className={cn("h-full overflow-hidden", isMobile ? "absolute left-[48px] top-0 bottom-0 shadow-2xl bg-bg-editor" : "relative")}>
+              {sidebarView === 'explorer' ? <Sidebar /> : <SearchSidebar />}
+            </div>
           )}
         </div>
 
@@ -97,7 +113,7 @@ function WorkspaceLayout({ children }: { children: React.ReactNode }) {
           <TerminalDrawer />
         </main>
 
-        {isAgentPanelOpen && (
+        {isAgentPanelOpen && !isMobile && (
           <div 
             onMouseDown={startResizing}
             className="w-1 cursor-col-resize hover:bg-[#007acc] active:bg-[#007acc] transition-colors z-50 absolute right-0 h-full"
@@ -106,8 +122,8 @@ function WorkspaceLayout({ children }: { children: React.ReactNode }) {
         )}
 
         <div 
-          style={{ width: isAgentPanelOpen ? `${agentPanelWidth}px` : '0px' }}
-          className="h-full overflow-hidden flex-shrink-0"
+          style={{ width: isAgentPanelOpen ? (isMobile ? '100%' : `${agentPanelWidth}px`) : '0px' }}
+          className={cn("h-full overflow-hidden flex-shrink-0 z-50 transition-all", isMobile && isAgentPanelOpen ? "absolute right-0 top-0 bottom-0 shadow-2xl bg-bg-editor" : "relative")}
         >
           <AgentPanel />
         </div>

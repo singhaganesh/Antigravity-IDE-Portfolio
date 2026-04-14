@@ -13,11 +13,6 @@ const skillsData = {
     { "name": "Python", "level": 60, "color": "#ff79c6" },
     { "name": "SQL", "level": 70, "color": "#bd93f9" }
   ],
-  "Generative AI & LLM Engineering": [
-    { "name": "OpenAI API", "level": 80, "color": "#10a37f" },
-    { "name": "Prompt Engineering", "level": 70, "color": "#ffb86c" },
-    { "name": "RAG Pipelines", "level": 75, "color": "#8be9fd" }
-  ],
   "Backend": [
     { "name": "Spring Boot", "level": 90, "color": "#6db33f" },
     { "name": "Spring Security", "level": 80, "color": "#f1502f" },
@@ -30,6 +25,18 @@ const skillsData = {
     { "name": "MVVM Architecture", "level": 85, "color": "#ffb86c" },
     { "name": "Retrofit / Coroutines", "level": 82, "color": "#8be9fd" },
     { "name": "DataStore / Preferences", "level": 75, "color": "#ff79c6" }
+  ],
+  "Frontend": [
+    { "name": "React 19", "level": 88, "color": "#61dafb" },
+    { "name": "Next.js", "level": 82, "color": "#ffffff" },
+    { "name": "Tailwind CSS", "level": 90, "color": "#38b2ac" },
+    { "name": "Redux Toolkit", "level": 80, "color": "#764abc" },
+    { "name": "Material UI", "level": 75, "color": "#007fff" }
+  ],
+  "Generative AI": [
+    { "name": "OpenAI API", "level": 80, "color": "#10a37f" },
+    { "name": "Prompt Engineering", "level": 70, "color": "#ffb86c" },
+    { "name": "RAG Pipelines", "level": 75, "color": "#8be9fd" }
   ],
   "Databases": [
     { "name": "PostgreSQL", "level": 85, "color": "#336791" },
@@ -49,15 +56,7 @@ const skillsData = {
     { "name": "AWS (EC2, RDS, S3)", "level": 80, "color": "#FF9900" },
     { "name": "Vercel / Netlify", "level": 90, "color": "#ffffff" },
     { "name": "Cloud Architecture", "level": 75, "color": "#8be9fd" },
-    { "name": "IAM & Security", "level": 70, "color": "#ff79c6" },
-    { "name": "Serverless (Lambda)", "level": 65, "color": "#f1fa8c" }
-  ],
-  "Frontend": [
-    { "name": "React 19", "level": 88, "color": "#61dafb" },
-    { "name": "Next.js", "level": 82, "color": "#ffffff" },
-    { "name": "Tailwind CSS", "level": 90, "color": "#38b2ac" },
-    { "name": "Redux Toolkit", "level": 80, "color": "#764abc" },
-    { "name": "Material UI", "level": 75, "color": "#007fff" }
+    { "name": "IAM & Security", "level": 70, "color": "#ff79c6" }
   ],
   "Design": [
     { "name": "Figma", "level": 70, "color": "#f24e1e" },
@@ -66,7 +65,7 @@ const skillsData = {
   ]
 };
 
-const learning = ["Rust", "Web3", "Go"];
+const learning = ["kubernetes","system Design","Serverless (Lambda)","RabbitMQ"];
 
 const SkillsPage = () => {
   return (

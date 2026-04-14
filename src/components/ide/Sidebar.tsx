@@ -84,8 +84,8 @@ const Sidebar = () => {
               onClick={() => !file.isDecorative && openTab(file.path)}
             >
               <div className="absolute left-[22px] top-0 bottom-0 w-[1px] bg-border-color/30" />
-              <div className="w-4 flex items-center justify-center shrink-0 mr-2 z-10">
-                <FileIcon filename={file.name} size={16} />
+              <div className="w-[18px] flex items-center justify-center shrink-0 mr-2 z-10">
+                <FileIcon filename={file.name} size={18} />
               </div>
               <span
                 className={[
@@ -120,8 +120,8 @@ const Sidebar = () => {
                 }
               }}
             >
-              <div className="w-[16px] flex items-center justify-center shrink-0">
-                <FileIcon filename={file.name} size={16} />
+              <div className="w-[18px] flex items-center justify-center shrink-0">
+                <FileIcon filename={file.name} size={18} />
               </div>
               <span
                 className={[
@@ -142,7 +142,7 @@ const Sidebar = () => {
 
   return (
     <>
-      <div className="w-[260px] h-full bg-bg-sidebar border-r border-border-color hidden md:flex flex-col select-none overflow-hidden">
+      <div className="w-[260px] h-full bg-bg-sidebar border-r border-border-color flex flex-col select-none overflow-hidden">
         {sidebarContent}
       </div>
 
