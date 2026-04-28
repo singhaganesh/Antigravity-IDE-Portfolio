@@ -1,27 +1,42 @@
 [
   {
-    "id": 1201007541,
-    "name": "Antigravity Ide Portfolio",
-    "originalName": "Antigravity-IDE-Portfolio",
-    "tag": "TypeScript",
-    "desc": "An interactive, Antigravity-themed developer portfolio built with Next.js 14, TypeScript, and Tailwind CSS. Features a functional file tree, multi-tab navigation, and dynamic GitHub project synchronization.",
-    "architecture": "```mermaid\ngraph TD\n    subgraph \"Workspace Shell (Persistent)\"\n        Layout[src/app/layout.tsx]\n        Context[ActiveFileContext.tsx]\n        Layout -->|Provides State| Context\n    end\n\n    subgraph \"IDE Chrome Components\"\n        TitleBar[TitleBar.tsx]\n        SideBar[Sidebar.tsx]\n        TabBar[TabBar.tsx]\n        AgentPanel[AgentPanel.tsx]\n        StatusBar[StatusBar.tsx]\n    end\n\n    subgraph \"Editor Area (Routed Content)\"\n        Home[page.tsx]\n        Readme[readme/page.tsx]\n        Projects[projects/page.tsx]\n        Skills[skills/page.tsx]\n        Experience[experience/page.tsx]\n    end\n\n    Context --> TitleBar & SideBar & TabBar & AgentPanel & StatusBar\n    Layout -->|Renders Children| EditorArea\n    EditorArea --- Home & Readme & Projects & Skills & Experience\n    \n    subgraph \"Data Services\"\n        Sync[scripts/sync-projects.mjs]\n        JSON[src/data/projects.json]\n        Sync -->|Fetch & Format| JSON\n        JSON -->|Populate Grid| Projects\n    end\n```\n\n---",
+    "id": 1013762329,
+    "name": "Chat App Web",
+    "originalName": "chat-app-web",
+    "tag": "JavaScript",
+    "desc": "A full-stack, real-time chat application built with Spring Boot, React, and WebSockets (STOMP). Features room-based messaging and persistent chat history using MongoDB.",
+    "architecture": "```mermaid\ngraph TD\n    %% Define Nodes\n    User((User))\n    Frontend[\"Frontend Client\\n(React)\"]\n    BackendREST[\"REST API\\n(Spring Boot /RoomController)\"]\n    BackendWS[\"WebSocket API\\n(Spring Boot /ChatController)\"]\n    Broker((\"In-Memory Broker\\n(STOMP Pub/Sub)\"))\n    Database[(\"MongoDB\\n(Rooms & Messages)\")]\n\n    %% User Interaction\n    User <-->|\"Interacts via Browser\"| Frontend\n\n    %% HTTP / REST Data Flow\n    Frontend -->|\"1. Create/Join Room (HTTP POST/GET)\"| BackendREST\n    Frontend -->|\"2. Fetch Chat History (HTTP GET)\"| BackendREST\n    BackendREST <-->|\"Query / Persist Room Data\"| Database\n\n    %% WebSocket / Real-Time Data Flow\n    Frontend <-->|\"3. Send Message (SockJS/STOMP)\"| BackendWS\n    BackendWS -->|\"4. Append Message to Room\"| Database\n    BackendWS -->|\"5. Route Message via Topic\"| Broker\n    Broker -.->|\"6. Broadcast to Room Subscribers\"| Frontend\n```",
     "stack": [
-      "TypeScript",
-      "Next.js 14",
-      "Tailwind CSS 3",
-      "Framer Motion 11",
-      "Mermaid.js",
-      "React Context API",
-      "GitHub REST API",
-      "Lucide React"
+      "JavaScript"
     ],
-    "tagColor": "#3178c6",
-    "demo": "#",
-    "github": "https://github.com/singhaganesh/Antigravity-IDE-Portfolio",
+    "tagColor": "#f7df1e",
+    "demo": "https://chatapp.ganeshsingha.online/",
+    "github": "https://github.com/singhaganesh/chat-app-web",
     "stars": 0,
     "forks": 0,
-    "updatedAt": "2026-04-14T09:41:28Z"
+    "updatedAt": "2026-04-28T09:15:33Z"
+  },
+  {
+    "id": 1174238235,
+    "name": "Thingsboard Bot",
+    "originalName": "ThingsBoard-Bot",
+    "tag": "Java",
+    "desc": "ThingsBoard AI Assistant is an AI-powered conversational layer designed to sit directly inside a ThingsBoard dashboard.",
+    "architecture": "```mermaid\ngraph TD\n    User((User)) -->|Question| Controller[ChatController]\n    Controller -->|Resolve Intent| Intent[QueryIntentResolver]\n    Intent -->|Match Branch| Index[BranchAliasIndex]\n    Intent -->|Fetch Data| TB[ThingsBoard API]\n    TB -->|Raw JSON| Filter[ContextFilterUtil]\n    Filter -->|Truth Note| Service[ChatService]\n    Service -->|CAG Prompt| OpenAI[OpenAI API]\n    OpenAI -->|Formatted Answer| User\n```\n\n---",
+    "stack": [
+      "Java",
+      "Framework",
+      "Build Tool",
+      "IoT Platform",
+      "LLM Engine",
+      "Memory"
+    ],
+    "tagColor": "#858585",
+    "demo": "#",
+    "github": "https://github.com/singhaganesh/ThingsBoard-Bot",
+    "stars": 0,
+    "forks": 1,
+    "updatedAt": "2026-04-28T04:29:34Z"
   },
   {
     "id": 1157856577,
@@ -44,7 +59,31 @@
     "github": "https://github.com/singhaganesh/EV-Project",
     "stars": 0,
     "forks": 0,
-    "updatedAt": "2026-04-14T07:22:43Z"
+    "updatedAt": "2026-04-25T08:58:53Z"
+  },
+  {
+    "id": 1201007541,
+    "name": "Antigravity Ide Portfolio",
+    "originalName": "Antigravity-IDE-Portfolio",
+    "tag": "TypeScript",
+    "desc": "An interactive, Antigravity-themed developer portfolio built with Next.js 14, TypeScript, and Tailwind CSS. Features a functional file tree, multi-tab navigation, and dynamic GitHub project synchronization.",
+    "architecture": "```mermaid\ngraph TD\n    subgraph \"Workspace Shell (Persistent)\"\n        Layout[src/app/layout.tsx]\n        Context[ActiveFileContext.tsx]\n        Layout -->|Provides State| Context\n    end\n\n    subgraph \"IDE Chrome Components\"\n        TitleBar[TitleBar.tsx]\n        SideBar[Sidebar.tsx]\n        TabBar[TabBar.tsx]\n        AgentPanel[AgentPanel.tsx]\n        StatusBar[StatusBar.tsx]\n    end\n\n    subgraph \"Editor Area (Routed Content)\"\n        Home[page.tsx]\n        Readme[readme/page.tsx]\n        Projects[projects/page.tsx]\n        Skills[skills/page.tsx]\n        Experience[experience/page.tsx]\n    end\n\n    Context --> TitleBar & SideBar & TabBar & AgentPanel & StatusBar\n    Layout -->|Renders Children| EditorArea\n    EditorArea --- Home & Readme & Projects & Skills & Experience\n    \n    subgraph \"Data Services\"\n        Sync[scripts/sync-projects.mjs]\n        JSON[src/data/projects.json]\n        Sync -->|Fetch & Format| JSON\n        JSON -->|Populate Grid| Projects\n    end\n```\n\n---",
+    "stack": [
+      "TypeScript",
+      "Next.js 14",
+      "Tailwind CSS 3",
+      "Framer Motion 11",
+      "Mermaid.js",
+      "React Context API",
+      "GitHub REST API",
+      "Lucide React"
+    ],
+    "tagColor": "#3178c6",
+    "demo": "#",
+    "github": "https://github.com/singhaganesh/Antigravity-IDE-Portfolio",
+    "stars": 0,
+    "forks": 0,
+    "updatedAt": "2026-04-14T11:13:29Z"
   },
   {
     "id": 1138840383,
@@ -67,44 +106,5 @@
     "stars": 0,
     "forks": 0,
     "updatedAt": "2026-04-11T04:55:44Z"
-  },
-  {
-    "id": 1013762329,
-    "name": "Chat App Web",
-    "originalName": "chat-app-web",
-    "tag": "JavaScript",
-    "desc": "A full-stack, real-time chat application built with Spring Boot, React, and WebSockets (STOMP). Features room-based messaging and persistent chat history using MongoDB.",
-    "architecture": "```mermaid\ngraph TD\n    %% Define Nodes\n    User((User))\n    Frontend[\"Frontend Client\\n(React)\"]\n    BackendREST[\"REST API\\n(Spring Boot /RoomController)\"]\n    BackendWS[\"WebSocket API\\n(Spring Boot /ChatController)\"]\n    Broker((\"In-Memory Broker\\n(STOMP Pub/Sub)\"))\n    Database[(\"MongoDB\\n(Rooms & Messages)\")]\n\n    %% User Interaction\n    User <-->|\"Interacts via Browser\"| Frontend\n\n    %% HTTP / REST Data Flow\n    Frontend -->|\"1. Create/Join Room (HTTP POST/GET)\"| BackendREST\n    Frontend -->|\"2. Fetch Chat History (HTTP GET)\"| BackendREST\n    BackendREST <-->|\"Query / Persist Room Data\"| Database\n\n    %% WebSocket / Real-Time Data Flow\n    Frontend <-->|\"3. Send Message (SockJS/STOMP)\"| BackendWS\n    BackendWS -->|\"4. Append Message to Room\"| Database\n    BackendWS -->|\"5. Route Message via Topic\"| Broker\n    Broker -.->|\"6. Broadcast to Room Subscribers\"| Frontend\n```",
-    "stack": [
-      "JavaScript"
-    ],
-    "tagColor": "#f7df1e",
-    "demo": "https://chat-app-web-tan.vercel.app",
-    "github": "https://github.com/singhaganesh/chat-app-web",
-    "stars": 0,
-    "forks": 0,
-    "updatedAt": "2026-04-10T05:34:18Z"
-  },
-  {
-    "id": 1174238235,
-    "name": "Thingsboard Bot",
-    "originalName": "ThingsBoard-Bot",
-    "tag": "Java",
-    "desc": "ThingsBoard AI Assistant is an AI-powered conversational layer designed to sit directly inside a ThingsBoard dashboard.",
-    "architecture": "```mermaid\ngraph TD\n    User((User)) -->|Question| Controller[ChatController]\n    Controller -->|Resolve Intent| Intent[QueryIntentResolver]\n    Intent -->|Match Branch| Index[BranchAliasIndex]\n    Intent -->|Fetch Data| TB[ThingsBoard API]\n    TB -->|Raw JSON| Filter[ContextFilterUtil]\n    Filter -->|Truth Note| Service[ChatService]\n    Service -->|CAG Prompt| OpenAI[OpenAI API]\n    OpenAI -->|Formatted Answer| User\n```\n\n---",
-    "stack": [
-      "Java",
-      "Framework",
-      "Build Tool",
-      "IoT Platform",
-      "LLM Engine",
-      "Memory"
-    ],
-    "tagColor": "#858585",
-    "demo": "#",
-    "github": "https://github.com/singhaganesh/ThingsBoard-Bot",
-    "stars": 0,
-    "forks": 0,
-    "updatedAt": "2026-04-09T08:54:18Z"
   }
 ]
