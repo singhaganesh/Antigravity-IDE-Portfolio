@@ -5,44 +5,21 @@
     "originalName": "ThingsBoard-Bot",
     "tag": "Java",
     "desc": "ThingsBoard AI Assistant is an AI-powered conversational layer designed to sit directly inside a ThingsBoard dashboard.",
-    "architecture": "```mermaid\ngraph TD\n    User((User)) -->|Question| Controller[ChatController]\n    Controller -->|Resolve Intent| Intent[QueryIntentResolver]\n    Intent -->|Match Branch| Index[BranchAliasIndex]\n    Intent -->|Fetch Data| TB[ThingsBoard API]\n    TB -->|Raw JSON| Filter[ContextFilterUtil]\n    Filter -->|Truth Note| Service[ChatService]\n    Service -->|CAG Prompt| OpenAI[OpenAI API]\n    OpenAI -->|Formatted Answer| User\n```\n\n---",
+    "architecture": "```mermaid\ngraph TD\n    User((User Web App)) -->|1. Submit Question + JWT token| ChatController[ChatController]\n    ChatController -->|2. Validate Authorization Scoping| UserDataService[UserDataService]\n    UserDataService -->|Query Scoped Node IDs| Postgres[(PostgreSQL / TimescaleDB)]\n    ChatController -->|3. Route Query Intent| Intent[QueryIntentResolver]\n    Intent -->|4. Resolve Cached State| RedisCache[(Redis State Store)]\n    RedisCache -->|Extract Telemetry / Attributes| SnapshotMapper[BranchSnapshotMapper]\n    SnapshotMapper -->|Inject Verified Context| ChatService[ChatService]\n    ChatService -->|5. Truth-Injected Prompts| OpenAI[OpenAI GPT-4o]\n    OpenAI -->|6. Formatted Markdown + Suggestions| ControllerResponse[Response Handler]\n    ControllerResponse -->|7. Collapsible UI + Quick Chips| User\n```\n\n---",
     "stack": [
       "Java",
       "Framework",
+      "Cache Store",
+      "Queue Broker",
       "Build Tool",
-      "IoT Platform",
-      "LLM Engine",
-      "Memory"
+      "LLM Engine"
     ],
     "tagColor": "#858585",
     "demo": "#",
     "github": "https://github.com/singhaganesh/ThingsBoard-Bot",
     "stars": 0,
     "forks": 1,
-    "updatedAt": "2026-05-29T04:35:44Z"
-  },
-  {
-    "id": 1157856577,
-    "name": "Ev Project",
-    "originalName": "EV-Project",
-    "tag": "Kotlin",
-    "desc": "A comprehensive EV Charging Management System featuring real-time slot booking, live telemetry, and automated payments. Built with Spring Boot, React, and Jetpack Compose",
-    "architecture": "```mermaid\ngraph TD\n    %% Users\n    U_Customer([Customer / End User])\n    U_Owner([Station Owner / Admin])\n\n    %% Frontends\n    subgraph Client Applications\n        MobileApp[Android App<br/>Kotlin / Jetpack Compose]\n        WebApp[Web Dashboard<br/>React / Vite / Redux]\n    end\n\n    %% Backend Infrastructure\n    subgraph Backend Services\n        REST_API[Spring Boot REST API<br/>Java 21]\n        WebSocket[WebSocket Server<br/>STOMP Telemetry]\n    end\n\n    %% Database Layer\n    subgraph Data Persistence\n        Postgres[(PostgreSQL Database<br/>Supabase)]\n    end\n\n    %% External Services\n    subgraph Third-Party Integrations\n        Stripe[Payment Gateways<br/>Stripe & Razorpay]\n        Maps[Mapping Services<br/>Google Maps / Nominatim]\n        SMS[SMS Provider<br/>OTP Auth]\n    end\n\n    %% Define Interactions\n    U_Customer -->|Searches & Books| MobileApp\n    U_Owner -->|Manages Stations| WebApp\n\n    MobileApp <-->|HTTPS / REST + JWT| REST_API\n    WebApp <-->|HTTPS / REST + JWT| REST_API\n    \n    MobileApp <-->|Real-time Charging Status| WebSocket\n    WebApp <-->|Live Slot Updates| WebSocket\n\n    REST_API <-->|JPA / Hibernate| Postgres\n    WebSocket -->|Reads Data| Postgres\n\n    REST_API <-->|Processes Transactions & Webhooks| Stripe\n    REST_API -->|Triggers Login Texts| SMS\n    MobileApp -->|Renders UI Location Data| Maps\n    WebApp -->|Reverse Geocoding| Maps\n```\n\n### Data Flow: Complete Request Lifecycle\n\n```\n1. CLIENT REQUEST\n   Mobile/Web sends: POST /api/bookings\n   Headers: Authorization: Bearer <JWT_TOKEN>\n   Body: { userId, slotId, vehicleType, startTime, endTime }\n\n2. NETWORK LAYER\n   Request → Nginx (reverse proxy) → Spring Boot (8080)\n\n3. SECURITY LAYER\n   JwtRequestFilter:\n   ├─ Extract JWT from Authorization header\n   ├─ JwtUtil.validateToken(token)\n   ├─ Verify signature + expiration\n   ├─ Extract userId + role\n   └─ Set SecurityContext\n\n4. CONTROLLER LAYER\n   BookingController.createBooking(BookingRequest)\n   ├─ Validate @NotNull, @Future annotations\n   └─ Call BookingService\n\n5. SERVICE LAYER (Business Logic)\n   BookingService.createBooking():\n   ├─ Fetch User from database\n   ├─ Fetch ChargerSlot from database\n   ├─ Validate slot is AVAILABLE\n   ├─ Check for overlapping bookings\n   ├─ Verify TRUCK support if needed\n   ├─ Calculate expiresAt = startTime + 15 minutes\n   ├─ Create Booking entity\n   ├─ Update slot.status = BOOKED\n   └─ Call repository.save()\n\n6. REPOSITORY LAYER (Data Access)\n   BookingRepository.save(booking):\n   ├─ JPA generates INSERT SQL\n   └─ Hibernate executes against PostgreSQL\n\n7. DATABASE LAYER\n   PostgreSQL executes:\n   INSERT INTO bookings (...) VALUES (...)\n   UPDATE charger_slots SET status='BOOKED' WHERE id=...\n\n8. RESPONSE BUILD\n   Service returns Booking entity\n   → Controller converts to JSON\n   → Return 201 CREATED with booking details\n\n9. WEBSOCKET BROADCAST\n   WebSocketController.notifySlotStatusChange()\n   └─ @SendTo(\"/topic/slot-updates\")\n      Broadcast to all connected admin dashboards\n\n10. CLIENT RESPONSE\n    Mobile/Web app receives:\n    ├─ Status: 201 CREATED\n    ├─ Body: { id, status, expiresAt, ... }\n    └─ UI updates to show booking confirmed\n\n11. BACKGROUND TASKS\n    @Scheduled (every 60 seconds):\n    BookingService.expireUnstartedBookings()\n    ├─ Find CONFIRMED bookings where now() > expiresAt\n    └─ Set status = EXPIRED, free slot\n```\n\n### External Integrations\n\n**Stripe Payment Gateway**\n- **Purpose:** Secure payment processing\n- **Flow:** Create Intent → Client processes → Webhook updates → DB records payment\n- **Webhook URL:** `POST /api/payments/webhook`\n- **Events:** `payment_intent.succeeded`, `payment_intent.payment_failed`\n\n**SMS OTP Provider**\n- **Purpose:** Two-factor authentication via mobile\n- **Flow:** User requests OTP → SMS sent → User enters OTP → JWT granted\n- **Current Status:** Implementation ready; provider TBD\n\n**WebSocket (STOMP)**\n- **Purpose:** Real-time slot status updates\n- **Endpoint:** `WS /ws`\n- **Subscribe:** `/topic/slot-updates`\n- **Broadcasts:** When slot status changes (BOOKED, CHARGING, AVAILABLE)\n\n---",
-    "stack": [
-      "Kotlin",
-      "Java",
-      "Spring Boot",
-      "Supabase",
-      "Stripe SDK",
-      "Jetpack Compose",
-      "React"
-    ],
-    "tagColor": "#858585",
-    "demo": "#",
-    "github": "https://github.com/singhaganesh/EV-Project",
-    "stars": 0,
-    "forks": 1,
-    "updatedAt": "2026-05-26T10:48:49Z"
+    "updatedAt": "2026-06-01T11:53:38Z"
   },
   {
     "id": 1201007541,
@@ -66,7 +43,30 @@
     "github": "https://github.com/singhaganesh/Antigravity-IDE-Portfolio",
     "stars": 0,
     "forks": 0,
-    "updatedAt": "2026-05-22T04:53:20Z"
+    "updatedAt": "2026-05-29T10:49:30Z"
+  },
+  {
+    "id": 1157856577,
+    "name": "Ev Project",
+    "originalName": "EV-Project",
+    "tag": "Kotlin",
+    "desc": "A comprehensive EV Charging Management System featuring real-time slot booking, live telemetry, and automated payments. Built with Spring Boot, React, and Jetpack Compose",
+    "architecture": "```mermaid\ngraph TD\n    %% Users\n    U_Customer([Customer / End User])\n    U_Owner([Station Owner / Admin])\n\n    %% Frontends\n    subgraph Client Applications\n        MobileApp[Android App<br/>Kotlin / Jetpack Compose]\n        WebApp[Web Dashboard<br/>React / Vite / Redux]\n    end\n\n    %% Backend Infrastructure\n    subgraph Backend Services\n        REST_API[Spring Boot REST API<br/>Java 21]\n        WebSocket[WebSocket Server<br/>STOMP Telemetry]\n    end\n\n    %% Database Layer\n    subgraph Data Persistence\n        Postgres[(PostgreSQL Database<br/>Supabase)]\n    end\n\n    %% External Services\n    subgraph Third-Party Integrations\n        Stripe[Payment Gateways<br/>Stripe & Razorpay]\n        Maps[Mapping Services<br/>Google Maps / Nominatim]\n        SMS[SMS Provider<br/>OTP Auth]\n    end\n\n    %% Define Interactions\n    U_Customer -->|Searches & Books| MobileApp\n    U_Owner -->|Manages Stations| WebApp\n\n    MobileApp <-->|HTTPS / REST + JWT| REST_API\n    WebApp <-->|HTTPS / REST + JWT| REST_API\n    \n    MobileApp <-->|Real-time Charging Status| WebSocket\n    WebApp <-->|Live Slot Updates| WebSocket\n\n    REST_API <-->|JPA / Hibernate| Postgres\n    WebSocket -->|Reads Data| Postgres\n\n    REST_API <-->|Processes Transactions & Webhooks| Stripe\n    REST_API -->|Triggers Login Texts| SMS\n    MobileApp -->|Renders UI Location Data| Maps\n    WebApp -->|Reverse Geocoding| Maps\n```\n\n### Data Flow: Complete Request Lifecycle\n\n```\n1. CLIENT REQUEST\n   Mobile/Web sends: POST /api/bookings\n   Headers: Authorization: Bearer <JWT_TOKEN>\n   Body: { userId, slotId, vehicleType, startTime, endTime }\n\n2. NETWORK LAYER\n   Request → Nginx (reverse proxy) → Spring Boot (8080)\n\n3. SECURITY LAYER\n   JwtRequestFilter:\n   ├─ Extract JWT from Authorization header\n   ├─ JwtUtil.validateToken(token)\n   ├─ Verify signature + expiration\n   ├─ Extract userId + role\n   └─ Set SecurityContext\n\n4. CONTROLLER LAYER\n   BookingController.createBooking(BookingRequest)\n   ├─ Validate @NotNull, @Future annotations\n   └─ Call BookingService\n\n5. SERVICE LAYER (Business Logic)\n   BookingService.createBooking():\n   ├─ Fetch User from database\n   ├─ Fetch ChargerSlot from database\n   ├─ Validate slot is AVAILABLE\n   ├─ Check for overlapping bookings\n   ├─ Verify TRUCK support if needed\n   ├─ Calculate expiresAt = startTime + 15 minutes\n   ├─ Create Booking entity\n   ├─ Update slot.status = BOOKED\n   └─ Call repository.save()\n\n6. REPOSITORY LAYER (Data Access)\n   BookingRepository.save(booking):\n   ├─ JPA generates INSERT SQL\n   └─ Hibernate executes against PostgreSQL\n\n7. DATABASE LAYER\n   PostgreSQL executes:\n   INSERT INTO bookings (...) VALUES (...)\n   UPDATE charger_slots SET status='BOOKED' WHERE id=...\n\n8. RESPONSE BUILD\n   Service returns Booking entity\n   → Controller converts to JSON\n   → Return 201 CREATED with booking details\n\n9. WEBSOCKET BROADCAST\n   WebSocketController.notifySlotStatusChange()\n   └─ @SendTo(\"/topic/slot-updates\")\n      Broadcast to all connected admin dashboards\n\n10. CLIENT RESPONSE\n    Mobile/Web app receives:\n    ├─ Status: 201 CREATED\n    ├─ Body: { id, status, expiresAt, ... }\n    └─ UI updates to show booking confirmed\n\n11. BACKGROUND TASKS\n    @Scheduled (every 60 seconds):\n    BookingService.expireUnstartedBookings()\n    ├─ Find CONFIRMED bookings where now() > expiresAt\n    └─ Set status = EXPIRED, free slot\n```\n\n### External Integrations\n\n**Stripe Payment Gateway**\n- **Purpose:** Secure payment processing\n- **Flow:** Create Intent → Client processes → Webhook updates → DB records payment\n- **Webhook URL:** `POST /api/payments/webhook`\n- **Events:** `payment_intent.succeeded`, `payment_intent.payment_failed`\n\n**SMS OTP Provider**\n- **Purpose:** Two-factor authentication via mobile\n- **Flow:** User requests OTP → SMS sent → User enters OTP → JWT granted\n- **Current Status:** Implementation ready; provider TBD\n\n**WebSocket (STOMP)**\n- **Purpose:** Real-time slot status updates\n- **Endpoint:** `WS /ws`\n- **Subscribe:** `/topic/slot-updates`\n- **Broadcasts:** When slot status changes (BOOKED, CHARGING, AVAILABLE)\n\n---",
+    "stack": [
+      "Kotlin",
+      "Java",
+      "Spring Boot",
+      "Supabase",
+      "Stripe SDK",
+      "Jetpack Compose",
+      "React"
+    ],
+    "tagColor": "#858585",
+    "demo": "#",
+    "github": "https://github.com/singhaganesh/EV-Project",
+    "stars": 0,
+    "forks": 1,
+    "updatedAt": "2026-05-26T10:48:49Z"
   },
   {
     "id": 1013762329,
