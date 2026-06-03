@@ -6,48 +6,22 @@
     "tag": "TypeScript",
     "desc": "An interactive, Antigravity-themed developer portfolio built with Next.js 14, TypeScript, and Tailwind CSS. Features a functional file tree, multi-tab navigation, and dynamic GitHub project synchronization.",
     "architecture": "```mermaid\ngraph TD\n    subgraph \"Workspace Shell (Persistent)\"\n        Layout[src/app/layout.tsx]\n        Context[ActiveFileContext.tsx]\n        Layout -->|Provides State| Context\n    end\n\n    subgraph \"IDE Chrome Components\"\n        TitleBar[TitleBar.tsx]\n        SideBar[Sidebar.tsx]\n        TabBar[TabBar.tsx]\n        AgentPanel[AgentPanel.tsx]\n        StatusBar[StatusBar.tsx]\n    end\n\n    subgraph \"Editor Area (Routed Content)\"\n        Home[page.tsx]\n        Readme[readme/page.tsx]\n        Projects[projects/page.tsx]\n        Skills[skills/page.tsx]\n        Experience[experience/page.tsx]\n    end\n\n    Context --> TitleBar & SideBar & TabBar & AgentPanel & StatusBar\n    Layout -->|Renders Children| EditorArea\n    EditorArea --- Home & Readme & Projects & Skills & Experience\n    \n    subgraph \"Data Services\"\n        Sync[scripts/sync-projects.mjs]\n        JSON[src/data/projects.json]\n        Sync -->|Fetch & Format| JSON\n        JSON -->|Populate Grid| Projects\n    end\n```\n\n---",
-    "stack": {
-      "backend": [
-        "Java 21",
-        "Spring Boot 4.0.3",
-        "Spring Web",
-        "Spring Data JPA",
-        "Spring Data Redis",
-        "Spring AMQP (RabbitMQ)",
-        "JSON Web Tokens (JWT) / Local Parsing"
-      ],
-      "frontend": [
-        "React",
-        "TypeScript",
-        "Vite",
-        "Tailwind CSS v4",
-        "HTML5 Canvas / HTML5 Web APIs (postMessage)",
-        "CSS3 Keyframe Animations"
-      ],
-      "databases_caching": [
-        "PostgreSQL / TimescaleDB (Time-series data archiving)",
-        "Redis (Real-time state and node counter cache)"
-      ],
-      "integration_ai": [
-        "ThingsBoard REST APIs",
-        "OpenAI API (GPT Models for NLP queries)",
-        "RabbitMQ (Asynchronous event queues)"
-      ],
-      "devops_infrastructure": [
-        "Docker",
-        "Docker Compose (Multi-container orchestration)",
-        "Caddy Server (Automatic Let's Encrypt SSL/HTTPS reverse proxy)",
-        "AWS EC2 Instance",
-        "nip.io (Wildcard DNS configuration)",
-        "Maven"
-      ]
-    },
+    "stack": [
+      "TypeScript",
+      "Next.js 14",
+      "Tailwind CSS 3",
+      "Framer Motion 11",
+      "Mermaid.js",
+      "React Context API",
+      "GitHub REST API",
+      "Lucide React"
+    ],
     "tagColor": "#3178c6",
     "demo": "#",
     "github": "https://github.com/singhaganesh/Antigravity-IDE-Portfolio",
     "stars": 0,
     "forks": 0,
-    "updatedAt": "2026-06-03T10:40:40Z"
+    "updatedAt": "2026-06-03T10:55:52Z"
   },
   {
     "id": 1250125683,
@@ -56,42 +30,17 @@
     "tag": "Kotlin",
     "desc": "A lightweight EV charging station finder system featuring a native Jetpack Compose Android client and a Spring Boot backend integrated with Open Charge Map  (OCM) and Supabase PostgreSQL.",
     "architecture": "### Data Flow Diagram\n\n```mermaid\ngraph TD\n    subgraph Android Application\n        UI[Jetpack Compose Views]\n        VM[StationViewModel]\n        Repo[StationRepository]\n        Retro[RetrofitClient]\n        Prefs[SharedPreferences]\n        \n        UI <-->|State/Intent| VM\n        VM <-->|Fetch| Repo\n        Repo <-->|Call| Retro\n        UI <-->|Read/Write| Prefs\n    end\n    \n    subgraph Backend Service\n        Ctrl[StationController]\n        Svc[StationService]\n        Import[StationImportService]\n        JPA[Spring Data Repositories]\n        Sync[StationSyncJob]\n        Seed[DataSeeder]\n        RedisConfig[RedisConfig]\n        \n        Ctrl <-->|Request/Response| Svc\n        Svc <-->|JPA| JPA\n        Import <-->|JPA| JPA\n        Sync -->|Trigger Sync| Import\n        Seed -->|Startup Seed| Import\n    end\n    \n    subgraph External & Database\n        DB[(Supabase PostgreSQL)]\n        Redis[(Upstash Redis Cache)]\n        OCM[OpenChargeMap API]\n    end\n    \n    Retro <-->|HTTP REST| Ctrl\n    Svc <-->|Read/Write Cache| Redis\n    JPA <-->|JDBC/Hibernate| DB\n    Import <-->|HTTP REST| OCM\n```\n\n### Complete Query Request Lifecycle (Android to Database)\n\n```\n1. MAP CAMERA POSITION CHANGE\n   → User pans/zooms map in android app\n   → MapTabScreen registers cameraState.isMoving == false\n   → Calls StationViewModel.fetchNearbyStationsDebounced(LatLng, zoom)\n\n2. DEBOUNCE FILTERING\n   → ViewModel cancels previous search jobs\n   → Waits 1.5s (debounce threshold)\n   → Checks if coordinates moved > 500m from last fetched location\n   → Calculates search radius (e.g., Zoom 12 = 15km)\n\n3. API INITIATION\n   → ViewModel triggers Retrofit client: GET /api/stations/nearby?lat=...&lng=...&radius=...\n   → Request goes over HTTP to Spring Boot (port 8081)\n\n4. BACKEND BUSINESS LOGIC\n   → StationController handles getNearbyStations()\n   → StationService calculates bounding box lat/lng deltas based on radius\n   → Service calls StationRepository.findStationsInViewport(swLat, neLat, swLng, neLng)\n   \n5. DATABASE FETCHING & SCORING\n   → PostgreSQL executes spatial bounding box query\n   → StationService computes exact Haversine distance from user to each returned station\n   → StationService queries ChargerSlotRepository for count & slot availability\n   → Result is compiled into StationWithScore DTOs, sorted by distance, and returned\n\n6. RENDER\n   → Android App parses JSON response\n   → ViewModel updates _uiState to StationUiState.Success(stations)\n   → Compose updates MapTabScreen markers and ListScreen rows\n```\n\n---",
-    "stack": {
-      "backend": [
-        "Java 21",
-        "Spring Boot 4.0.3",
-        "Spring Web",
-        "Spring Data JPA",
-        "Spring Data Redis",
-        "Spring AMQP (RabbitMQ)",
-        "JSON Web Tokens (JWT) / Local Parsing"
-      ],
-      "frontend": [
-        "React",
-        "TypeScript",
-        "Vite",
-        "Tailwind CSS v4",
-        "HTML5 Canvas / HTML5 Web APIs (postMessage)",
-        "CSS3 Keyframe Animations"
-      ],
-      "databases_caching": [
-        "PostgreSQL / TimescaleDB (Time-series data archiving)",
-        "Redis (Real-time state and node counter cache)"
-      ],
-      "integration_ai": [
-        "ThingsBoard REST APIs",
-        "OpenAI API (GPT Models for NLP queries)",
-        "RabbitMQ (Asynchronous event queues)"
-      ],
-      "devops_infrastructure": [
-        "Docker",
-        "Docker Compose (Multi-container orchestration)",
-        "Caddy Server (Automatic Let's Encrypt SSL/HTTPS reverse proxy)",
-        "AWS EC2 Instance",
-        "nip.io (Wildcard DNS configuration)",
-        "Maven"
-      ]
-    },
+    "stack": [
+      "Kotlin",
+      "Spring Boot",
+      "Jetpack Compose",
+      "Supabase",
+      "Upstash Redis",
+      "OpenChargeMap API",
+      "Retrofit",
+      "Gradle",
+      "Google Maps API"
+    ],
     "tagColor": "#858585",
     "demo": "#",
     "github": "https://github.com/singhaganesh/EV-Station-Finder",
@@ -159,37 +108,48 @@
     "stack": {
       "backend": [
         "Java 21",
-        "Spring Boot 4.0.3",
+        "Spring Boot 3.3.5",
         "Spring Web",
         "Spring Data JPA",
-        "Spring Data Redis",
-        "Spring AMQP (RabbitMQ)",
-        "JSON Web Tokens (JWT) / Local Parsing"
+        "Spring Security (Stateless JWT authentication)",
+        "Spring WebSocket (STOMP real-time telemetry messaging)",
+        "JSON Web Tokens (JJWT 0.12.5) / Token generation & local parsing",
+        "Spring Task Scheduler (@Scheduled for booking expiration management)"
       ],
       "frontend": [
-        "React",
-        "TypeScript",
-        "Vite",
-        "Tailwind CSS v4",
-        "HTML5 Canvas / HTML5 Web APIs (postMessage)",
-        "CSS3 Keyframe Animations"
+        "React 19",
+        "Vite 6.1.0",
+        "Redux Toolkit (State Management)",
+        "React Router DOM v7",
+        "Material UI (MUI v7)",
+        "Tailwind CSS v4 (with @tailwindcss/vite)",
+        "Leaflet / React Leaflet (Interactive map viewport rendering)",
+        "Recharts (Dynamic revenue and utilization graph dashboard)",
+        "Framer Motion (Micro-animations)",
+        "Axios (HTTP client with auto-logout response interceptors)",
+        "React Hot Toast (Notification alerts)"
+      ],
+      "mobile": [
+        "Kotlin",
+        "Jetpack Compose (Declarative UI framework)",
+        "Retrofit 2 (REST API integration)",
+        "OkHttp WebSockets (STOMP telemetry client)",
+        "Jetpack DataStore (Encrypted local preference storage)",
+        "Custom Claymorphism Canvas Modifiers (Outer/Inner shadow & highlight renders)"
       ],
       "databases_caching": [
-        "PostgreSQL / TimescaleDB (Time-series data archiving)",
-        "Redis (Real-time state and node counter cache)"
+        "PostgreSQL (Relational database with spatial lat/lng index)",
+        "Supabase (Cloud database hosting)"
       ],
-      "integration_ai": [
-        "ThingsBoard REST APIs",
-        "OpenAI API (GPT Models for NLP queries)",
-        "RabbitMQ (Asynchronous event queues)"
+      "integration_gateways": [
+        "Stripe Java SDK (PCI-compliant payment intent gateway)",
+        "Razorpay SDK (Payment processing & signature verification)"
       ],
       "devops_infrastructure": [
         "Docker",
-        "Docker Compose (Multi-container orchestration)",
-        "Caddy Server (Automatic Let's Encrypt SSL/HTTPS reverse proxy)",
-        "AWS EC2 Instance",
-        "nip.io (Wildcard DNS configuration)",
-        "Maven"
+        "Docker Compose (Multi-container local database setup)",
+        "Maven (Dependency management & build automation)",
+        "Git & GitHub Actions"
       ]
     },
     "tagColor": "#858585",
@@ -206,42 +166,9 @@
     "tag": "JavaScript",
     "desc": "A full-stack, real-time chat application built with Spring Boot, React, and WebSockets (STOMP). Features room-based messaging and persistent chat history using MongoDB.",
     "architecture": "```mermaid\ngraph TD\n    %% Define Nodes\n    User((User))\n    Frontend[\"Frontend Client\\n(React)\"]\n    BackendREST[\"REST API\\n(Spring Boot /RoomController)\"]\n    BackendWS[\"WebSocket API\\n(Spring Boot /ChatController)\"]\n    Broker((\"In-Memory Broker\\n(STOMP Pub/Sub)\"))\n    Database[(\"MongoDB\\n(Rooms & Messages)\")]\n\n    %% User Interaction\n    User <-->|\"Interacts via Browser\"| Frontend\n\n    %% HTTP / REST Data Flow\n    Frontend -->|\"1. Create/Join Room (HTTP POST/GET)\"| BackendREST\n    Frontend -->|\"2. Fetch Chat History (HTTP GET)\"| BackendREST\n    BackendREST <-->|\"Query / Persist Room Data\"| Database\n\n    %% WebSocket / Real-Time Data Flow\n    Frontend <-->|\"3. Send Message (SockJS/STOMP)\"| BackendWS\n    BackendWS -->|\"4. Append Message to Room\"| Database\n    BackendWS -->|\"5. Route Message via Topic\"| Broker\n    Broker -.->|\"6. Broadcast to Room Subscribers\"| Frontend\n```",
-    "stack": {
-      "backend": [
-        "Java 21",
-        "Spring Boot 4.0.3",
-        "Spring Web",
-        "Spring Data JPA",
-        "Spring Data Redis",
-        "Spring AMQP (RabbitMQ)",
-        "JSON Web Tokens (JWT) / Local Parsing"
-      ],
-      "frontend": [
-        "React",
-        "TypeScript",
-        "Vite",
-        "Tailwind CSS v4",
-        "HTML5 Canvas / HTML5 Web APIs (postMessage)",
-        "CSS3 Keyframe Animations"
-      ],
-      "databases_caching": [
-        "PostgreSQL / TimescaleDB (Time-series data archiving)",
-        "Redis (Real-time state and node counter cache)"
-      ],
-      "integration_ai": [
-        "ThingsBoard REST APIs",
-        "OpenAI API (GPT Models for NLP queries)",
-        "RabbitMQ (Asynchronous event queues)"
-      ],
-      "devops_infrastructure": [
-        "Docker",
-        "Docker Compose (Multi-container orchestration)",
-        "Caddy Server (Automatic Let's Encrypt SSL/HTTPS reverse proxy)",
-        "AWS EC2 Instance",
-        "nip.io (Wildcard DNS configuration)",
-        "Maven"
-      ]
-    },
+    "stack": [
+      "JavaScript"
+    ],
     "tagColor": "#f7df1e",
     "demo": "https://chatapp.ganeshsingha.online/",
     "github": "https://github.com/singhaganesh/chat-app-web",
@@ -256,42 +183,14 @@
     "tag": "JavaScript",
     "desc": "A full-stack, multi-role e-commerce platform built with Spring Boot and React 19. Features secure JWT authentication, role-based dashboards (User, Seller, Admin), and a modern Tailwind CSS frontend.",
     "architecture": "```mermaid\ngraph TD\n    subgraph Clients\n        U[User / Customer]\n        S[Seller]\n        A[Admin]\n    end\n\n    subgraph \"Frontend (React + Vite)\"\n        UI[User Interface / React Router]\n        State[Redux Toolkit State]\n        Axios[Axios HTTP Client]\n        \n        UI <--> State\n        UI <--> Axios\n    end\n\n    subgraph \"Backend (Spring Boot)\"\n        Auth[Spring Security + JWT Filter]\n        Controllers[REST Controllers]\n        Services[Business Logic Layer]\n        Repositories[Spring Data JPA]\n        \n        Auth -->|Validated Requests| Controllers\n        Controllers -->|DTOs| Services\n        Services -->|Entities| Repositories\n    end\n\n    subgraph \"Storage & Services\"\n        DB[(PostgreSQL / MySQL)]\n        Cloud[Cloudinary / File Storage]\n    end\n\n    %% Client to Frontend\n    U -->|Browses / Shops| UI\n    S -->|Manages Inventory| UI\n    A -->|System Admin| UI\n\n    %% Frontend to Backend\n    Axios <-->|REST API Calls w/ Bearer Token| Auth\n\n    %% Backend to Storage\n    Repositories <-->|SQL Queries| DB\n    Services -->|Uploads Media| Cloud\n```\n---",
-    "stack": {
-      "backend": [
-        "Java 21",
-        "Spring Boot 4.0.3",
-        "Spring Web",
-        "Spring Data JPA",
-        "Spring Data Redis",
-        "Spring AMQP (RabbitMQ)",
-        "JSON Web Tokens (JWT) / Local Parsing"
-      ],
-      "frontend": [
-        "React",
-        "TypeScript",
-        "Vite",
-        "Tailwind CSS v4",
-        "HTML5 Canvas / HTML5 Web APIs (postMessage)",
-        "CSS3 Keyframe Animations"
-      ],
-      "databases_caching": [
-        "PostgreSQL / TimescaleDB (Time-series data archiving)",
-        "Redis (Real-time state and node counter cache)"
-      ],
-      "integration_ai": [
-        "ThingsBoard REST APIs",
-        "OpenAI API (GPT Models for NLP queries)",
-        "RabbitMQ (Asynchronous event queues)"
-      ],
-      "devops_infrastructure": [
-        "Docker",
-        "Docker Compose (Multi-container orchestration)",
-        "Caddy Server (Automatic Let's Encrypt SSL/HTTPS reverse proxy)",
-        "AWS EC2 Instance",
-        "nip.io (Wildcard DNS configuration)",
-        "Maven"
-      ]
-    },
+    "stack": [
+      "JavaScript",
+      "Spring Boot",
+      "Spring Security",
+      "PostgreSQL",
+      "React 19",
+      "Redux Toolkit"
+    ],
     "tagColor": "#f7df1e",
     "demo": "#",
     "github": "https://github.com/singhaganesh/Ecommerce-Web",
