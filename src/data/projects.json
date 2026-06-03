@@ -6,22 +6,40 @@
     "tag": "TypeScript",
     "desc": "An interactive, Antigravity-themed developer portfolio built with Next.js 14, TypeScript, and Tailwind CSS. Features a functional file tree, multi-tab navigation, and dynamic GitHub project synchronization.",
     "architecture": "```mermaid\ngraph TD\n    subgraph \"Workspace Shell (Persistent)\"\n        Layout[src/app/layout.tsx]\n        Context[ActiveFileContext.tsx]\n        Layout -->|Provides State| Context\n    end\n\n    subgraph \"IDE Chrome Components\"\n        TitleBar[TitleBar.tsx]\n        SideBar[Sidebar.tsx]\n        TabBar[TabBar.tsx]\n        AgentPanel[AgentPanel.tsx]\n        StatusBar[StatusBar.tsx]\n    end\n\n    subgraph \"Editor Area (Routed Content)\"\n        Home[page.tsx]\n        Readme[readme/page.tsx]\n        Projects[projects/page.tsx]\n        Skills[skills/page.tsx]\n        Experience[experience/page.tsx]\n    end\n\n    Context --> TitleBar & SideBar & TabBar & AgentPanel & StatusBar\n    Layout -->|Renders Children| EditorArea\n    EditorArea --- Home & Readme & Projects & Skills & Experience\n    \n    subgraph \"Data Services\"\n        Sync[scripts/sync-projects.mjs]\n        JSON[src/data/projects.json]\n        Sync -->|Fetch & Format| JSON\n        JSON -->|Populate Grid| Projects\n    end\n```\n\n---",
-    "stack": [
-      "TypeScript",
-      "Next.js 14",
-      "Tailwind CSS 3",
-      "Framer Motion 11",
-      "Mermaid.js",
-      "React Context API",
-      "GitHub REST API",
-      "Lucide React"
-    ],
+    "stack": {
+      "backend": [
+        "Python 3.10+ (Core graph compilation & analysis engine)",
+        "Tree-sitter (Multi-language Abstract Syntax Tree - AST parsing)",
+        "ReScript / TypeScript (MCP wrapper client-side logic)",
+        "Git CLI Hooks Integration (Incremental auto-indexing on commit/push events)"
+      ],
+      "frontend": [
+        "HTML5 Canvas & SVG (Interactive codebase dependency maps)",
+        "Tailwind CSS (Visual graph dashboard styling)",
+        "Vis.js / D3.js (Interactive call-graph node link visualization panels)"
+      ],
+      "databases_caching": [
+        "SQLite (Local-first database storing indexed file hashes, calls, and nodes)",
+        "In-Memory Cache (Fast call-resolution lookups)"
+      ],
+      "integration_ai": [
+        "Model Context Protocol (MCP) JSON-RPC 2.0 Spec (For AI client communications)",
+        "Claude Code Integration Hooks",
+        "Cursor / Windsurf AI Assistant Tool Definitions"
+      ],
+      "devops_infrastructure": [
+        "Pipx / Pip (Python package installer)",
+        "npm / Node.js (ReScript compiler and runtime wrapper)",
+        "Git (Local version control tracking changes and branches)",
+        "Docker (Optional containerized MCP server environments)"
+      ]
+    },
     "tagColor": "#3178c6",
     "demo": "#",
     "github": "https://github.com/singhaganesh/Antigravity-IDE-Portfolio",
     "stars": 0,
     "forks": 0,
-    "updatedAt": "2026-06-03T10:55:52Z"
+    "updatedAt": "2026-06-03T11:20:00Z"
   },
   {
     "id": 1250125683,
@@ -30,17 +48,39 @@
     "tag": "Kotlin",
     "desc": "A lightweight EV charging station finder system featuring a native Jetpack Compose Android client and a Spring Boot backend integrated with Open Charge Map  (OCM) and Supabase PostgreSQL.",
     "architecture": "### Data Flow Diagram\n\n```mermaid\ngraph TD\n    subgraph Android Application\n        UI[Jetpack Compose Views]\n        VM[StationViewModel]\n        Repo[StationRepository]\n        Retro[RetrofitClient]\n        Prefs[SharedPreferences]\n        \n        UI <-->|State/Intent| VM\n        VM <-->|Fetch| Repo\n        Repo <-->|Call| Retro\n        UI <-->|Read/Write| Prefs\n    end\n    \n    subgraph Backend Service\n        Ctrl[StationController]\n        Svc[StationService]\n        Import[StationImportService]\n        JPA[Spring Data Repositories]\n        Sync[StationSyncJob]\n        Seed[DataSeeder]\n        RedisConfig[RedisConfig]\n        \n        Ctrl <-->|Request/Response| Svc\n        Svc <-->|JPA| JPA\n        Import <-->|JPA| JPA\n        Sync -->|Trigger Sync| Import\n        Seed -->|Startup Seed| Import\n    end\n    \n    subgraph External & Database\n        DB[(Supabase PostgreSQL)]\n        Redis[(Upstash Redis Cache)]\n        OCM[OpenChargeMap API]\n    end\n    \n    Retro <-->|HTTP REST| Ctrl\n    Svc <-->|Read/Write Cache| Redis\n    JPA <-->|JDBC/Hibernate| DB\n    Import <-->|HTTP REST| OCM\n```\n\n### Complete Query Request Lifecycle (Android to Database)\n\n```\n1. MAP CAMERA POSITION CHANGE\n   → User pans/zooms map in android app\n   → MapTabScreen registers cameraState.isMoving == false\n   → Calls StationViewModel.fetchNearbyStationsDebounced(LatLng, zoom)\n\n2. DEBOUNCE FILTERING\n   → ViewModel cancels previous search jobs\n   → Waits 1.5s (debounce threshold)\n   → Checks if coordinates moved > 500m from last fetched location\n   → Calculates search radius (e.g., Zoom 12 = 15km)\n\n3. API INITIATION\n   → ViewModel triggers Retrofit client: GET /api/stations/nearby?lat=...&lng=...&radius=...\n   → Request goes over HTTP to Spring Boot (port 8081)\n\n4. BACKEND BUSINESS LOGIC\n   → StationController handles getNearbyStations()\n   → StationService calculates bounding box lat/lng deltas based on radius\n   → Service calls StationRepository.findStationsInViewport(swLat, neLat, swLng, neLng)\n   \n5. DATABASE FETCHING & SCORING\n   → PostgreSQL executes spatial bounding box query\n   → StationService computes exact Haversine distance from user to each returned station\n   → StationService queries ChargerSlotRepository for count & slot availability\n   → Result is compiled into StationWithScore DTOs, sorted by distance, and returned\n\n6. RENDER\n   → Android App parses JSON response\n   → ViewModel updates _uiState to StationUiState.Success(stations)\n   → Compose updates MapTabScreen markers and ListScreen rows\n```\n\n---",
-    "stack": [
-      "Kotlin",
-      "Spring Boot",
-      "Jetpack Compose",
-      "Supabase",
-      "Upstash Redis",
-      "OpenChargeMap API",
-      "Retrofit",
-      "Gradle",
-      "Google Maps API"
-    ],
+    "stack": {
+      "backend": [
+        "Java 21",
+        "Spring Boot 3.3.5",
+        "Spring Web (RESTful API Development)",
+        "Spring Data JPA (Object-Relational Mapping / Data Access)",
+        "Spring Data Redis (Client connectivity & caching framework)",
+        "Lombok (Boilerplate code reduction)",
+        "RestTemplate (Client-side HTTP request execution)"
+      ],
+      "frontend": [
+        "Kotlin",
+        "Jetpack Compose (Modern declarative UI toolkit)",
+        "Google Maps Compose Library (Map visualization & custom teardrop pins)",
+        "Jetpack Navigation Compose (Multi-screen routing & Navigation Host)",
+        "Retrofit & OkHttp (Type-safe REST API client and network logging interceptors)",
+        "Material Design 3 (Modern UI styles, colors, and layout components)",
+        "Kotlin Coroutines & Flow (Reactive programming, StateFlow, & background tasks)"
+      ],
+      "databases_caching": [
+        "Supabase PostgreSQL (Managed cloud database storing station records, slot details, and user reviews)",
+        "Upstash Redis (Serverless cloud Redis for geocoding coordinates and caching optimized route plans)"
+      ],
+      "integration_ai": [
+        "OSRM (Open Source Routing Machine) API (Generates driving route coordinates and step distances)",
+        "Nominatim (OpenStreetMap) API (Geocodes street addresses into latitude and longitude coordinates)"
+      ],
+      "devops_infrastructure": [
+        "Maven (Java backend build tool & dependency management)",
+        "Gradle (Android project compilation and build automation)",
+        "Git (Distributed version control)"
+      ]
+    },
     "tagColor": "#858585",
     "demo": "#",
     "github": "https://github.com/singhaganesh/EV-Station-Finder",
@@ -183,14 +223,43 @@
     "tag": "JavaScript",
     "desc": "A full-stack, multi-role e-commerce platform built with Spring Boot and React 19. Features secure JWT authentication, role-based dashboards (User, Seller, Admin), and a modern Tailwind CSS frontend.",
     "architecture": "```mermaid\ngraph TD\n    subgraph Clients\n        U[User / Customer]\n        S[Seller]\n        A[Admin]\n    end\n\n    subgraph \"Frontend (React + Vite)\"\n        UI[User Interface / React Router]\n        State[Redux Toolkit State]\n        Axios[Axios HTTP Client]\n        \n        UI <--> State\n        UI <--> Axios\n    end\n\n    subgraph \"Backend (Spring Boot)\"\n        Auth[Spring Security + JWT Filter]\n        Controllers[REST Controllers]\n        Services[Business Logic Layer]\n        Repositories[Spring Data JPA]\n        \n        Auth -->|Validated Requests| Controllers\n        Controllers -->|DTOs| Services\n        Services -->|Entities| Repositories\n    end\n\n    subgraph \"Storage & Services\"\n        DB[(PostgreSQL / MySQL)]\n        Cloud[Cloudinary / File Storage]\n    end\n\n    %% Client to Frontend\n    U -->|Browses / Shops| UI\n    S -->|Manages Inventory| UI\n    A -->|System Admin| UI\n\n    %% Frontend to Backend\n    Axios <-->|REST API Calls w/ Bearer Token| Auth\n\n    %% Backend to Storage\n    Repositories <-->|SQL Queries| DB\n    Services -->|Uploads Media| Cloud\n```\n---",
-    "stack": [
-      "JavaScript",
-      "Spring Boot",
-      "Spring Security",
-      "PostgreSQL",
-      "React 19",
-      "Redux Toolkit"
-    ],
+    "stack": {
+      "backend": [
+        "Java 21",
+        "Spring Boot 3.4.3",
+        "Spring Web (REST API MVC)",
+        "Spring Security (Stateless Authorization)",
+        "Spring Data JPA (Hibernate ORM)",
+        "JSON Web Tokens (JJWT 0.12.6)",
+        "Hibernate Validator (Jakarta Validation)",
+        "Spring Boot Actuator",
+        "ModelMapper"
+      ],
+      "frontend": [
+        "React 19 (Functional Components & Hooks)",
+        "Vite 7 (Build Tool)",
+        "Redux Toolkit (Global Store Management)",
+        "Tailwind CSS v4 (Utility-first Styling)",
+        "Material UI (MUI v7) / Headless UI (Sleek components)",
+        "Framer Motion (Smooth UI micro-animations and transitions)",
+        "React Router DOM v7 (Declarative Client-side Routing)",
+        "Axios (Interceptors for stateless JWT injection)"
+      ],
+      "databases_caching": [
+        "PostgreSQL (Primary persistent relational database)",
+        "MySQL (Runtime database driver support)",
+        "H2 Database (In-memory testing and development database)",
+        "HTML5 Web Storage (LocalStorage for client-side session state & persistent cart cache)"
+      ],
+      "integration_ai": [
+        "Cloudinary REST API (Direct multi-image uploads & asset optimization from frontend)"
+      ],
+      "devops_infrastructure": [
+        "Maven (Java Build and Dependency Manager)",
+        "npm / Node.js (Frontend Package Manager)",
+        "Git (Version Control System)"
+      ]
+    },
     "tagColor": "#f7df1e",
     "demo": "#",
     "github": "https://github.com/singhaganesh/Ecommerce-Web",
