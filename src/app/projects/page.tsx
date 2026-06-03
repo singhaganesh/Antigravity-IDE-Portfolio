@@ -16,7 +16,7 @@ interface Project {
   tag: string;
   desc: string;
   architecture: string | null;
-  stack: string[];
+  stack: string[] | Record<string, string[]>;
   tagColor: string;
   demo: string;
   github: string;
@@ -147,12 +147,35 @@ const ProjectsPage = () => {
                   </section>
 
                   <section>
-                    <h3 className="text-text-cyan text-[14px] font-mono font-bold mb-4 flex items-center gap-2"><span className="opacity-50">#</span> TECH_STACK</h3>
-                    <div className="flex flex-wrap gap-3">
-                      {selectedProject.stack.map((tech) => (
-                        <span key={tech} className="bg-bg-sidebar text-text-primary text-[13px] font-mono px-4 py-2 border border-border-color rounded-md hover:border-[#00e5cc] transition-colors cursor-default">{tech}</span>
-                      ))}
-                    </div>
+                    <h3 className="text-text-cyan text-[14px] font-mono font-bold mb-4 flex items-center gap-2">
+                      <span className="opacity-50">#</span> TECH_STACK
+                    </h3>
+                    {Array.isArray(selectedProject.stack) ? (
+                      <div className="flex flex-wrap gap-3">
+                        {selectedProject.stack.map((tech) => (
+                          <span key={tech} className="bg-bg-sidebar text-text-primary text-[13px] font-mono px-4 py-2 border border-border-color rounded-md hover:border-[#00e5cc] transition-colors cursor-default">
+                            {tech}
+                          </span>
+                        ))}
+                      </div>
+                    ) : (
+                      <div className="space-y-6">
+                        {Object.entries(selectedProject.stack).map(([category, items]) => (
+                          <div key={category} className="space-y-2">
+                            <h4 className="text-[#ffb86c] text-[11px] font-mono font-bold uppercase tracking-[0.15em]">
+                              {category.replace('_', ' & ')}
+                            </h4>
+                            <div className="flex flex-wrap gap-2">
+                              {(items as string[]).map((tech) => (
+                                <span key={tech} className="bg-bg-sidebar text-text-primary text-[12px] font-mono px-3.5 py-1.5 border border-border-color rounded-md hover:border-[#00e5cc] transition-colors cursor-default">
+                                  {tech}
+                                </span>
+                              ))}
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    )}
                   </section>
 
                   <div className="flex flex-wrap gap-4 pt-6">

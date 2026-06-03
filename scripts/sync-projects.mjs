@@ -142,7 +142,10 @@ async function fetchProjects() {
         const existingProj = existingProjects.find(p => p.originalName === repo.name);
         let finalStack;
 
-        if (existingProj && existingProj.stack && existingProj.stack.length > 0) {
+        const hasExistingStack = existingProj && existingProj.stack && 
+          (Array.isArray(existingProj.stack) ? existingProj.stack.length > 0 : Object.keys(existingProj.stack).length > 0);
+
+        if (hasExistingStack) {
           // Preserve manually specified/edited tech stacks
           finalStack = existingProj.stack;
           console.log(`  -> Preserving existing manual tech stack for ${repo.name}`);
