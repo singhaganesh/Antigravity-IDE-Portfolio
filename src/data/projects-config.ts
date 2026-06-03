@@ -9,5 +9,7 @@ export const PROJECT_ORDER = [
   "Ecommerce-Web",
   "chat-cpp-web",
   "ThingsBoard-Bot",
+  "EV-Station-Finder",
+  "EV-Station-Finder",
   // Add other repo names in order...
 ];

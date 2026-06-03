@@ -113,6 +113,14 @@ async function getTechStack(repoName) {
 async function fetchProjects() {
   console.log(`Fetching repositories for ${USERNAME}...`);
   try {
+    let existingProjects = [];
+    try {
+      const data = await fs.readFile(OUTPUT_FILE, 'utf-8');
+      existingProjects = JSON.parse(data);
+    } catch (err) {
+      // Ignore if file doesn't exist yet or is invalid
+    }
+
     const response = await fetch(
       `https://api.github.com/users/${USERNAME}/repos?sort=updated&per_page=100&type=public`
     );
@@ -130,17 +138,24 @@ async function fetchProjects() {
         console.log(`Processing ${repo.name}...`);
         
         const architecture = await getArchitecture(repo.name);
-        const readmeStack = await getTechStack(repo.name);
         
-        // Merge primary language with README stack and topics
-        const combinedStack = [
-          repo.language,
-          ...readmeStack,
-          ...(repo.topics || []).filter(t => t !== 'portfolio')
-        ].filter(Boolean);
+        const existingProj = existingProjects.find(p => p.originalName === repo.name);
+        let finalStack;
 
-        // Deduplicate and limit to top 10 items
-        const finalStack = [...new Set(combinedStack)].slice(0, 10);
+        if (existingProj && existingProj.stack && existingProj.stack.length > 0) {
+          // Preserve manually specified/edited tech stacks
+          finalStack = existingProj.stack;
+          console.log(`  -> Preserving existing manual tech stack for ${repo.name}`);
+        } else {
+          // Otherwise build the stack from README and topics
+          const readmeStack = await getTechStack(repo.name);
+          const combinedStack = [
+            repo.language,
+            ...readmeStack,
+            ...(repo.topics || []).filter(t => t !== 'portfolio')
+          ].filter(Boolean);
+          finalStack = [...new Set(combinedStack)].slice(0, 10);
+        }
         
         projects.push({
           id: repo.id,

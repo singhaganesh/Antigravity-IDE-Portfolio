@@ -1,5 +1,31 @@
 [
   {
+    "id": 1250125683,
+    "name": "Ev Station Finder",
+    "originalName": "EV-Station-Finder",
+    "tag": "Kotlin",
+    "desc": "A lightweight EV charging station finder system featuring a native Jetpack Compose Android client and a Spring Boot backend integrated with Open Charge Map  (OCM) and Supabase PostgreSQL.",
+    "architecture": "### Data Flow Diagram\n\n```mermaid\ngraph TD\n    subgraph Android Application\n        UI[Jetpack Compose Views]\n        VM[StationViewModel]\n        Repo[StationRepository]\n        Retro[RetrofitClient]\n        Prefs[SharedPreferences]\n        \n        UI <-->|State/Intent| VM\n        VM <-->|Fetch| Repo\n        Repo <-->|Call| Retro\n        UI <-->|Read/Write| Prefs\n    end\n    \n    subgraph Backend Service\n        Ctrl[StationController]\n        Svc[StationService]\n        Import[StationImportService]\n        JPA[Spring Data Repositories]\n        Sync[StationSyncJob]\n        Seed[DataSeeder]\n        RedisConfig[RedisConfig]\n        \n        Ctrl <-->|Request/Response| Svc\n        Svc <-->|JPA| JPA\n        Import <-->|JPA| JPA\n        Sync -->|Trigger Sync| Import\n        Seed -->|Startup Seed| Import\n    end\n    \n    subgraph External & Database\n        DB[(Supabase PostgreSQL)]\n        Redis[(Upstash Redis Cache)]\n        OCM[OpenChargeMap API]\n    end\n    \n    Retro <-->|HTTP REST| Ctrl\n    Svc <-->|Read/Write Cache| Redis\n    JPA <-->|JDBC/Hibernate| DB\n    Import <-->|HTTP REST| OCM\n```\n\n### Complete Query Request Lifecycle (Android to Database)\n\n```\n1. MAP CAMERA POSITION CHANGE\n   → User pans/zooms map in android app\n   → MapTabScreen registers cameraState.isMoving == false\n   → Calls StationViewModel.fetchNearbyStationsDebounced(LatLng, zoom)\n\n2. DEBOUNCE FILTERING\n   → ViewModel cancels previous search jobs\n   → Waits 1.5s (debounce threshold)\n   → Checks if coordinates moved > 500m from last fetched location\n   → Calculates search radius (e.g., Zoom 12 = 15km)\n\n3. API INITIATION\n   → ViewModel triggers Retrofit client: GET /api/stations/nearby?lat=...&lng=...&radius=...\n   → Request goes over HTTP to Spring Boot (port 8081)\n\n4. BACKEND BUSINESS LOGIC\n   → StationController handles getNearbyStations()\n   → StationService calculates bounding box lat/lng deltas based on radius\n   → Service calls StationRepository.findStationsInViewport(swLat, neLat, swLng, neLng)\n   \n5. DATABASE FETCHING & SCORING\n   → PostgreSQL executes spatial bounding box query\n   → StationService computes exact Haversine distance from user to each returned station\n   → StationService queries ChargerSlotRepository for count & slot availability\n   → Result is compiled into StationWithScore DTOs, sorted by distance, and returned\n\n6. RENDER\n   → Android App parses JSON response\n   → ViewModel updates _uiState to StationUiState.Success(stations)\n   → Compose updates MapTabScreen markers and ListScreen rows\n```\n\n---",
+    "stack": [
+      "Kotlin",
+      "Language & Runtime",
+      "Build Tool",
+      "Caching Layer",
+      "Libraries",
+      "Client Communication",
+      "Language",
+      "UI Framework",
+      "Maps Engine",
+      "Networking"
+    ],
+    "tagColor": "#858585",
+    "demo": "#",
+    "github": "https://github.com/singhaganesh/EV-Station-Finder",
+    "stars": 0,
+    "forks": 1,
+    "updatedAt": "2026-06-03T10:17:25Z"
+  },
+  {
     "id": 1174238235,
     "name": "Thingsboard Bot",
     "originalName": "ThingsBoard-Bot",
@@ -19,7 +45,7 @@
     "github": "https://github.com/singhaganesh/ThingsBoard-Bot",
     "stars": 0,
     "forks": 1,
-    "updatedAt": "2026-06-01T11:53:38Z"
+    "updatedAt": "2026-06-03T08:21:27Z"
   },
   {
     "id": 1201007541,
@@ -43,7 +69,7 @@
     "github": "https://github.com/singhaganesh/Antigravity-IDE-Portfolio",
     "stars": 0,
     "forks": 0,
-    "updatedAt": "2026-05-29T10:49:30Z"
+    "updatedAt": "2026-06-01T11:57:03Z"
   },
   {
     "id": 1157856577,
