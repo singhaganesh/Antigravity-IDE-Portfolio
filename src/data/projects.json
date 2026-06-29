@@ -1,53 +1,11 @@
 [
   {
-    "id": 1201007541,
-    "name": "Antigravity Ide Portfolio",
-    "originalName": "Antigravity-IDE-Portfolio",
-    "tag": "TypeScript",
-    "desc": "An interactive, Antigravity-themed developer portfolio built with Next.js 14, TypeScript, and Tailwind CSS. Features a functional file tree, multi-tab navigation, and dynamic GitHub project synchronization.",
-    "architecture": "```mermaid\ngraph TD\n    subgraph \"Workspace Shell (Persistent)\"\n        Layout[src/app/layout.tsx]\n        Context[ActiveFileContext.tsx]\n        Layout -->|Provides State| Context\n    end\n\n    subgraph \"IDE Chrome Components\"\n        TitleBar[TitleBar.tsx]\n        SideBar[Sidebar.tsx]\n        TabBar[TabBar.tsx]\n        AgentPanel[AgentPanel.tsx]\n        StatusBar[StatusBar.tsx]\n    end\n\n    subgraph \"Editor Area (Routed Content)\"\n        Home[page.tsx]\n        Readme[readme/page.tsx]\n        Projects[projects/page.tsx]\n        Skills[skills/page.tsx]\n        Experience[experience/page.tsx]\n    end\n\n    Context --> TitleBar & SideBar & TabBar & AgentPanel & StatusBar\n    Layout -->|Renders Children| EditorArea\n    EditorArea --- Home & Readme & Projects & Skills & Experience\n    \n    subgraph \"Data Services\"\n        Sync[scripts/sync-projects.mjs]\n        JSON[src/data/projects.json]\n        Sync -->|Fetch & Format| JSON\n        JSON -->|Populate Grid| Projects\n    end\n```\n\n---",
-    "stack": {
-      "backend": [
-        "Python 3.10+ (Core graph compilation & analysis engine)",
-        "Tree-sitter (Multi-language Abstract Syntax Tree - AST parsing)",
-        "ReScript / TypeScript (MCP wrapper client-side logic)",
-        "Git CLI Hooks Integration (Incremental auto-indexing on commit/push events)"
-      ],
-      "frontend": [
-        "HTML5 Canvas & SVG (Interactive codebase dependency maps)",
-        "Tailwind CSS (Visual graph dashboard styling)",
-        "Vis.js / D3.js (Interactive call-graph node link visualization panels)"
-      ],
-      "databases_caching": [
-        "SQLite (Local-first database storing indexed file hashes, calls, and nodes)",
-        "In-Memory Cache (Fast call-resolution lookups)"
-      ],
-      "integration_ai": [
-        "Model Context Protocol (MCP) JSON-RPC 2.0 Spec (For AI client communications)",
-        "Claude Code Integration Hooks",
-        "Cursor / Windsurf AI Assistant Tool Definitions"
-      ],
-      "devops_infrastructure": [
-        "Pipx / Pip (Python package installer)",
-        "npm / Node.js (ReScript compiler and runtime wrapper)",
-        "Git (Local version control tracking changes and branches)",
-        "Docker (Optional containerized MCP server environments)"
-      ]
-    },
-    "tagColor": "#3178c6",
-    "demo": "#",
-    "github": "https://github.com/singhaganesh/Antigravity-IDE-Portfolio",
-    "stars": 0,
-    "forks": 0,
-    "updatedAt": "2026-06-29T08:31:34Z"
-  },
-  {
     "id": 1174238235,
     "name": "Thingsboard Bot",
     "originalName": "ThingsBoard-Bot",
     "tag": "Java",
     "desc": "ThingsBoard AI Assistant is an AI-powered conversational layer designed to sit directly inside a ThingsBoard dashboard.",
-    "architecture": "```\n┌──────────────────────────────────────────────────────────────────────┐\n│  ThingsBoard Dashboard                                                │\n│  ┌───────────────────────────────────────────────────────────────┐   │\n│  │  HTML Widget  (iframe → React Chat UI)                        │   │\n│  │  postMessage sends JWT + host on load (origin-validated)      │   │\n│  └────────────────────────┬──────────────────────────────────────┘   │\n└───────────────────────────│──────────────────────────────────────────┘\n                            │  HTTPS / SSE\n                     ┌──────▼──────────────────┐\n                     │   Caddy Reverse Proxy    │  flush_interval -1 (SSE)\n                     │   (TLS + security hdrs)  │\n                     └──────┬──────────────────┘\n                            │\n          ┌─────────────────▼──────────────────┐\n          │         Spring Boot App             │\n          │  ┌──────────────────────────────┐  │\n          │  │ ChatController               │  │  profile: chat\n          │  │  → JWT decode (+ optional    │  │\n          │  │    signature verify)         │  │\n          │  │  → customer mapping          │  │\n          │  │  → QueryIntentResolver       │  │\n          │  │  → BranchSnapshotMapper      │  │\n          │  │  → ChatService → OpenAI      │  │\n          │  └──────────────────────────────┘  │\n          │  ┌──────────────────────────────┐  │\n          │  │ EventConsumerService         │  │  profile: consumer\n          │  │  → idempotency check (Redis) │  │\n          │  │  → TimescaleDB write         │  │\n          │  │  → Redis state update        │  │\n          │  │  → idempotency mark AFTER    │  │\n          │  └──────────────────────────────┘  │\n          │  ┌──────────────────────────────┐  │\n          │  │ WebhookController            │  │  profile: ingestion\n          │  │  → HMAC verify               │  │\n          │  │  → timestamp skew check      │  │\n          │  │  → publish to RabbitMQ       │  │\n          │  └──────────────────────────────┘  │\n          └───────┬───────────────────┬─────────┘\n                  │                   │\n         ┌────────▼───────┐  ┌────────▼──────────────┐\n         │  Redis (Upstash)│  │  TimescaleDB (Cloud)  │\n         │  device state  │  │  device_events         │\n         │  + replay lock │  │  hierarchy_nodes       │\n         └────────────────┘  │  branch_ancestor_paths │\n                             └───────────────────────┘\n                  │\n         ┌────────▼──────────┐\n         │  RabbitMQ          │\n         │  iot.events        │\n         │  iot.dlx (DLX)     │\n         │  iot.events.dlq    │\n         └────────────────────┘\n```\n\n---",
+    "architecture": "```mermaid\ngraph TD\n    subgraph ClientLayer [\"Client Layer\"]\n        TB[\"ThingsBoard Dashboard\"]\n        UI[\"React Chat UI (Iframe)\"]\n        TB -->|postMessage: JWT & Host| UI\n    end\n\n    subgraph ProxyLayer [\"Proxy Layer\"]\n        Caddy[\"Caddy Reverse Proxy\"]\n        UI -->|HTTPS / SSE| Caddy\n    end\n\n    subgraph SpringApp [\"Spring Boot Application\"]\n        subgraph ChatProfile [\"Profile: chat\"]\n            CC[\"ChatController\"]\n            QIR[\"QueryIntentResolver\"]\n            BSM[\"BranchSnapshotMapper\"]\n            CS[\"ChatService\"]\n            OAI[\"OpenAI (GPT-4o)\"]\n            \n            CC --> QIR\n            CC --> BSM\n            CC --> CS\n            CS --> OAI\n        end\n\n        subgraph IngestionProfile [\"Profile: ingestion\"]\n            WC[\"WebhookController\"]\n        end\n\n        subgraph ConsumerProfile [\"Profile: consumer\"]\n            ECS[\"EventConsumerService\"]\n        end\n    end\n\n    Caddy -->|Flushes SSE| CC\n    TB -->|Real-time Webhook Events| WC\n\n    subgraph BrokerLayer [\"Messaging Layer\"]\n        RMQ[\"RabbitMQ Broker\"]\n        Queue[\"Queue: iot.events\"]\n        DLQ[\"Queue: iot.events.dlq (DLQ)\"]\n        RMQ --> Queue\n        RMQ --> DLQ\n    end\n\n    WC -->|Publish Events| RMQ\n    Queue -->|Consume Events| ECS\n\n    subgraph StorageLayer [\"Database & Cache Layer\"]\n        Redis[(\"Redis - Upstash: Device State & Replay Lock\")]\n        Timescale[(\"TimescaleDB - Cloud: Event & Hierarchy Store\")]\n    end\n\n    ECS -->|1. Idempotency Check| Redis\n    ECS -->|2. Write Time-series| Timescale\n    ECS -->|3. Update Active State| Redis\n    ECS -->|4. Mark Ingested| Redis\n\n    CC -->|Read Live State| Redis\n    CC -->|Read Historical/Hierarchy| Timescale\n```\n\n---",
     "stack": {
       "backend": [
         "Java 21",
@@ -89,7 +47,49 @@
     "github": "https://github.com/singhaganesh/ThingsBoard-Bot",
     "stars": 0,
     "forks": 2,
-    "updatedAt": "2026-06-29T04:17:44Z"
+    "updatedAt": "2026-06-29T11:32:21Z"
+  },
+  {
+    "id": 1201007541,
+    "name": "Antigravity Ide Portfolio",
+    "originalName": "Antigravity-IDE-Portfolio",
+    "tag": "TypeScript",
+    "desc": "An interactive, Antigravity-themed developer portfolio built with Next.js 14, TypeScript, and Tailwind CSS. Features a functional file tree, multi-tab navigation, and dynamic GitHub project synchronization.",
+    "architecture": "```mermaid\ngraph TD\n    subgraph \"Workspace Shell (Persistent)\"\n        Layout[src/app/layout.tsx]\n        Context[ActiveFileContext.tsx]\n        Layout -->|Provides State| Context\n    end\n\n    subgraph \"IDE Chrome Components\"\n        TitleBar[TitleBar.tsx]\n        SideBar[Sidebar.tsx]\n        TabBar[TabBar.tsx]\n        AgentPanel[AgentPanel.tsx]\n        StatusBar[StatusBar.tsx]\n    end\n\n    subgraph \"Editor Area (Routed Content)\"\n        Home[page.tsx]\n        Readme[readme/page.tsx]\n        Projects[projects/page.tsx]\n        Skills[skills/page.tsx]\n        Experience[experience/page.tsx]\n    end\n\n    Context --> TitleBar & SideBar & TabBar & AgentPanel & StatusBar\n    Layout -->|Renders Children| EditorArea\n    EditorArea --- Home & Readme & Projects & Skills & Experience\n    \n    subgraph \"Data Services\"\n        Sync[scripts/sync-projects.mjs]\n        JSON[src/data/projects.json]\n        Sync -->|Fetch & Format| JSON\n        JSON -->|Populate Grid| Projects\n    end\n```\n\n---",
+    "stack": {
+      "backend": [
+        "Python 3.10+ (Core graph compilation & analysis engine)",
+        "Tree-sitter (Multi-language Abstract Syntax Tree - AST parsing)",
+        "ReScript / TypeScript (MCP wrapper client-side logic)",
+        "Git CLI Hooks Integration (Incremental auto-indexing on commit/push events)"
+      ],
+      "frontend": [
+        "HTML5 Canvas & SVG (Interactive codebase dependency maps)",
+        "Tailwind CSS (Visual graph dashboard styling)",
+        "Vis.js / D3.js (Interactive call-graph node link visualization panels)"
+      ],
+      "databases_caching": [
+        "SQLite (Local-first database storing indexed file hashes, calls, and nodes)",
+        "In-Memory Cache (Fast call-resolution lookups)"
+      ],
+      "integration_ai": [
+        "Model Context Protocol (MCP) JSON-RPC 2.0 Spec (For AI client communications)",
+        "Claude Code Integration Hooks",
+        "Cursor / Windsurf AI Assistant Tool Definitions"
+      ],
+      "devops_infrastructure": [
+        "Pipx / Pip (Python package installer)",
+        "npm / Node.js (ReScript compiler and runtime wrapper)",
+        "Git (Local version control tracking changes and branches)",
+        "Docker (Optional containerized MCP server environments)"
+      ]
+    },
+    "tagColor": "#3178c6",
+    "demo": "#",
+    "github": "https://github.com/singhaganesh/Antigravity-IDE-Portfolio",
+    "stars": 0,
+    "forks": 0,
+    "updatedAt": "2026-06-29T08:47:52Z"
   },
   {
     "id": 1157856577,
