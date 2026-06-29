@@ -39,54 +39,7 @@
     "github": "https://github.com/singhaganesh/Antigravity-IDE-Portfolio",
     "stars": 0,
     "forks": 0,
-    "updatedAt": "2026-06-03T11:20:00Z"
-  },
-  {
-    "id": 1250125683,
-    "name": "Ev Station Finder",
-    "originalName": "EV-Station-Finder",
-    "tag": "Kotlin",
-    "desc": "A lightweight EV charging station finder system featuring a native Jetpack Compose Android client and a Spring Boot backend integrated with Open Charge Map  (OCM) and Supabase PostgreSQL.",
-    "architecture": "### Data Flow Diagram\n\n```mermaid\ngraph TD\n    subgraph Android Application\n        UI[Jetpack Compose Views]\n        VM[StationViewModel]\n        Repo[StationRepository]\n        Retro[RetrofitClient]\n        Prefs[SharedPreferences]\n        \n        UI <-->|State/Intent| VM\n        VM <-->|Fetch| Repo\n        Repo <-->|Call| Retro\n        UI <-->|Read/Write| Prefs\n    end\n    \n    subgraph Backend Service\n        Ctrl[StationController]\n        Svc[StationService]\n        Import[StationImportService]\n        JPA[Spring Data Repositories]\n        Sync[StationSyncJob]\n        Seed[DataSeeder]\n        RedisConfig[RedisConfig]\n        \n        Ctrl <-->|Request/Response| Svc\n        Svc <-->|JPA| JPA\n        Import <-->|JPA| JPA\n        Sync -->|Trigger Sync| Import\n        Seed -->|Startup Seed| Import\n    end\n    \n    subgraph External & Database\n        DB[(Supabase PostgreSQL)]\n        Redis[(Upstash Redis Cache)]\n        OCM[OpenChargeMap API]\n    end\n    \n    Retro <-->|HTTP REST| Ctrl\n    Svc <-->|Read/Write Cache| Redis\n    JPA <-->|JDBC/Hibernate| DB\n    Import <-->|HTTP REST| OCM\n```\n\n### Complete Query Request Lifecycle (Android to Database)\n\n```\n1. MAP CAMERA POSITION CHANGE\n   → User pans/zooms map in android app\n   → MapTabScreen registers cameraState.isMoving == false\n   → Calls StationViewModel.fetchNearbyStationsDebounced(LatLng, zoom)\n\n2. DEBOUNCE FILTERING\n   → ViewModel cancels previous search jobs\n   → Waits 1.5s (debounce threshold)\n   → Checks if coordinates moved > 500m from last fetched location\n   → Calculates search radius (e.g., Zoom 12 = 15km)\n\n3. API INITIATION\n   → ViewModel triggers Retrofit client: GET /api/stations/nearby?lat=...&lng=...&radius=...\n   → Request goes over HTTP to Spring Boot (port 8081)\n\n4. BACKEND BUSINESS LOGIC\n   → StationController handles getNearbyStations()\n   → StationService calculates bounding box lat/lng deltas based on radius\n   → Service calls StationRepository.findStationsInViewport(swLat, neLat, swLng, neLng)\n   \n5. DATABASE FETCHING & SCORING\n   → PostgreSQL executes spatial bounding box query\n   → StationService computes exact Haversine distance from user to each returned station\n   → StationService queries ChargerSlotRepository for count & slot availability\n   → Result is compiled into StationWithScore DTOs, sorted by distance, and returned\n\n6. RENDER\n   → Android App parses JSON response\n   → ViewModel updates _uiState to StationUiState.Success(stations)\n   → Compose updates MapTabScreen markers and ListScreen rows\n```\n\n---",
-    "stack": {
-      "backend": [
-        "Java 21",
-        "Spring Boot 3.3.5",
-        "Spring Web (RESTful API Development)",
-        "Spring Data JPA (Object-Relational Mapping / Data Access)",
-        "Spring Data Redis (Client connectivity & caching framework)",
-        "Lombok (Boilerplate code reduction)",
-        "RestTemplate (Client-side HTTP request execution)"
-      ],
-      "frontend": [
-        "Kotlin",
-        "Jetpack Compose (Modern declarative UI toolkit)",
-        "Google Maps Compose Library (Map visualization & custom teardrop pins)",
-        "Jetpack Navigation Compose (Multi-screen routing & Navigation Host)",
-        "Retrofit & OkHttp (Type-safe REST API client and network logging interceptors)",
-        "Material Design 3 (Modern UI styles, colors, and layout components)",
-        "Kotlin Coroutines & Flow (Reactive programming, StateFlow, & background tasks)"
-      ],
-      "databases_caching": [
-        "Supabase PostgreSQL (Managed cloud database storing station records, slot details, and user reviews)",
-        "Upstash Redis (Serverless cloud Redis for geocoding coordinates and caching optimized route plans)"
-      ],
-      "integration_ai": [
-        "OSRM (Open Source Routing Machine) API (Generates driving route coordinates and step distances)",
-        "Nominatim (OpenStreetMap) API (Geocodes street addresses into latitude and longitude coordinates)"
-      ],
-      "devops_infrastructure": [
-        "Maven (Java backend build tool & dependency management)",
-        "Gradle (Android project compilation and build automation)",
-        "Git (Distributed version control)"
-      ]
-    },
-    "tagColor": "#858585",
-    "demo": "#",
-    "github": "https://github.com/singhaganesh/EV-Station-Finder",
-    "stars": 0,
-    "forks": 1,
-    "updatedAt": "2026-06-03T10:17:25Z"
+    "updatedAt": "2026-06-29T08:31:34Z"
   },
   {
     "id": 1174238235,
@@ -94,7 +47,7 @@
     "originalName": "ThingsBoard-Bot",
     "tag": "Java",
     "desc": "ThingsBoard AI Assistant is an AI-powered conversational layer designed to sit directly inside a ThingsBoard dashboard.",
-    "architecture": "```mermaid\ngraph TD\n    User((User Web App)) -->|1. Submit Question + JWT token| ChatController[ChatController]\n    ChatController -->|2. Validate Authorization Scoping| UserDataService[UserDataService]\n    UserDataService -->|Query Scoped Node IDs| Postgres[(PostgreSQL / TimescaleDB)]\n    ChatController -->|3. Route Query Intent| Intent[QueryIntentResolver]\n    Intent -->|4. Resolve Cached State| RedisCache[(Redis State Store)]\n    RedisCache -->|Extract Telemetry / Attributes| SnapshotMapper[BranchSnapshotMapper]\n    SnapshotMapper -->|Inject Verified Context| ChatService[ChatService]\n    ChatService -->|5. Truth-Injected Prompts| OpenAI[OpenAI GPT-4o]\n    OpenAI -->|6. Formatted Markdown + Suggestions| ControllerResponse[Response Handler]\n    ControllerResponse -->|7. Collapsible UI + Quick Chips| User\n```\n\n---",
+    "architecture": "```\n┌──────────────────────────────────────────────────────────────────────┐\n│  ThingsBoard Dashboard                                                │\n│  ┌───────────────────────────────────────────────────────────────┐   │\n│  │  HTML Widget  (iframe → React Chat UI)                        │   │\n│  │  postMessage sends JWT + host on load (origin-validated)      │   │\n│  └────────────────────────┬──────────────────────────────────────┘   │\n└───────────────────────────│──────────────────────────────────────────┘\n                            │  HTTPS / SSE\n                     ┌──────▼──────────────────┐\n                     │   Caddy Reverse Proxy    │  flush_interval -1 (SSE)\n                     │   (TLS + security hdrs)  │\n                     └──────┬──────────────────┘\n                            │\n          ┌─────────────────▼──────────────────┐\n          │         Spring Boot App             │\n          │  ┌──────────────────────────────┐  │\n          │  │ ChatController               │  │  profile: chat\n          │  │  → JWT decode (+ optional    │  │\n          │  │    signature verify)         │  │\n          │  │  → customer mapping          │  │\n          │  │  → QueryIntentResolver       │  │\n          │  │  → BranchSnapshotMapper      │  │\n          │  │  → ChatService → OpenAI      │  │\n          │  └──────────────────────────────┘  │\n          │  ┌──────────────────────────────┐  │\n          │  │ EventConsumerService         │  │  profile: consumer\n          │  │  → idempotency check (Redis) │  │\n          │  │  → TimescaleDB write         │  │\n          │  │  → Redis state update        │  │\n          │  │  → idempotency mark AFTER    │  │\n          │  └──────────────────────────────┘  │\n          │  ┌──────────────────────────────┐  │\n          │  │ WebhookController            │  │  profile: ingestion\n          │  │  → HMAC verify               │  │\n          │  │  → timestamp skew check      │  │\n          │  │  → publish to RabbitMQ       │  │\n          │  └──────────────────────────────┘  │\n          └───────┬───────────────────┬─────────┘\n                  │                   │\n         ┌────────▼───────┐  ┌────────▼──────────────┐\n         │  Redis (Upstash)│  │  TimescaleDB (Cloud)  │\n         │  device state  │  │  device_events         │\n         │  + replay lock │  │  hierarchy_nodes       │\n         └────────────────┘  │  branch_ancestor_paths │\n                             └───────────────────────┘\n                  │\n         ┌────────▼──────────┐\n         │  RabbitMQ          │\n         │  iot.events        │\n         │  iot.dlx (DLX)     │\n         │  iot.events.dlq    │\n         └────────────────────┘\n```\n\n---",
     "stack": {
       "backend": [
         "Java 21",
@@ -135,8 +88,8 @@
     "demo": "#",
     "github": "https://github.com/singhaganesh/ThingsBoard-Bot",
     "stars": 0,
-    "forks": 1,
-    "updatedAt": "2026-06-03T08:21:27Z"
+    "forks": 2,
+    "updatedAt": "2026-06-29T04:17:44Z"
   },
   {
     "id": 1157856577,
@@ -144,7 +97,7 @@
     "originalName": "EV-Project",
     "tag": "Kotlin",
     "desc": "A comprehensive EV Charging Management System featuring real-time slot booking, live telemetry, and automated payments. Built with Spring Boot, React, and Jetpack Compose",
-    "architecture": "```mermaid\ngraph TD\n    %% Users\n    U_Customer([Customer / End User])\n    U_Owner([Station Owner / Admin])\n\n    %% Frontends\n    subgraph Client Applications\n        MobileApp[Android App<br/>Kotlin / Jetpack Compose]\n        WebApp[Web Dashboard<br/>React / Vite / Redux]\n    end\n\n    %% Backend Infrastructure\n    subgraph Backend Services\n        REST_API[Spring Boot REST API<br/>Java 21]\n        WebSocket[WebSocket Server<br/>STOMP Telemetry]\n    end\n\n    %% Database Layer\n    subgraph Data Persistence\n        Postgres[(PostgreSQL Database<br/>Supabase)]\n    end\n\n    %% External Services\n    subgraph Third-Party Integrations\n        Stripe[Payment Gateways<br/>Stripe & Razorpay]\n        Maps[Mapping Services<br/>Google Maps / Nominatim]\n        SMS[SMS Provider<br/>OTP Auth]\n    end\n\n    %% Define Interactions\n    U_Customer -->|Searches & Books| MobileApp\n    U_Owner -->|Manages Stations| WebApp\n\n    MobileApp <-->|HTTPS / REST + JWT| REST_API\n    WebApp <-->|HTTPS / REST + JWT| REST_API\n    \n    MobileApp <-->|Real-time Charging Status| WebSocket\n    WebApp <-->|Live Slot Updates| WebSocket\n\n    REST_API <-->|JPA / Hibernate| Postgres\n    WebSocket -->|Reads Data| Postgres\n\n    REST_API <-->|Processes Transactions & Webhooks| Stripe\n    REST_API -->|Triggers Login Texts| SMS\n    MobileApp -->|Renders UI Location Data| Maps\n    WebApp -->|Reverse Geocoding| Maps\n```\n\n### Data Flow: Complete Request Lifecycle\n\n```\n1. CLIENT REQUEST\n   Mobile/Web sends: POST /api/bookings\n   Headers: Authorization: Bearer <JWT_TOKEN>\n   Body: { userId, slotId, vehicleType, startTime, endTime }\n\n2. NETWORK LAYER\n   Request → Nginx (reverse proxy) → Spring Boot (8080)\n\n3. SECURITY LAYER\n   JwtRequestFilter:\n   ├─ Extract JWT from Authorization header\n   ├─ JwtUtil.validateToken(token)\n   ├─ Verify signature + expiration\n   ├─ Extract userId + role\n   └─ Set SecurityContext\n\n4. CONTROLLER LAYER\n   BookingController.createBooking(BookingRequest)\n   ├─ Validate @NotNull, @Future annotations\n   └─ Call BookingService\n\n5. SERVICE LAYER (Business Logic)\n   BookingService.createBooking():\n   ├─ Fetch User from database\n   ├─ Fetch ChargerSlot from database\n   ├─ Validate slot is AVAILABLE\n   ├─ Check for overlapping bookings\n   ├─ Verify TRUCK support if needed\n   ├─ Calculate expiresAt = startTime + 15 minutes\n   ├─ Create Booking entity\n   ├─ Update slot.status = BOOKED\n   └─ Call repository.save()\n\n6. REPOSITORY LAYER (Data Access)\n   BookingRepository.save(booking):\n   ├─ JPA generates INSERT SQL\n   └─ Hibernate executes against PostgreSQL\n\n7. DATABASE LAYER\n   PostgreSQL executes:\n   INSERT INTO bookings (...) VALUES (...)\n   UPDATE charger_slots SET status='BOOKED' WHERE id=...\n\n8. RESPONSE BUILD\n   Service returns Booking entity\n   → Controller converts to JSON\n   → Return 201 CREATED with booking details\n\n9. WEBSOCKET BROADCAST\n   WebSocketController.notifySlotStatusChange()\n   └─ @SendTo(\"/topic/slot-updates\")\n      Broadcast to all connected admin dashboards\n\n10. CLIENT RESPONSE\n    Mobile/Web app receives:\n    ├─ Status: 201 CREATED\n    ├─ Body: { id, status, expiresAt, ... }\n    └─ UI updates to show booking confirmed\n\n11. BACKGROUND TASKS\n    @Scheduled (every 60 seconds):\n    BookingService.expireUnstartedBookings()\n    ├─ Find CONFIRMED bookings where now() > expiresAt\n    └─ Set status = EXPIRED, free slot\n```\n\n### External Integrations\n\n**Stripe Payment Gateway**\n- **Purpose:** Secure payment processing\n- **Flow:** Create Intent → Client processes → Webhook updates → DB records payment\n- **Webhook URL:** `POST /api/payments/webhook`\n- **Events:** `payment_intent.succeeded`, `payment_intent.payment_failed`\n\n**SMS OTP Provider**\n- **Purpose:** Two-factor authentication via mobile\n- **Flow:** User requests OTP → SMS sent → User enters OTP → JWT granted\n- **Current Status:** Implementation ready; provider TBD\n\n**WebSocket (STOMP)**\n- **Purpose:** Real-time slot status updates\n- **Endpoint:** `WS /ws`\n- **Subscribe:** `/topic/slot-updates`\n- **Broadcasts:** When slot status changes (BOOKED, CHARGING, AVAILABLE)\n\n---",
+    "architecture": "```mermaid\ngraph TD\n    %% Users\n    U_Customer([Customer / End User])\n    U_Owner([Station Owner / Admin])\n\n    %% Frontends\n    subgraph Client Applications\n        MobileApp[Android App<br/>Kotlin / Jetpack Compose]\n        WebApp[Web Dashboard<br/>React / Vite / Redux]\n    end\n\n    %% Backend Infrastructure\n    subgraph Backend Services\n        REST_API[Spring Boot REST API<br/>Java 21]\n        WebSocket[WebSocket Server<br/>STOMP Telemetry]\n    end\n\n    %% Database Layer\n    subgraph Data Persistence\n        Postgres[(PostgreSQL Database<br/>Supabase)]\n    end\n\n    %% External Services\n    subgraph Third-Party Integrations\n        Razorpay[Payment Gateway<br/>Razorpay]\n        Maps[Mapping Services<br/>Google Maps / Nominatim]\n        SMS[SMS Provider<br/>Customer OTP Auth]\n        Email[Gmail SMTP<br/>Owner OTP / MFA]\n        Redis[(Redis / Upstash<br/>OTP + temp tokens)]\n        Storage[Supabase Storage<br/>Business Documents]\n    end\n\n    %% Define Interactions\n    U_Customer -->|Searches & Books| MobileApp\n    U_Owner -->|Manages Stations| WebApp\n\n    MobileApp <-->|HTTPS / REST + JWT| REST_API\n    WebApp <-->|HTTPS / REST + JWT| REST_API\n    \n    MobileApp <-->|Real-time Charging Status| WebSocket\n    WebApp <-->|Live Slot Updates| WebSocket\n\n    REST_API <-->|JPA / Hibernate| Postgres\n    WebSocket -->|Reads Data| Postgres\n\n    REST_API <-->|Creates Orders & Verifies Signatures| Razorpay\n    REST_API -->|Triggers Customer Login Texts| SMS\n    REST_API -->|Sends Owner OTP / MFA Emails| Email\n    REST_API <-->|Stores OTP + Temp Tokens TTL| Redis\n    REST_API -->|Uploads Owner Documents| Storage\n    MobileApp -->|Renders UI Location Data| Maps\n    WebApp -->|Reverse Geocoding| Maps\n```\n\n### Data Flow: Complete Request Lifecycle\n\n```\n1. CLIENT REQUEST\n   Mobile/Web sends: POST /api/bookings\n   Headers: Authorization: Bearer <JWT_TOKEN>\n   Body: { userId, slotId, vehicleType, startTime, endTime }\n\n2. NETWORK LAYER\n   Request → Nginx (reverse proxy) → Spring Boot (8080)\n\n3. SECURITY LAYER\n   JwtRequestFilter:\n   ├─ Extract JWT from Authorization header\n   ├─ JwtUtil.validateToken(token)\n   ├─ Verify signature + expiration\n   ├─ Extract userId + role\n   └─ Set SecurityContext\n\n4. CONTROLLER LAYER\n   BookingController.createBooking(BookingRequest)\n   ├─ Validate @NotNull, @Future annotations\n   └─ Call BookingService\n\n5. SERVICE LAYER (Business Logic)\n   BookingService.createBooking():\n   ├─ Fetch User from database\n   ├─ Fetch ChargerSlot from database\n   ├─ Validate slot is AVAILABLE\n   ├─ Check for overlapping bookings\n   ├─ Verify TRUCK support if needed\n   ├─ Calculate expiresAt = startTime + 15 minutes\n   ├─ Create Booking entity\n   ├─ Update slot.status = BOOKED\n   └─ Call repository.save()\n\n6. REPOSITORY LAYER (Data Access)\n   BookingRepository.save(booking):\n   ├─ JPA generates INSERT SQL\n   └─ Hibernate executes against PostgreSQL\n\n7. DATABASE LAYER\n   PostgreSQL executes:\n   INSERT INTO bookings (...) VALUES (...)\n   UPDATE charger_slots SET status='BOOKED' WHERE id=...\n\n8. RESPONSE BUILD\n   Service returns Booking entity\n   → Controller converts to JSON\n   → Return 201 CREATED with booking details\n\n9. WEBSOCKET BROADCAST\n   WebSocketController.notifySlotStatusChange()\n   └─ @SendTo(\"/topic/slot-updates\")\n      Broadcast to all connected admin dashboards\n\n10. CLIENT RESPONSE\n    Mobile/Web app receives:\n    ├─ Status: 201 CREATED\n    ├─ Body: { id, status, expiresAt, ... }\n    └─ UI updates to show booking confirmed\n\n11. BACKGROUND TASKS\n    @Scheduled (every 60 seconds):\n    BookingService.expireUnstartedBookings()\n    ├─ Find CONFIRMED bookings where now() > expiresAt\n    └─ Set status = EXPIRED, free slot\n```\n\n### External Integrations\n\n**Razorpay Payment Gateway**\n- **Purpose:** Secure payment processing\n- **Flow:** Session stops → backend creates a Razorpay **order** (`razorpayOrderId` returned to the client) → client completes payment in the Razorpay checkout → client calls `POST /api/payments/verify` → backend verifies the HMAC-SHA256 signature, marks the session `PAID`, releases the slot, and records the `Payment`\n- **Verify endpoint:** `POST /api/payments/verify` (idempotent — duplicate calls return success without re-writing)\n- **No webhook:** confirmation is signature-verified on the client-initiated verify call, not via a server callback\n\n**SMS OTP Provider**\n- **Purpose:** Customer authentication via mobile\n- **Flow:** User requests OTP → SMS sent → User enters OTP → JWT granted\n- **Current Status:** Implementation ready; provider TBD\n\n**Gmail SMTP (Email OTP)**\n- **Purpose:** Owner email verification + MFA login codes\n- **Flow:** Backend generates a 6-digit OTP → `EmailService` sends via Gmail SMTP (App Password)\n- **Note:** Non-fatal in dev (OTP also returned in response); strict in prod (only channel)\n\n**Redis (Upstash)**\n- **Purpose:** TTL store for owner registration OTPs and MFA temp-login tokens\n- **Flow:** OTPs hashed with a 5-minute TTL; consumed on successful verification\n- **Why separate:** Keeps the short-lived owner email-OTP state out of the relational DB\n\n**Supabase Storage**\n- **Purpose:** Stores owner business documents (registration, electricity, bank)\n- **Flow:** `DocumentStorageService` PUTs files to the `business-documents` bucket via the Storage REST API; the object path is persisted on `BusinessProfile`\n- **Dev bypass:** Skips the real upload when no service key is configured\n\n**WebSocket (STOMP)**\n- **Purpose:** Real-time slot status updates\n- **Endpoint:** `WS /ws`\n- **Subscribe:** `/topic/slot-updates`\n- **Broadcasts:** When slot status changes (BOOKED, CHARGING, AVAILABLE)\n\n---",
     "stack": {
       "backend": [
         "Java 21",
@@ -197,24 +150,54 @@
     "github": "https://github.com/singhaganesh/EV-Project",
     "stars": 0,
     "forks": 1,
-    "updatedAt": "2026-05-26T10:48:49Z"
+    "updatedAt": "2026-06-19T04:52:24Z"
   },
   {
-    "id": 1013762329,
-    "name": "Chat App Web",
-    "originalName": "chat-app-web",
-    "tag": "JavaScript",
-    "desc": "A full-stack, real-time chat application built with Spring Boot, React, and WebSockets (STOMP). Features room-based messaging and persistent chat history using MongoDB.",
-    "architecture": "```mermaid\ngraph TD\n    %% Define Nodes\n    User((User))\n    Frontend[\"Frontend Client\\n(React)\"]\n    BackendREST[\"REST API\\n(Spring Boot /RoomController)\"]\n    BackendWS[\"WebSocket API\\n(Spring Boot /ChatController)\"]\n    Broker((\"In-Memory Broker\\n(STOMP Pub/Sub)\"))\n    Database[(\"MongoDB\\n(Rooms & Messages)\")]\n\n    %% User Interaction\n    User <-->|\"Interacts via Browser\"| Frontend\n\n    %% HTTP / REST Data Flow\n    Frontend -->|\"1. Create/Join Room (HTTP POST/GET)\"| BackendREST\n    Frontend -->|\"2. Fetch Chat History (HTTP GET)\"| BackendREST\n    BackendREST <-->|\"Query / Persist Room Data\"| Database\n\n    %% WebSocket / Real-Time Data Flow\n    Frontend <-->|\"3. Send Message (SockJS/STOMP)\"| BackendWS\n    BackendWS -->|\"4. Append Message to Room\"| Database\n    BackendWS -->|\"5. Route Message via Topic\"| Broker\n    Broker -.->|\"6. Broadcast to Room Subscribers\"| Frontend\n```",
-    "stack": [
-      "JavaScript"
-    ],
-    "tagColor": "#f7df1e",
-    "demo": "https://chatapp.ganeshsingha.online/",
-    "github": "https://github.com/singhaganesh/chat-app-web",
+    "id": 1250125683,
+    "name": "Ev Station Finder",
+    "originalName": "EV-Station-Finder",
+    "tag": "Kotlin",
+    "desc": "A lightweight EV charging station finder system featuring a native Jetpack Compose Android client and a Spring Boot backend integrated with Open Charge Map  (OCM) and Supabase PostgreSQL.",
+    "architecture": "### Data Flow Diagram\n\n```mermaid\ngraph TD\n    subgraph Android Application\n        UI[Jetpack Compose Views]\n        VM[StationViewModel]\n        Repo[StationRepository]\n        Retro[RetrofitClient]\n        Prefs[SharedPreferences]\n        \n        UI <-->|State/Intent| VM\n        VM <-->|Fetch| Repo\n        Repo <-->|Call| Retro\n        UI <-->|Read/Write| Prefs\n    end\n    \n    subgraph Backend Service\n        Ctrl[StationController]\n        Svc[StationService]\n        Import[StationImportService]\n        JPA[Spring Data Repositories]\n        Sync[StationSyncJob]\n        Seed[DataSeeder]\n        RedisConfig[RedisConfig]\n        \n        Ctrl <-->|Request/Response| Svc\n        Svc <-->|JPA| JPA\n        Import <-->|JPA| JPA\n        Sync -->|Trigger Sync| Import\n        Seed -->|Startup Seed| Import\n    end\n    \n    subgraph External & Database\n        DB[(Supabase PostgreSQL)]\n        Redis[(Upstash Redis Cache)]\n        OCM[OpenChargeMap API]\n    end\n    \n    Retro <-->|HTTP REST| Ctrl\n    Svc <-->|Read/Write Cache| Redis\n    JPA <-->|JDBC/Hibernate| DB\n    Import <-->|HTTP REST| OCM\n```\n\n### Complete Query Request Lifecycle (Android to Database)\n\n```\n1. MAP CAMERA POSITION CHANGE\n   → User pans/zooms map in android app\n   → MapTabScreen registers cameraState.isMoving == false\n   → Calls StationViewModel.fetchNearbyStationsDebounced(LatLng, zoom)\n\n2. DEBOUNCE FILTERING\n   → ViewModel cancels previous search jobs\n   → Waits 1.5s (debounce threshold)\n   → Checks if coordinates moved > 500m from last fetched location\n   → Calculates search radius (e.g., Zoom 12 = 15km)\n\n3. API INITIATION\n   → ViewModel triggers Retrofit client: GET /api/stations/nearby?lat=...&lng=...&radius=...\n   → Request goes over HTTP to Spring Boot (port 8081)\n\n4. BACKEND BUSINESS LOGIC\n   → StationController handles getNearbyStations()\n   → StationService calculates bounding box lat/lng deltas based on radius\n   → Service calls StationRepository.findStationsInViewport(swLat, neLat, swLng, neLng)\n   \n5. DATABASE FETCHING & SCORING\n   → PostgreSQL executes spatial bounding box query\n   → StationService computes exact Haversine distance from user to each returned station\n   → StationService queries ChargerSlotRepository for count & slot availability\n   → Result is compiled into StationWithScore DTOs, sorted by distance, and returned\n\n6. RENDER\n   → Android App parses JSON response\n   → ViewModel updates _uiState to StationUiState.Success(stations)\n   → Compose updates MapTabScreen markers and ListScreen rows\n```\n\n---",
+    "stack": {
+      "backend": [
+        "Java 21",
+        "Spring Boot 3.3.5",
+        "Spring Web (RESTful API Development)",
+        "Spring Data JPA (Object-Relational Mapping / Data Access)",
+        "Spring Data Redis (Client connectivity & caching framework)",
+        "Lombok (Boilerplate code reduction)",
+        "RestTemplate (Client-side HTTP request execution)"
+      ],
+      "frontend": [
+        "Kotlin",
+        "Jetpack Compose (Modern declarative UI toolkit)",
+        "Google Maps Compose Library (Map visualization & custom teardrop pins)",
+        "Jetpack Navigation Compose (Multi-screen routing & Navigation Host)",
+        "Retrofit & OkHttp (Type-safe REST API client and network logging interceptors)",
+        "Material Design 3 (Modern UI styles, colors, and layout components)",
+        "Kotlin Coroutines & Flow (Reactive programming, StateFlow, & background tasks)"
+      ],
+      "databases_caching": [
+        "Supabase PostgreSQL (Managed cloud database storing station records, slot details, and user reviews)",
+        "Upstash Redis (Serverless cloud Redis for geocoding coordinates and caching optimized route plans)"
+      ],
+      "integration_ai": [
+        "OSRM (Open Source Routing Machine) API (Generates driving route coordinates and step distances)",
+        "Nominatim (OpenStreetMap) API (Geocodes street addresses into latitude and longitude coordinates)"
+      ],
+      "devops_infrastructure": [
+        "Maven (Java backend build tool & dependency management)",
+        "Gradle (Android project compilation and build automation)",
+        "Git (Distributed version control)"
+      ]
+    },
+    "tagColor": "#858585",
+    "demo": "#",
+    "github": "https://github.com/singhaganesh/EV-Station-Finder",
     "stars": 0,
-    "forks": 0,
-    "updatedAt": "2026-04-28T10:15:30Z"
+    "forks": 1,
+    "updatedAt": "2026-06-12T05:31:49Z"
   },
   {
     "id": 1138840383,
@@ -265,6 +248,23 @@
     "github": "https://github.com/singhaganesh/Ecommerce-Web",
     "stars": 0,
     "forks": 0,
-    "updatedAt": "2026-04-11T04:55:44Z"
+    "updatedAt": "2026-06-03T11:37:22Z"
+  },
+  {
+    "id": 1013762329,
+    "name": "Chat App Web",
+    "originalName": "chat-app-web",
+    "tag": "JavaScript",
+    "desc": "A full-stack, real-time chat application built with Spring Boot, React, and WebSockets (STOMP). Features room-based messaging and persistent chat history using MongoDB.",
+    "architecture": "```mermaid\ngraph TD\n    %% Define Nodes\n    User((User))\n    Frontend[\"Frontend Client\\n(React)\"]\n    BackendREST[\"REST API\\n(Spring Boot /RoomController)\"]\n    BackendWS[\"WebSocket API\\n(Spring Boot /ChatController)\"]\n    Broker((\"In-Memory Broker\\n(STOMP Pub/Sub)\"))\n    Database[(\"MongoDB\\n(Rooms & Messages)\")]\n\n    %% User Interaction\n    User <-->|\"Interacts via Browser\"| Frontend\n\n    %% HTTP / REST Data Flow\n    Frontend -->|\"1. Create/Join Room (HTTP POST/GET)\"| BackendREST\n    Frontend -->|\"2. Fetch Chat History (HTTP GET)\"| BackendREST\n    BackendREST <-->|\"Query / Persist Room Data\"| Database\n\n    %% WebSocket / Real-Time Data Flow\n    Frontend <-->|\"3. Send Message (SockJS/STOMP)\"| BackendWS\n    BackendWS -->|\"4. Append Message to Room\"| Database\n    BackendWS -->|\"5. Route Message via Topic\"| Broker\n    Broker -.->|\"6. Broadcast to Room Subscribers\"| Frontend\n```",
+    "stack": [
+      "JavaScript"
+    ],
+    "tagColor": "#f7df1e",
+    "demo": "https://chatapp.ganeshsingha.online/",
+    "github": "https://github.com/singhaganesh/chat-app-web",
+    "stars": 0,
+    "forks": 0,
+    "updatedAt": "2026-04-28T10:15:30Z"
   }
 ]
