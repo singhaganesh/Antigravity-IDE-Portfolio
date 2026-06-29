@@ -107,7 +107,7 @@ export default function Home() {
   }, []);
 
   const stats = [
-    { label: "CGPA", value: "8.97", color: "#4ec9b0" },
+    { label: "CGPA", value: "9.01", color: "#4ec9b0" },
     { label: "PROJECTS", value: repoCount ? `${repoCount}+` : "...", color: "#61dafb" },
     { label: "INTERNSHIP", value: "1", color: "#c586c0" },
     { label: "YEARS EXP", value: "< 1 Year", color: "#ce9178" }

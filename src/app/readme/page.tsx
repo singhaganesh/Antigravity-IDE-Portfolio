@@ -22,9 +22,9 @@ const educationData = [
   {
     "institution": "Brainware University",
     "degree": "Master of Computer Applications",
-    "duration": "2024 — Pursuing",
-    "grade": "CGPA: 8.97",
-    "status": "active"
+    "duration": "2024 — 2026",
+    "grade": "CGPA: 9.01",
+    "status": "completed"
   },
   {
     "institution": "MAKAUT",
